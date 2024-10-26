@@ -1,3 +1,4 @@
+/* global process */
 import React from 'react';
 
 const AboutPage = () => {
@@ -24,9 +25,9 @@ const AboutPage = () => {
             />
           </div>
           <div className="w-full md:w-2/3 space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-accent">Hello, I'm Muhumuza Deus</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-accent">Hello, I&apos;m Muhumuza Deus</h2>
             <p className="text-lg leading-relaxed">
-              I'm a passionate statistics student at Kyambogo University and a self-taught machine learning practitioner. 
+              I&apos;m a passionate statistics student at Kyambogo University and a self-taught machine learning practitioner. 
               My journey in the world of data science has been driven by curiosity and a desire to uncover insights 
               hidden within complex datasets.
             </p>
@@ -38,7 +39,7 @@ const AboutPage = () => {
           <div className="bg-accent-light p-8 rounded-xl shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <h3 className="text-xl font-bold text-accent mb-4">My Background</h3>
             <p className="leading-relaxed">
-              Currently pursuing my degree in Statistics, I've combined my academic knowledge with practical 
+              Currently pursuing my degree in Statistics, I&apos;ve combined my academic knowledge with practical 
               experience in machine learning and deep learning. This unique blend allows me to approach 
               data-driven problems with both statistical rigor and cutting-edge AI techniques.
             </p>
@@ -59,8 +60,8 @@ const AboutPage = () => {
           <div className="bg-accent-light p-8 rounded-xl shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <h3 className="text-xl font-bold text-accent mb-4">Current Focus</h3>
             <p className="leading-relaxed">
-              I'm currently diving deep into advanced neural network architectures and their applications 
-              in computer vision and natural language processing. I'm also exploring the intersection of 
+              I&apos;m currently diving deep into advanced neural network architectures and their applications 
+              in computer vision and natural language processing. I&apos;m also exploring the intersection of 
               traditional statistical methods with modern machine learning approaches.
             </p>
           </div>
@@ -69,7 +70,7 @@ const AboutPage = () => {
             <h3 className="text-xl font-bold text-accent mb-4">Future Goals</h3>
             <p className="leading-relaxed">
               My aim is to contribute to the field of AI and statistics by developing innovative solutions 
-              that can make a real-world impact. I'm particularly interested in applications of AI in 
+              that can make a real-world impact. I&apos;m particularly interested in applications of AI in 
               healthcare and environmental science.
             </p>
           </div>

@@ -23,7 +23,7 @@ function Footer() {
           <div className="relative bg-accent-light p-6 rounded-lg shadow-md">
             <FaQuoteLeft className="text-accent text-2xl absolute -top-3 -left-3 opacity-70" />
             <p className="text-text-primary text-lg italic font-light leading-relaxed my-6">
-              "If it works, don't touch it"
+              &quot;If it works, don&apos;t touch it&quot;
             </p>
             <FaQuoteRight className="text-accent text-2xl absolute -bottom-3 -right-3 opacity-70" />
           </div>

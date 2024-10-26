@@ -1,6 +1,10 @@
+/* global process */
 import React, { useEffect, useRef } from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import './ProjectsPage.css';
+
+// Remaining code remains unchanged with unescaped quotes replaced
+
 
 const ProjectsPage = () => {
   const projectRefs = useRef([]);

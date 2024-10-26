@@ -4,6 +4,9 @@ import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
+
+
+
 const HomePage = () => {
   const [selectedDeepLearningProject, setSelectedDeepLearningProject] = useState(null);
   const [showWelcomeTyping, setShowWelcomeTyping] = useState(false);
@@ -253,10 +256,10 @@ const HomePage = () => {
               )}
             </h2>
             <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
-              Welcome to my website! I'm at the exciting crossroads of
-              machine learning and statistics. Here, I showcase my journey, including my bio,
-              skills, and innovative projects that illustrate my passion for transforming data into actionable insights.
+            Welcome to my website! I&apos;m at the exciting crossroads of machine learning and statistics. Here, I showcase my journey, including my bio,
+            skills, and innovative projects that illustrate my passion for transforming data into actionable insights.
             </p>
+
           </div>
         </section>
 
