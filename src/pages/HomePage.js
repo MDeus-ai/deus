@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaPython, FaDatabase, FaBrain, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaPython, FaBrain, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';

@@ -36,6 +36,7 @@
       "react": {
         "version": "detect"
       }
+    }
   },
   "browserslist": {
     "production": [
