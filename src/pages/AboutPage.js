@@ -1,4 +1,3 @@
-/* global process */
 import React from 'react';
 
 const AboutPage = () => {
