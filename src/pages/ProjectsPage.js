@@ -1,9 +1,6 @@
-
 import React, { useEffect, useRef } from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import './ProjectsPage.css';
-
-
 
 const ProjectsPage = () => {
   const projectRefs = useRef([]);
@@ -64,12 +61,15 @@ const ProjectsPage = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    projectRefs.current.forEach(ref => {
+    // Capture the current refs to avoid issues during cleanup
+    const currentProjectRefs = projectRefs.current;
+
+    currentProjectRefs.forEach(ref => {
       if (ref) observer.observe(ref);
     });
 
     return () => {
-      projectRefs.current.forEach(ref => {
+      currentProjectRefs.forEach(ref => {
         if (ref) observer.unobserve(ref);
       });
     };
