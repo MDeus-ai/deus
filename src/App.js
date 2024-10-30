@@ -8,7 +8,6 @@ import ProjectsPage from './pages/ProjectsPage';
 import './App.css';
 import '@fontsource/roboto-slab';
 
-
 function App() {
   return (
     <Router>

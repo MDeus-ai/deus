@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import '../../src/App.css';
 import { FaPython, FaBrain, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
+
+// Import Google Fonts using an import statement in the CSS file
+import '../../src/App.css';
 
 const techStack = [
   { icon: FaPython, name: 'Python' },
@@ -37,7 +41,7 @@ const allProjects = [
   {
     title: 'Neural Network Architectures',
     description: 'Designing and implementing cutting-edge neural network structures',
-    icon: <FaBrain />,
+    icon: <FaBrain />, 
     fullDescription:
       'This project involves the exploration and implementation of advanced neural network architectures, focusing on novel structures for efficiency and tackling complex tasks.',
     coverImage: '/assets/images/deeplearning/dl_im1.jpg',
@@ -71,15 +75,15 @@ const ProjectCard = ({ project, isActive }) => (
       </div>
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
             {project.title}
           </h3>
           {project.icon && <div className="text-blue-400 text-2xl">{project.icon}</div>}
         </div>
-        <p className="text-gray-300 text-lg leading-relaxed">{project.description}</p>
+        <p className="text-gray-300 text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>{project.description}</p>
         {project.fullDescription && (
           <div className="pt-4 border-t border-gray-700">
-            <p className="text-gray-400 text-sm">{project.fullDescription}</p>
+            <p className="text-gray-400 text-sm" style={{ fontFamily: 'Roboto Slab, serif' }}>{project.fullDescription}</p>
           </div>
         )}
         <div className="pt-4 flex flex-wrap gap-2">
@@ -87,6 +91,7 @@ const ProjectCard = ({ project, isActive }) => (
             <span
               key={index}
               className="px-3 py-1 text-xs font-medium bg-gray-700 rounded-full text-gray-300"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               {tech}
             </span>
@@ -125,15 +130,15 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
       <header className="h-screen flex items-center justify-center bg-cover bg-center relative" style={{ backgroundImage: `url(/assets/hero.jpg)` }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="z-10 text-center px-4">
-          <h1 className="text-4xl sm:text-7xl font-bold mb-4">
+          <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
             <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
           </h1>
-          <p className="text-xl sm:text-2xl">
+          <p className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
             <ReactTypingEffect text="machine learning, deep-learning, statistics" typingDelay={2000} speed={50} eraseDelay={10000000} />
           </p>
         </div>
@@ -144,10 +149,10 @@ const HomePage = () => {
         <section ref={welcomeRef} className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
           <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl bg-opacity-90">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
               {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} />}
             </h2>
-            <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
+            <p className="text-gray-300 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
               Welcome to my website! I'm at the exciting crossroads of machine learning and statistics.
             </p>
           </div>
@@ -157,20 +162,20 @@ const HomePage = () => {
         <section ref={aboutRef} className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
           <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 lg:p-20 shadow-2xl bg-opacity-90">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
               {showAboutTyping && <ReactTypingEffect text="../About Me" typingDelay={200} speed={50} eraseDelay={10000000} />}
             </h2>
-            <p className="text-gray-300 mb-4 text-base sm:text-lg leading-relaxed">
+            <p className="text-gray-300 mb-4 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
               I am currently a statistics student at Kyambogo University and a self-taught machine-learning practitioner.
             </p>
             <Link to="/about" className="inline-flex items-center text-blue-400 hover:text-blue-300">
               <FaUserCircle className="mr-2" /> Learn More About Me
             </Link>
             <div className="mt-8">
-              <h3 className="text-xl sm:text-2xl font-semibold mb-4">Technologies I work with:</h3>
+              <h3 className="text-xl sm:text-2xl font-semibold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>Technologies I work with:</h3>
               <ul className="flex flex-wrap gap-4">
                 {techStack.map((tech, index) => (
-                  <li key={index} className="bg-gray-700 px-3 py-2 rounded-full flex items-center">
+                  <li key={index} className="bg-gray-700 px-3 py-2 rounded-full flex items-center" style={{ fontFamily: 'Roboto Slab, serif' }}>
                     <tech.icon className="mr-2" />
                     <span>{tech.name}</span>
                   </li>
@@ -183,7 +188,7 @@ const HomePage = () => {
         {/* Projects Section */}
         <section className="py-20">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
               My Activities
             </h2>
           </div>

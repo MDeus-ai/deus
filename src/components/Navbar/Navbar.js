@@ -16,7 +16,6 @@ const Navbar = () => {
     { to: "/", label: "Home" },
     { to: "/projects", label: "Projects" },
     { to: "/about", label: "About" },
-    // Add more pages here as needed
   ];
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const Navbar = () => {
 
   const isActive = (path) => {
     if (path === '/') {
-      return false; // Never highlight the home page
+      return false;
     }
     return location.pathname.startsWith(path);
   };
@@ -55,9 +54,9 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : 'hidden'}`}>
       <div className="navbar-container">
+        {/* Logo that navigates to the homepage */}
         <Link to="/" className="navbar-logo">
-          <span>MD</span>
-          <span className="logo-dot">.ai</span>
+          <img src="/favicon.png" alt="Logo" className="favicon-logo" />
         </Link>
 
         <div className="desktop-nav">
@@ -72,7 +71,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <button 
+        <button
           className="navbar-toggle"
           onClick={() => setIsMenuOpen(true)}
           aria-label="Open menu"
@@ -82,11 +81,11 @@ const Navbar = () => {
 
         <div className={`navbar-offcanvas ${isMenuOpen ? 'active' : ''}`}>
           <div className="offcanvas-header">
+            {/* Logo that navigates to the homepage */}
             <Link to="/" className="offcanvas-logo" onClick={() => setIsMenuOpen(false)}>
-              <span>MD</span>
-              <span className="logo-dot">.ai</span>
+              <img src="/favicon.png" alt="Logo" className="favicon-logo" />
             </Link>
-            <button 
+            <button
               className="offcanvas-close"
               onClick={() => setIsMenuOpen(false)}
               aria-label="Close menu"
