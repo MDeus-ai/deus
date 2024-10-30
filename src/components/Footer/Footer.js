@@ -40,7 +40,7 @@ function Footer() {
             </a>
             <a href="tel:+256784871018" className="flex items-center gap-4 text-text-secondary hover:text-accent transition-transform transform hover:translate-x-2">
               <FaPhone className="text-accent text-base md:text-lg" />
-              <span className="text-sm md:text-base">+256 784 871 018</span>
+              <span className="text-sm md:text-base">+256 745 581 418</span>
             </a>
             <div className="flex items-center gap-4 text-text-secondary">
               <FaLocationDot className="text-accent text-base md:text-lg" />
@@ -64,7 +64,7 @@ function Footer() {
             <a href="https://twitter.com/Muhumuzadeus5" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="Twitter">
               <FaXTwitter />
             </a>
-            <a href="https://wa.me/256745581418" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="WhatsApp">
+            <a href="https://wa.me/256784871018" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="WhatsApp">
               <FaWhatsapp />
             </a>
           </div>
