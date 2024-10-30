@@ -64,7 +64,7 @@ function Footer() {
             <a href="https://twitter.com/Muhumuzadeus5" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="Twitter">
               <FaXTwitter />
             </a>
-            <a href="https://wa.me/256784871018" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="WhatsApp">
+            <a href="https://wa.me/256745581418" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-xl md:text-2xl hover:text-accent transition-transform transform hover:-translate-y-1" aria-label="WhatsApp">
               <FaWhatsapp />
             </a>
           </div>
