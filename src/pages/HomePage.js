@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../../src/App.css';
 import { FaPython, FaBrain, FaUserCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
-// Import Google Fonts using an import statement in the CSS file
+
 import '../../src/App.css';
 
 const techStack = [
@@ -58,49 +57,51 @@ const allProjects = [
   },
 ];
 
-const ProjectCard = ({ project, isActive }) => (
-  <Link to={project.link} className={`transform ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'} transition-all duration-700`}>
-    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl group">
-      <div className="relative aspect-video overflow-hidden">
-        <img
-          src={project.coverImage}
-          alt={project.title}
-          className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/assets/images/me.png';
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
-      <div className="p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            {project.title}
-          </h3>
-          {project.icon && <div className="text-blue-400 text-2xl">{project.icon}</div>}
+const ProjectCard = ({ project, isActive }) => {
+  const cardContent = (
+    <div
+      className={`transform transition-all duration-700 ${
+        isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'
+      }`}
+    >
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
+        <div className="relative h-80 overflow-hidden">
+          <img
+            src={project.coverImage}
+            alt={project.title}
+            className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
-        <p className="text-gray-300 text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>{project.description}</p>
-        {project.fullDescription && (
-          <div className="pt-4 border-t border-gray-700">
-            <p className="text-gray-400 text-sm" style={{ fontFamily: 'Roboto Slab, serif' }}>{project.fullDescription}</p>
+        <div className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
+              {project.title}
+            </h3>
+            {project.icon && <div className="text-blue-400 text-xl">{project.icon}</div>}
           </div>
-        )}
-        <div className="pt-4 flex flex-wrap gap-2">
-          {project.technologies?.map((tech, index) => (
-            <span
-              key={index}
-              className="px-3 py-1 text-xs font-medium bg-gray-700 rounded-full text-gray-300"
-              style={{ fontFamily: 'Roboto Slab, serif' }}
-            >
-              {tech}
-            </span>
-          ))}
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-2">{project.description}</p>
+          <div className="pt-2 flex flex-wrap gap-1">
+            {project.technologies?.map((tech, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 text-xs font-medium bg-gray-700 rounded-full text-gray-300"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  </Link>
-);
+  );
+
+  return project.link ? <Link to={project.link} className="block">{cardContent}</Link> : cardContent;
+};
 
 const HomePage = () => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
