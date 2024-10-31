@@ -77,12 +77,13 @@ const certifications = [
     link: "#"
   }
 ];
-
 const CertificationCard = ({ cert, index }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
 
   useEffect(() => {
+    const currentCard = cardRef.current;
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -92,13 +93,13 @@ const CertificationCard = ({ cert, index }) => {
       { threshold: 0.1 }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
+    if (currentCard) {
+      observer.observe(currentCard);
     }
 
     return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
+      if (currentCard) {
+        observer.unobserve(currentCard);
       }
     };
   }, []);
@@ -131,6 +132,8 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardRef = useRef(null);
 
   useEffect(() => {
+    const currentCard = cardRef.current;
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -140,13 +143,13 @@ const ProjectCard = ({ project, isActive, index }) => {
       { threshold: 0.1 }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
+    if (currentCard) {
+      observer.observe(currentCard);
     }
 
     return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
+      if (currentCard) {
+        observer.unobserve(currentCard);
       }
     };
   }, []);
@@ -195,7 +198,13 @@ const ProjectCard = ({ project, isActive, index }) => {
     </div>
   );
 
-  return project.link ? <Link to={project.link} className="block">{cardContent}</Link> : cardContent;
+  return project.link ? (
+    <Link to={project.link} className="block">
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
+  );
 };
 
 const HomePage = () => {
@@ -206,19 +215,25 @@ const HomePage = () => {
   const aboutRef = useRef(null);
 
   useEffect(() => {
+    const currentWelcomeRef = welcomeRef.current;
+    const currentAboutRef = aboutRef.current;
+    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (entry.target === welcomeRef.current) setShowWelcomeTyping(true);
-          if (entry.target === aboutRef.current) setShowAboutTyping(true);
+          if (entry.target === currentWelcomeRef) setShowWelcomeTyping(true);
+          if (entry.target === currentAboutRef) setShowAboutTyping(true);
         }
       });
     }, { threshold: 0.5 });
 
-    if (welcomeRef.current) observer.observe(welcomeRef.current);
-    if (aboutRef.current) observer.observe(aboutRef.current);
+    if (currentWelcomeRef) observer.observe(currentWelcomeRef);
+    if (currentAboutRef) observer.observe(currentAboutRef);
 
-    return () => observer.disconnect();
+    return () => {
+      if (currentWelcomeRef) observer.unobserve(currentWelcomeRef);
+      if (currentAboutRef) observer.unobserve(currentAboutRef);
+    };
   }, []);
 
   const handleProjectNavigation = (direction) => {
