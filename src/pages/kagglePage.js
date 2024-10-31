@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaGithub, FaKaggle, FaMedal, FaSearch, FaFilter, FaCode } from 'react-icons/fa';
+import { FaGithub, FaKaggle, FaMedal, FaSearch, FaFilter} from 'react-icons/fa';
 import { SiJupyter } from 'react-icons/si';
 
 const KagglePortfolio = () => {
