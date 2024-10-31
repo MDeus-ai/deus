@@ -37,7 +37,7 @@ const allProjects = [
   {
     title: 'Neural Network Architectures',
     description: 'Designing and implementing cutting-edge neural network structures',
-    icon: <FaBrain />, 
+    icon: <FaBrain />,
     fullDescription:
       'This project involves the exploration and implementation of advanced neural network architectures, focusing on novel structures for efficiency and tackling complex tasks.',
     coverImage: '/assets/images/deeplearning/dl_im1.jpg',
@@ -77,7 +77,6 @@ const certifications = [
     link: "#"
   }
 ];
-
 
 const CertificationCard = ({ cert, index }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -226,29 +225,28 @@ const HomePage = () => {
     setCurrentProjectIndex((prev) => (direction === 'left' ? (prev === 0 ? allProjects.length - 1 : prev - 1) : (prev === allProjects.length - 1 ? 0 : prev + 1)));
   };
 
-
   return (
     <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
-      {/* Hero Section - keeping original background */}
+      {/* Hero Section */}
       <header className="h-screen flex items-center justify-center bg-cover bg-center relative" style={{ backgroundImage: `url(/assets/hero.jpg)` }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="z-10 text-center px-4">
           <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
+            <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} component="span" />
           </h1>
           <p className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect text="machine learning, deep-learning, statistics" typingDelay={2000} speed={50} eraseDelay={10000000} />
+            <ReactTypingEffect text="machine learning, deep-learning, statistics" typingDelay={2000} speed={50} eraseDelay={10000000} component="span" />
           </p>
         </div>
       </header>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-        {/* Welcome Section - keeping original styling */}
+        {/* Welcome Section */}
         <section ref={welcomeRef} className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
           <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl bg-opacity-90">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} />}
+              {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
             </h2>
             <p className="text-gray-300 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
               Welcome to my website! I'm at the exciting crossroads of machine learning and statistics.
@@ -256,12 +254,12 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* About Section - keeping original styling */}
+        {/* About Section */}
         <section ref={aboutRef} className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
           <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 lg:p-20 shadow-2xl bg-opacity-90">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              {showAboutTyping && <ReactTypingEffect text="../About Me" typingDelay={200} speed={50} eraseDelay={10000000} />}
+              {showAboutTyping && <ReactTypingEffect text="../About Me" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
             </h2>
             <p className="text-gray-300 mb-4 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
               I am currently a statistics student at Kyambogo University and a self-taught machine-learning practitioner.
@@ -283,7 +281,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Projects Section*/}
+        {/* Projects Section */}
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
