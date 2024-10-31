@@ -232,11 +232,16 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="z-10 text-center px-4">
           <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} component="span" />
+            <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
           </h1>
-          <p className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect text="machine learning, deep-learning, statistics" typingDelay={2000} speed={50} eraseDelay={10000000} component="span" />
-          </p>
+          <div className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            <ReactTypingEffect 
+              text="machine learning, deep-learning, statistics" 
+              typingDelay={2000} 
+              speed={50} 
+              eraseDelay={10000000}
+            />
+          </div>
         </div>
       </header>
 
