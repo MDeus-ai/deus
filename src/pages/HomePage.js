@@ -110,7 +110,7 @@ const CertificationCard = ({ cert, index }) => {
       className={`bg-gray-800 rounded-xl p-6 transition-all duration-600 transform 
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
         hover:transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20`}
-      style={{ transitionDelay: `${index * 100}ms` }}
+      style={{ transitionDelay: `${index * 200}ms` }}
     >
       <div className="flex items-center gap-4 mb-4">
         <FaCertificate className="text-3xl text-purple-400" />
