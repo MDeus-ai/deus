@@ -311,7 +311,7 @@ const HomePage = () => {
 
           <div className="relative max-w-5xl mx-auto">
             <div className="overflow-hidden rounded-2xl">
-              <div className="flex transition-transform duration-1000 ease-out" style={{ transform: `translateX(-${currentProjectIndex * 400}%)` }}>
+              <div className="flex transition-transform duration-700 ease-out" style={{ transform: `translateX(-${currentProjectIndex * 100}%)` }}>
                 {allProjects.map((project, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-0 sm:px-4">
                     <ProjectCard 
