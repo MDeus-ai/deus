@@ -107,7 +107,7 @@ return (
             Kaggle Competition Portfolio
           </h1>
           <p className="mt-4 text-xl text-gray-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Exploring data science challenges and pushing the boundaries of machine learning
+            Kaggle competitions l have participated in, displaying my skill of working with structured datasets, for clssification, regression, EDA and so on
           </p>
           <div className="mt-6 flex justify-center space-x-4">
             <a 

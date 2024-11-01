@@ -96,7 +96,7 @@ const ProjectsPage = () => {
             className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
             style={{ fontFamily: 'Roboto Slab, serif' }}
           >
-            Exploring the intersection of data science, machine learning, and web development
+            Check out the projects that l have worked on
           </p>
         </div>
       </header>

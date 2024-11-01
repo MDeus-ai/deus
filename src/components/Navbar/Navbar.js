@@ -195,7 +195,7 @@ const Navbar = () => {
             </div>
 
             {/* Copyright notice */}
-            <div className="p-6 text-center text-sm text-neutral-400 border-t border-white/10">
+            <div className="p-2 text-center text-sm text-neutral-400 border-t border-white/10">
               © 2024 Muhumuza Deus. All rights reserved
             </div>
           </div>
