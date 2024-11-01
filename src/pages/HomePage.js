@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaPython, FaBrain, FaUserCircle, FaChevronLeft, FaChevronRight, FaCertificate } from 'react-icons/fa';
-import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
+import AutoTransition from '../components/AutoTransition';
+import ZoomHeroSection from '../components/HeroZoom';
+import IntroductionSection from '../components/IntroductionSection';
+import { FaBrain, FaCertificate } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
-const techStack = [
-  { icon: FaPython, name: 'Python' },
-  { icon: SiPandas, name: 'Pandas' },
-  { icon: SiNumpy, name: 'NumPy' },
-  { icon: SiScikitlearn, name: 'Scikit-learn' },
-  { icon: SiTensorflow, name: 'TensorFlow' },
-];
+
 
 const allProjects = [
   {
@@ -77,6 +73,7 @@ const certifications = [
     link: "#"
   }
 ];
+
 
 const FadeInSection = ({ children, delay = 0, className = '' }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -189,102 +186,26 @@ const ProjectCard = ({ project, isActive, index }) => {
 };
 
 const HomePage = () => {
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [showWelcomeTyping, setShowWelcomeTyping] = useState(false);
-  const [showAboutTyping, setShowAboutTyping] = useState(false);
-  const welcomeRef = useRef(null);
-  const aboutRef = useRef(null);
-
-  useEffect(() => {
-    const currentWelcomeRef = welcomeRef.current;
-    const currentAboutRef = aboutRef.current;
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target === currentWelcomeRef) setShowWelcomeTyping(true);
-          if (entry.target === currentAboutRef) setShowAboutTyping(true);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    if (currentWelcomeRef) observer.observe(currentWelcomeRef);
-    if (currentAboutRef) observer.observe(currentAboutRef);
-
-    return () => {
-      if (currentWelcomeRef) observer.unobserve(currentWelcomeRef);
-      if (currentAboutRef) observer.unobserve(currentAboutRef);
-    };
-  }, []);
-
-  const handleProjectNavigation = (direction) => {
-    setCurrentProjectIndex((prev) => (direction === 'left' ? (prev === 0 ? allProjects.length - 1 : prev - 1) : (prev === allProjects.length - 1 ? 0 : prev + 1)));
-  };
-
   return (
     <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
-      <header className="h-screen flex items-center justify-center bg-cover bg-center relative" style={{ backgroundImage: `url(/assets/hero.jpg)` }}>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="z-10 text-center px-4">
-          <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
-          </h1>
-          <div className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            <ReactTypingEffect 
-              text="machine learning, deep-learning, statistics" 
-              typingDelay={2000} 
-              speed={50} 
-              eraseDelay={10000000}
-            />
-          </div>
+      <ZoomHeroSection backgroundImage="/assets/hero.jpg">
+        <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
+          <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
+        </h1>
+        <div className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
+          <ReactTypingEffect 
+            text="machine learning, deep-learning, statistics" 
+            typingDelay={2000} 
+            speed={50} 
+            eraseDelay={10000000}
+          />
         </div>
-      </header>
+      </ZoomHeroSection>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-        {/* Welcome Section */}
-        <FadeInSection>
-          <section ref={welcomeRef} className="relative">
-            <div className="absolute inset-0"></div>
-            <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl bg-opacity-90">
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
-              </h2>
-              <p className="text-gray-300 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                Welcome to my website! I'm at the exciting crossroads of machine learning and statistics.
-              </p>
-            </div>
-          </section>
-        </FadeInSection>
-
-        {/* About Section */}
-        <FadeInSection>
-        <section ref={aboutRef} className="relative overflow-hidden">
-          <div className="absolute inset-0"></div>
-          <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 lg:p-20 shadow-2xl bg-opacity-90">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              {showAboutTyping && <ReactTypingEffect text="../About Me" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
-            </h2>
-            <p className="text-gray-300 mb-4 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              I am currently a statistics student at Kyambogo University and a self-taught machine-learning practitioner.
-            </p>
-            <Link to="/about" className="inline-flex items-center text-blue-400 hover:text-blue-300">
-              <FaUserCircle className="mr-2" /> Learn More About Me
-            </Link>
-            <div className="mt-8">
-              <h3 className="text-xl sm:text-2xl font-semibold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>Technologies I work with:</h3>
-              <ul className="flex flex-wrap gap-4">
-                {techStack.map((tech, index) => (
-                  <li key={index} className="bg-gray-700 px-3 py-2 rounded-full flex items-center" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                    <tech.icon className="mr-2" />
-                    <span>{tech.name}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-        </FadeInSection>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-40">
+        {/* New Introduction Section */}
+        <IntroductionSection />
 
         {/* Projects Section */}
         <section className="py-20">
@@ -296,29 +217,17 @@ const HomePage = () => {
             </div>
           </FadeInSection>
 
-          <div className="relative max-w-5xl mx-auto">
-            <div className="overflow-hidden rounded-2xl">
-              <div className="flex transition-transform duration-700 ease-out" style={{ transform: `translateX(-${currentProjectIndex * 100}%)` }}>
-                {allProjects.map((project, index) => (
-                  <div key={index} className="w-full flex-shrink-0 px-0 sm:px-4">
-                    <ProjectCard 
-                      project={project} 
-                      isActive={index === currentProjectIndex} 
-                      index={index}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <button onClick={() => handleProjectNavigation('left')} className="absolute left-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group">
-              <FaChevronLeft className="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" />
-            </button>
-
-            <button onClick={() => handleProjectNavigation('right')} className="absolute right-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group">
-              <FaChevronRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+          <AutoTransition 
+            items={allProjects}
+            interval={5000}
+            renderItem={(project, isActive, index) => (
+              <ProjectCard 
+                project={project} 
+                isActive={isActive} 
+                index={index}
+              />
+            )}
+          />
         </section>
 
         {/* Certifications Section */}

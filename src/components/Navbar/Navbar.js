@@ -79,7 +79,7 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Navbar remains the same */}
+      {/* Navbar */}
       <nav className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-out 
         ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
