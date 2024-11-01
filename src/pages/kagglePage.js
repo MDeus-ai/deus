@@ -9,50 +9,45 @@ const KagglePortfolio = () => {
   const competitions = [
     {
       id: 1,
-      title: "Titanic - Machine Learning from Disaster",
-      description: "Predict survival on the Titanic using machine learning techniques. Implementation includes feature engineering, model selection, and ensemble methods.",
+      title: "Loan Approval Prediction",
+      description: "Predicting whether an applicant is approved for a loan.",
       status: "completed",
-      rank: 342,
-      totalParticipants: 15400,
-      score: 0.82954,
-      percentile: 97,
+      rank: 396,
+      totalParticipants: 3858,
+      score: 0.96816,
+      percentile: 11,
       notebooks: [
         {
-          title: "Titanic EDA and Model Selection",
-          link: "https://www.kaggle.com/code/username/titanic-eda-and-model-selection",
-          stars: 25
+          title: "Loan Approval Prediction",
+          link: "https://www.kaggle.com/code/muhumuzadeusai/loan-approval-prediction?scriptVersionId=204532491",
+          stars: 0
         },
-        {
-          title: "Titanic Ensemble Approach",
-          link: "https://www.kaggle.com/code/username/titanic-ensemble-approach",
-          stars: 12
-        }
       ],
-      competitionLink: "https://www.kaggle.com/competitions/titanic",
-      githubRepo: "https://github.com/username/titanic-competition",
-      tags: ["Classification", "Feature Engineering", "Ensemble Learning"],
+      competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e10",
+      githubRepo: "https://github.com/MDeus-ai/My_KAGGLE_Work/tree/main/S4Ep10(Loan%20Approval%20Prediction)",
+      tags: ["Classification", "Feature Engineering", "Ensemble Learning", "LightGBM", "CatBoost", "CUDA", "Optuna", "XGBoost"],
       medal: "silver"
     },
     {
       id: 2,
-      title: "House Prices - Advanced Regression Techniques",
-      description: "Predicting house prices using advanced regression techniques. Implemented feature selection, regularization, and gradient boosting methods.",
-      status: "completed",
-      rank: 156,
-      totalParticipants: 12500,
-      score: 0.12435,
-      percentile: 98.5,
+      title: "Exploring Mental Health Data",
+      description: "Using data from a mental health survey to explore factors that may cause individuals to experience depression",
+      status: "in-progress",
+      rank: 0,
+      totalParticipants: 0,
+      score: 0,
+      percentile: 0,
       notebooks: [
         {
-          title: "House Prices Comprehensive EDA",
-          link: "https://www.kaggle.com/code/username/house-prices-comprehensive-eda",
+          title: "Mental Health-Depression Prediction",
+          link: "",
           stars: 45
         }
       ],
-      competitionLink: "https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques",
+      competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e11/overview",
       githubRepo: "https://github.com/username/house-prices-competition",
-      tags: ["Regression", "Feature Selection", "XGBoost"],
-      medal: "gold"
+      tags: ["Classification", "Feature Selection", "XGBoost", "CatBoost", "LightGBM"],
+      medal: "non"
     },
     {
       id: 3,
