@@ -1,4 +1,5 @@
 import React from 'react';
+import ScrollToTop from './components/ScrollToTop';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import KagglePage from './pages/kagglePage';
 import Navbar from './components/Navbar/Navbar';
@@ -15,6 +16,7 @@ function App() {
     <Router>
       <div className="App">
         <Navbar />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} /> 
