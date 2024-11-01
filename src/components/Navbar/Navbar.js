@@ -9,6 +9,7 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollThreshold, setScrollThreshold] = useState(0);
+  const [isFading, setIsFading] = useState(false);
 
   const location = useLocation();
 
@@ -41,9 +42,12 @@ const Navbar = () => {
     let timeoutId;
     if (isMenuOpen) {
       setIsMenuVisible(true);
+      setIsFading(false);
     } else {
+      setIsFading(true);
       timeoutId = setTimeout(() => {
         setIsMenuVisible(false);
+        setIsFading(false);
       }, 300);
     }
 
@@ -67,6 +71,10 @@ const Navbar = () => {
       return location.pathname === '/projects' || location.pathname.startsWith('/projects/');
     }
     return false;
+  };
+
+  const handleCloseMenu = () => {
+    setIsMenuOpen(false);
   };
 
   return (
@@ -108,26 +116,26 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Overlay remains the same */}
+      {/* Overlay with fade effect */}
       {isMenuVisible && (
         <div 
-          className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-200
-            ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
-          onClick={() => setIsMenuOpen(false)}
+          className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-300
+            ${isMenuOpen && !isFading ? 'opacity-100' : 'opacity-0'}`}
+          onClick={handleCloseMenu}
         >
-          <div className={`absolute inset-0 transition-opacity duration-200 delay-150
-            ${isMenuOpen ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} />
+          <div className={`absolute inset-0 transition-opacity duration-300 delay-150
+            ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} />
         </div>
       )}
 
-      {/* Offcanvas with added border */}
+      {/* Offcanvas with fade effect and copyright */}
       {isMenuVisible && (
         <div 
           className={`fixed top-0 right-0 w-full md:w-[400px] h-full z-50 
-            transform will-change-transform transition-all duration-200
+            transform will-change-transform transition-all duration-300
             before:content-[''] before:absolute before:top-0 before:left-0 before:w-[1px] before:h-full 
-            before:bg-white/10 before:transition-opacity before:duration-200
-            ${isMenuOpen ? 'translate-x-0 before:opacity-100' : 'translate-x-full before:opacity-0'}`}
+            before:bg-white/10 before:transition-opacity before:duration-300
+            ${isMenuOpen && !isFading ? 'translate-x-0 opacity-100 before:opacity-100' : 'translate-x-full opacity-0 before:opacity-0'}`}
           style={{ 
             fontFamily: 'Roboto Slab, serif',
             backfaceVisibility: 'hidden',
@@ -137,32 +145,32 @@ const Navbar = () => {
           }}
         >
           {/* Background with staggered blur effect */}
-          <div className={`absolute inset-0 transition-opacity duration-200 delay-75
+          <div className={`absolute inset-0 transition-opacity duration-300 delay-75
             bg-white/10 dark:bg-neutral-950/30
-            ${isMenuOpen ? 'opacity-100 backdrop-blur-xl' : 'opacity-0'}`} 
+            ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-xl' : 'opacity-0'}`} 
           />
 
           {/* Content container */}
-          <div className="relative h-full">
+          <div className="relative h-full flex flex-col">
             <div className="flex items-center justify-between p-3 md:p-6 border-b border-white/10">
               <Link 
                 to="/" 
                 className="text-white text-2xl md:text-3xl font-bold hover:text-[#BCA37F] transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleCloseMenu}
               >
                 <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
               </Link>
               <button
                 className="w-8 h-8 flex items-center justify-center text-white hover:text-[#BCA37F] 
                   hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleCloseMenu}
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="h-[calc(100%-81px)] overflow-y-auto">
+            <div className="flex-1 overflow-y-auto">
               <div className="p-10 md:p-8">
                 <div className="space-y-9">
                   {navLinks.map((link, index) => (
@@ -171,7 +179,7 @@ const Navbar = () => {
                       to={link.to}
                       className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
                         ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-white hover:text-[#BCA37F]'}`}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={handleCloseMenu}
                     >
                       <span className="relative">
                         {link.label}
@@ -184,6 +192,11 @@ const Navbar = () => {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Copyright notice */}
+            <div className="p-6 text-center text-sm text-neutral-400 border-t border-white/10">
+              © 2024 Muhumuza Deus. All rights reserved
             </div>
           </div>
         </div>
