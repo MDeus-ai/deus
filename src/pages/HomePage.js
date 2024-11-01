@@ -118,7 +118,7 @@ const FadeInSection = ({ children, delay = 0, className = '' }) => {
 
 const CertificationCard = ({ cert, index }) => (
   <FadeInSection delay={index * 200}>
-    <div className="bg-black rounded-xl p-6 transition-all duration-600 transform 
+    <div className="bg-gray-800 rounded-xl p-6 transition-all duration-600 transform 
       hover:transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20">
       <div className="flex items-center gap-4 mb-4">
         <FaCertificate className="text-3xl text-purple-400" />
@@ -139,7 +139,7 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-black rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
         <div className="relative h-80 overflow-hidden">
           <img
             src={project.coverImage}
@@ -222,7 +222,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100" style={{ fontFamily: 'Roboto Slab, serif' }}>
+    <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
       <header className="h-screen flex items-center justify-center bg-cover bg-center relative" style={{ backgroundImage: `url(/assets/hero.jpg)` }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
