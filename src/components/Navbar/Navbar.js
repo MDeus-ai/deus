@@ -32,32 +32,30 @@ const Navbar = () => {
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, scrollThreshold]);
 
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
-      mainContent.style.filter = isMenuOpen ? 'blur(16px)' : 'none';
-      mainContent.style.transition = 'filter 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      mainContent.style.opacity = isMenuOpen ? '0.4' : '1';
+      mainContent.style.transition = 'opacity 0.3s ease-out';
     }
     
     document.body.style.overflow = isMenuOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
       if (mainContent) {
-        mainContent.style.filter = 'none';
+        mainContent.style.opacity = '1';
       }
     };
   }, [isMenuOpen]);
 
   const isActive = (path) => {
-    // Exact match for home and about pages
     if (path === '/' || path === '/about') {
       return location.pathname === path;
     }
-    // Special handling for projects section
     if (path === '/projects') {
       return location.pathname === '/projects' || location.pathname.startsWith('/projects/');
     }
@@ -66,11 +64,12 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out 
+      <nav className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-out 
         ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
         backdrop-blur-md px-5 py-3 md:px-6`}
         style={{ fontFamily: 'Roboto Slab, serif' }}>
+        {/* Navbar content remains the same */}
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-[#BCA37F] transition-colors duration-300">
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
@@ -102,19 +101,28 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Overlay with slight blur */}
       <div 
-        className={`fixed inset-0 bg-black/40 backdrop-blur-2xl z-50 transition-all duration-500 ease-in-out
-          ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-50 transition-opacity duration-300 ease-out
+          ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
         onClick={() => setIsMenuOpen(false)}
       />
 
+      {/* Offcanvas Menu with transparency and stronger blur */}
       <div 
-        className={`fixed top-0 right-0 w-full md:w-[400px] h-full bg-neutral-950/90 backdrop-blur-2xl z-50 
-          transform transition-all duration-500 ease-in-out
-          ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
-        style={{ fontFamily: 'Roboto Slab, serif' }}
+        className={`fixed top-0 right-0 w-full md:w-[400px] h-full z-50 
+          transform will-change-transform transition-transform duration-300 ease-out
+          bg-white/10 dark:bg-neutral-950/30 backdrop-blur-xl
+          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        style={{ 
+          fontFamily: 'Roboto Slab, serif',
+          backfaceVisibility: 'hidden',
+          perspective: '1000px',
+          borderLeft: '1px solid rgba(255, 255, 255, 0.1)' // Subtle border for depth
+        }}
       >
-        <div className="flex items-center justify-between p-3 md:p-6 border-b border-neutral-800">
+        {/* Header with glass effect */}
+        <div className="flex items-center justify-between p-3 md:p-6 border-b border-white/10">
           <Link 
             to="/" 
             className="text-white text-2xl md:text-3xl font-bold hover:text-[#BCA37F] transition-colors duration-300"
@@ -124,7 +132,7 @@ const Navbar = () => {
           </Link>
           <button
             className="w-8 h-8 flex items-center justify-center text-white hover:text-[#BCA37F] 
-              hover:bg-neutral-800/50 rounded-full transition-all duration-300 hover:rotate-90"
+              hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Close menu"
           >
@@ -132,6 +140,7 @@ const Navbar = () => {
           </button>
         </div>
 
+        {/* Content with glass effect */}
         <div className="h-[calc(100%-81px)] overflow-y-auto">
           <div className="p-10 md:p-8">
             <div className="space-y-9">
@@ -139,14 +148,14 @@ const Navbar = () => {
                 <Link
                   key={index}
                   to={link.to}
-                  className={`group flex items-center text-2xl md:text-3xl font-medium transition-all duration-300 ease-in-out
-                    ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-neutral-300 hover:text-[#BCA37F]'}`}
+                  className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
+                    ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-white hover:text-[#BCA37F]'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <span className="relative">
                     {link.label}
                     <span className={`absolute -left-2 -right-2 h-0.5 bg-[#BCA37F] bottom-0 transform origin-left
-                      transition-transform duration-300 ease-in-out scale-x-0
+                      transition-transform duration-300 ease-out scale-x-0
                       ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
                     />
                   </span>
