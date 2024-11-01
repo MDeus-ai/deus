@@ -22,10 +22,10 @@ const Navbar = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 70);
 
-      if (currentScrollY > lastScrollY && currentScrollY - scrollThreshold > 90) {
+      if (currentScrollY > lastScrollY && currentScrollY - scrollThreshold > 80) {
         setIsVisible(false);
         setScrollThreshold(currentScrollY);
-      } else if (currentScrollY < lastScrollY && lastScrollY - currentScrollY > 20) {
+      } else if (currentScrollY < lastScrollY && lastScrollY - currentScrollY > 10) {
         setIsVisible(true);
         setScrollThreshold(currentScrollY);
       }
@@ -40,7 +40,7 @@ const Navbar = () => {
     // Apply blur to main content when menu is open
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
-      mainContent.style.filter = isMenuOpen ? 'blur(20px)' : 'none';  // To increase blur intensity, adjust the '10px' value
+      mainContent.style.filter = isMenuOpen ? 'blur(10px)' : 'none';  // To increase blur intensity, adjust the '10px' value
       mainContent.style.transition = 'filter 0.5s ease-out';
     }
     
@@ -66,7 +66,7 @@ const Navbar = () => {
         ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
         backdrop-blur-md px-5 py-3 md:px-6`}>
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-[#BCA37F] transition-colors duration-300">
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
@@ -115,16 +115,16 @@ const Navbar = () => {
           ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Off-canvas Header */}
-        <div className="flex items-center justify-between p-5 md:p-6 border-b border-neutral-800">
+        <div className="flex items-center justify-between p-3 md:p-6 border-b border-neutral-800">
           <Link 
             to="/" 
             className="text-white text-2xl md:text-3xl font-bold hover:text-[#BCA37F] transition-colors duration-300"
             onClick={() => setIsMenuOpen(false)}
           >
-            <img src="/favicon.png" alt="Logo" className="w-8 h-8 inline-block align-middle" />
+            <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
           </Link>
           <button
-            className="w-12 h-12 flex items-center justify-center text-white hover:text-[#BCA37F] 
+            className="w-8 h-8 flex items-center justify-center text-white hover:text-[#BCA37F] 
               hover:bg-neutral-800/50 rounded-full transition-all duration-300 hover:rotate-90"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Close menu"
