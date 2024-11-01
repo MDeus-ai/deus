@@ -37,17 +37,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, scrollThreshold]);
 
-  // Handle menu open/close with staggered effects
   useEffect(() => {
     let timeoutId;
     if (isMenuOpen) {
-      // Show menu immediately when opening
       setIsMenuVisible(true);
     } else {
-      // Delay hiding menu until after transition
       timeoutId = setTimeout(() => {
         setIsMenuVisible(false);
-      }, 300); // Match this with your transition duration
+      }, 300);
     }
 
     return () => {
@@ -55,7 +52,6 @@ const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  // Handle body scroll lock
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? 'hidden' : '';
     return () => {
@@ -75,12 +71,12 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Navbar remains the same */}
       <nav className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-out 
         ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
         backdrop-blur-md px-5 py-3 md:px-6`}
         style={{ fontFamily: 'Roboto Slab, serif' }}>
-        {/* Navbar content */}
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-[#BCA37F] transition-colors duration-300">
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
@@ -112,25 +108,26 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Simplified overlay without blur initially */}
+      {/* Overlay remains the same */}
       {isMenuVisible && (
         <div 
           className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-200
             ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setIsMenuOpen(false)}
         >
-          {/* Add blur effect after mount */}
           <div className={`absolute inset-0 transition-opacity duration-200 delay-150
             ${isMenuOpen ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} />
         </div>
       )}
 
-      {/* Optimized offcanvas menu */}
+      {/* Offcanvas with added border */}
       {isMenuVisible && (
         <div 
           className={`fixed top-0 right-0 w-full md:w-[400px] h-full z-50 
             transform will-change-transform transition-all duration-200
-            ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            before:content-[''] before:absolute before:top-0 before:left-0 before:w-[1px] before:h-full 
+            before:bg-white/10 before:transition-opacity before:duration-200
+            ${isMenuOpen ? 'translate-x-0 before:opacity-100' : 'translate-x-full before:opacity-0'}`}
           style={{ 
             fontFamily: 'Roboto Slab, serif',
             backfaceVisibility: 'hidden',
