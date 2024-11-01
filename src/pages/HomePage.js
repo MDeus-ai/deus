@@ -17,7 +17,7 @@ const allProjects = [
     title: 'Kaggle Competitions',
     description: 'Notebooks, And Leaderboard Positions. See my work with structured datasets, including data cleaning, data-analysis, data-transformation, and leveraging machine-learning algorithms for classification and regression tasks',
     link: '/kaggle-competitions',
-    coverImage: '/assets/images/structdata/kaggle.png',
+    coverImage: '/assets/images/structdata/kaggle_main_cover.png',
     technologies: ['Python', 'Pandas', 'Numpy', 'Scikit-Learn'],
   },
   {
@@ -77,41 +77,49 @@ const certifications = [
     link: "#"
   }
 ];
-const CertificationCard = ({ cert, index }) => {
+
+const FadeInSection = ({ children, delay = 0, className = '' }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef(null);
+  const domRef = useRef(null);
 
   useEffect(() => {
-    const currentCard = cardRef.current;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
           setIsVisible(true);
         }
-      },
-      { threshold: 0.1 }
-    );
+      });
+    }, { threshold: 0.2 });
 
-    if (currentCard) {
-      observer.observe(currentCard);
+    const currentElement = domRef.current;
+    if (currentElement) {
+      observer.observe(currentElement);
     }
 
     return () => {
-      if (currentCard) {
-        observer.unobserve(currentCard);
+      if (currentElement) {
+        observer.unobserve(currentElement);
       }
     };
   }, []);
 
   return (
     <div
-      ref={cardRef}
-      className={`bg-gray-800 rounded-xl p-6 transition-all duration-600 transform 
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-        hover:transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20`}
-      style={{ transitionDelay: `${index * 200}ms` }}
+      ref={domRef}
+      className={`transition-all duration-700 ${className}
+        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
+      {children}
+    </div>
+  );
+};
+
+
+const CertificationCard = ({ cert, index }) => (
+  <FadeInSection delay={index * 200}>
+    <div className="bg-black rounded-xl p-6 transition-all duration-600 transform 
+      hover:transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20">
       <div className="flex items-center gap-4 mb-4">
         <FaCertificate className="text-3xl text-purple-400" />
         <div>
@@ -124,45 +132,14 @@ const CertificationCard = ({ cert, index }) => {
         View Certificate →
       </Link>
     </div>
-  );
-};
+  </FadeInSection>
+);
 
 const ProjectCard = ({ project, isActive, index }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    const currentCard = cardRef.current;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (currentCard) {
-      observer.observe(currentCard);
-    }
-
-    return () => {
-      if (currentCard) {
-        observer.unobserve(currentCard);
-      }
-    };
-  }, []);
-
   const cardContent = (
-    <div
-      ref={cardRef}
-      className={`transform transition-all duration-700
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-        ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}
-      style={{ transitionDelay: `${index * 200}ms` }}
-    >
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
+    <div className={`transform transition-all duration-700
+      ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
+      <div className="bg-black rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
         <div className="relative h-80 overflow-hidden">
           <img
             src={project.coverImage}
@@ -198,12 +175,16 @@ const ProjectCard = ({ project, isActive, index }) => {
     </div>
   );
 
-  return project.link ? (
-    <Link to={project.link} className="block">
-      {cardContent}
-    </Link>
-  ) : (
-    cardContent
+  return (
+    <FadeInSection delay={index * 200}>
+      {project.link ? (
+        <Link to={project.link} className="block">
+          {cardContent}
+        </Link>
+      ) : (
+        cardContent
+      )}
+    </FadeInSection>
   );
 };
 
@@ -241,7 +222,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
       <header className="h-screen flex items-center justify-center bg-cover bg-center relative" style={{ backgroundImage: `url(/assets/hero.jpg)` }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -262,23 +243,26 @@ const HomePage = () => {
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
         {/* Welcome Section */}
-        <section ref={welcomeRef} className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
-          <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl bg-opacity-90">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
-            </h2>
-            <p className="text-gray-300 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              Welcome to my website! I'm at the exciting crossroads of machine learning and statistics.
-            </p>
-          </div>
-        </section>
+        <FadeInSection>
+          <section ref={welcomeRef} className="relative">
+            <div className="absolute inset-0"></div>
+            <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl bg-opacity-90">
+              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                {showWelcomeTyping && <ReactTypingEffect text="../Hello" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
+              </h2>
+              <p className="text-gray-300 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                Welcome to my website! I'm at the exciting crossroads of machine learning and statistics.
+              </p>
+            </div>
+          </section>
+        </FadeInSection>
 
         {/* About Section */}
+        <FadeInSection>
         <section ref={aboutRef} className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-500 transform skew-y-6 sm:skew-y-3 -z-10"></div>
+          <div className="absolute inset-0"></div>
           <div className="relative bg-gray-800 rounded-lg p-6 sm:p-8 lg:p-20 shadow-2xl bg-opacity-90">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-orange-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
               {showAboutTyping && <ReactTypingEffect text="../About Me" typingDelay={200} speed={50} eraseDelay={10000000} component="span" />}
             </h2>
             <p className="text-gray-300 mb-4 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Roboto Slab, serif' }}>
@@ -300,14 +284,17 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+        </FadeInSection>
 
         {/* Projects Section */}
         <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              My Activities
-            </h2>
-          </div>
+          <FadeInSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                My Activities
+              </h2>
+            </div>
+          </FadeInSection>
 
           <div className="relative max-w-5xl mx-auto">
             <div className="overflow-hidden rounded-2xl">
@@ -336,12 +323,14 @@ const HomePage = () => {
 
         {/* Certifications Section */}
         <section className="py-2">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              Certifications
-            </h2>
-            <p className="text-gray-300 text-lg mb-8">Professional certifications and achievements in machine learning and data science</p>
-          </div>
+          <FadeInSection>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                Certifications
+              </h2>
+              <p className="text-gray-300 text-lg mb-8">Professional certifications and achievements in machine learning and data science</p>
+            </div>
+          </FadeInSection>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {certifications.map((cert, index) => (
@@ -353,5 +342,6 @@ const HomePage = () => {
     </div>
   );
 };
+
 
 export default HomePage;

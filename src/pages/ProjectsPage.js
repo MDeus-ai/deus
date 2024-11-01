@@ -46,7 +46,7 @@ const ProjectsPage = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '50px',  // Increased margin to start animation earlier
+      rootMargin: '50px',
       threshold: 0.1
     };
 
@@ -75,7 +75,7 @@ const ProjectsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
-      <header className="relative h-[60vh] flex items-center justify-center">
+      <header className="relative h-[50vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="/assets/images/project/main_cover.jpg" 
@@ -86,10 +86,16 @@ const ProjectsPage = () => {
         </div>
         
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+          <h1 
+            className="text-4xl md:text-5xl font-bold text-text-primary z-10"
+            style={{ fontFamily: 'Roboto Slab, serif' }}
+          >
             My Projects
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+          <p 
+            className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
+            style={{ fontFamily: 'Roboto Slab, serif' }}
+          >
             Exploring the intersection of data science, machine learning, and web development
           </p>
         </div>
@@ -114,10 +120,16 @@ const ProjectsPage = () => {
               </div>
 
               <div className="p-6 space-y-4">
-                <h3 className="text-xl md:text-2xl font-bold text-blue-400 line-clamp-2">
+                <h3 
+                  className="text-xl md:text-2xl font-bold text-blue-400 line-clamp-2"
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
+                >
                   {project.title}
                 </h3>
-                <p className="text-gray-300 line-clamp-3">
+                <p 
+                  className="text-gray-300 line-clamp-3"
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
+                >
                   {project.description}
                 </p>
 
@@ -126,6 +138,7 @@ const ProjectsPage = () => {
                     <span 
                       key={index}
                       className="px-3 py-1 text-sm bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20"
+                      style={{ fontFamily: 'Roboto Slab, serif' }}
                     >
                       {tag}
                     </span>
@@ -138,6 +151,7 @@ const ProjectsPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                    style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
                     <FaGithub className="text-xl" />
                     <span>GitHub</span>
@@ -147,6 +161,7 @@ const ProjectsPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                    style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
                     <FaExternalLinkAlt className="text-lg" />
                     <span>Live Demo</span>

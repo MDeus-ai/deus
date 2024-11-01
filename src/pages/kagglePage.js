@@ -78,192 +78,200 @@ const KagglePortfolio = () => {
   ];
 
   const filteredCompetitions = competitions
-    .filter(comp => filter === 'all' || comp.status === filter)
-    .filter(comp => 
-      comp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comp.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+  .filter(comp => filter === 'all' || comp.status === filter)
+  .filter(comp => 
+    comp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    comp.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
-  const getMedalColor = (medal) => {
-    switch(medal) {
-      case 'gold': return 'text-yellow-400';
-      case 'silver': return 'text-gray-400';
-      case 'bronze': return 'text-amber-600';
-      default: return 'text-gray-500';
-    }
-  };
+const getMedalColor = (medal) => {
+  switch(medal) {
+    case 'gold': return 'text-yellow-400';
+    case 'silver': return 'text-gray-400';
+    case 'bronze': return 'text-amber-600';
+    default: return 'text-gray-500';
+  }
+};
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
-      {/* Hero Section */}
-      <header className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src="/assets/images/structdata/kaggle_main_cover.png" 
-            alt="Projects header"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/60"></div>
-        </div>
-        <div className="absolute inset-0 bg-blue-900/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-              Kaggle Competition Portfolio
-            </h1>
-            <p className="mt-4 text-xl text-gray-300">
-              Exploring data science challenges and pushing the boundaries of machine learning
-            </p>
-            <div className="mt-6 flex justify-center space-x-4">
-              <a 
-                href="https://github.com/MDeus-ai/My_KAGGLE_Work" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <FaGithub className="text-xl" />
-                GitHub Profile
-              </a>
-              <a 
-                href="https://www.kaggle.com/muhumuzadeusai" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <FaKaggle className="text-xl" />
-                Kaggle Profile
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Filters and Search */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          <div className="flex items-center gap-4">
-            <FaFilter className="text-gray-400" />
-            <select 
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+return (
+  <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
+    {/* Hero Section */}
+    <header className="relative h-[50vh] bg-cover bg-center flex items-center justify-center">
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/assets/images/structdata/kaggle.png" 
+          alt="Projects header"
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/60"></div>
+      </div>
+      <div className="absolute inset-0 bg-blue-900/20"></div>
+      <div className="relative max-w-7xl mx-auto px-4">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-text-primary z-10" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            Kaggle Competition Portfolio
+          </h1>
+          <p className="mt-4 text-xl text-gray-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            Exploring data science challenges and pushing the boundaries of machine learning
+          </p>
+          <div className="mt-6 flex justify-center space-x-4">
+            <a 
+              href="https://github.com/MDeus-ai/My_KAGGLE_Work" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             >
-              <option value="all">All Competitions</option>
-              <option value="completed">Completed</option>
-              <option value="in-progress">In Progress</option>
-            </select>
-          </div>
-          
-          <div className="relative w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Search competitions or tags..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-80 bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-blue-500"
-            />
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          </div>
-        </div>
-
-        {/* Competition Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {filteredCompetitions.map((competition) => (
-            <div 
-              key={competition.id}
-              className="bg-gray-800/50 rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-300 overflow-hidden"
+              <FaGithub className="text-xl" />
+              GitHub Profile
+            </a>
+            <a 
+              href="https://www.kaggle.com/muhumuzadeusai" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-blue-400">
-                    {competition.title}
-                  </h3>
-                  <FaMedal className={`text-2xl ${getMedalColor(competition.medal)}`} />
-                </div>
-                
-                <p className="text-gray-300 mb-4">
-                  {competition.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {competition.tags.map((tag, index) => (
-                    <span 
-                      key={index}
-                      className="px-3 py-1 text-sm bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-gray-900/50 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">Rank</div>
-                    <div className="text-lg font-bold">{competition.rank} / {competition.totalParticipants}</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">Score</div>
-                    <div className="text-lg font-bold">{competition.score}</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">Percentile</div>
-                    <div className="text-lg font-bold">Top {competition.percentile}%</div>
-                  </div>
-                  <div className="bg-gray-900/50 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">Status</div>
-                    <div className="text-lg font-bold capitalize">{competition.status}</div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-gray-300 mb-2">Notebooks</h4>
-                  {competition.notebooks.map((notebook, index) => (
-                    <a
-                      key={index}
-                      href={notebook.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-3 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        <SiJupyter className="text-orange-400" />
-                        <span>{notebook.title}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-yellow-400">
-                        <span>★</span>
-                        <span>{notebook.stars}</span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-
-                <div className="flex justify-between mt-6 pt-4 border-t border-gray-700">
-                  <a 
-                    href={competition.competitionLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
-                  >
-                    <FaKaggle />
-                    <span>Competition</span>
-                  </a>
-                  <a 
-                    href={competition.githubRepo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
-                  >
-                    <FaGithub />
-                    <span>Repository</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
+              <FaKaggle className="text-xl" />
+              Kaggle Profile
+            </a>
+          </div>
         </div>
       </div>
+    </header>
+
+    {/* Filters and Search */}
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+        <div className="flex items-center gap-4">
+          <FaFilter className="text-gray-400" />
+          <select 
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+            style={{ fontFamily: 'Roboto Slab, serif' }}
+          >
+            <option value="all">All Competitions</option>
+            <option value="completed">Completed</option>
+            <option value="in-progress">In Progress</option>
+          </select>
+        </div>
+        
+        <div className="relative w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search competitions or tags..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full md:w-80 bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-blue-500"
+            style={{ fontFamily: 'Roboto Slab, serif' }}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
+      </div>
+
+      {/* Competition Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {filteredCompetitions.map((competition) => (
+          <div 
+            key={competition.id}
+            className="bg-gray-800/50 rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-300 overflow-hidden"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-bold text-blue-400" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                  {competition.title}
+                </h3>
+                <FaMedal className={`text-2xl ${getMedalColor(competition.medal)}`} />
+              </div>
+              
+              <p className="text-gray-300 mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                {competition.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {competition.tags.map((tag, index) => (
+                  <span 
+                    key={index}
+                    className="px-3 py-1 text-sm bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20"
+                    style={{ fontFamily: 'Roboto Slab, serif' }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-sm text-gray-400" style={{ fontFamily: 'Roboto Slab, serif' }}>Rank</div>
+                  <div className="text-lg font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>{competition.rank} / {competition.totalParticipants}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-sm text-gray-400" style={{ fontFamily: 'Roboto Slab, serif' }}>Score</div>
+                  <div className="text-lg font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>{competition.score}</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-sm text-gray-400" style={{ fontFamily: 'Roboto Slab, serif' }}>Percentile</div>
+                  <div className="text-lg font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>Top {competition.percentile}%</div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-3">
+                  <div className="text-sm text-gray-400" style={{ fontFamily: 'Roboto Slab, serif' }}>Status</div>
+                  <div className="text-lg font-bold capitalize" style={{ fontFamily: 'Roboto Slab, serif' }}>{competition.status}</div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-lg font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Roboto Slab, serif' }}>Notebooks</h4>
+                {competition.notebooks.map((notebook, index) => (
+                  <a
+                    key={index}
+                    href={notebook.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3 bg-gray-900/30 rounded-lg hover:bg-gray-900/50 transition-colors"
+                    style={{ fontFamily: 'Roboto Slab, serif' }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <SiJupyter className="text-orange-400" />
+                      <span>{notebook.title}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-yellow-400">
+                      <span>★</span>
+                      <span>{notebook.stars}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              <div className="flex justify-between mt-6 pt-4 border-t border-gray-700">
+                <a 
+                  href={competition.competitionLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
+                >
+                  <FaKaggle />
+                  <span>Competition</span>
+                </a>
+                <a 
+                  href={competition.githubRepo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
+                >
+                  <FaGithub />
+                  <span>Repository</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default KagglePortfolio;

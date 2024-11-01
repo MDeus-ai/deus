@@ -5,7 +5,7 @@ const AboutPage = () => {
     <div className="bg-background text-text-primary font-roboto-slab min-h-screen">
       {/* Hero Section */}
       <header 
-        className="relative h-[40vh] bg-cover bg-center flex items-center justify-center" 
+        className="relative h-[50vh] bg-cover bg-center flex items-center justify-center" 
         style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/about/picture_1.jpg)` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
