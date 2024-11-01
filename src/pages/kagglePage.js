@@ -104,7 +104,7 @@ return (
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-text-primary z-10" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Kaggle Competition Portfolio
+            Kaggle Portfolio
           </h1>
           <p className="mt-4 text-xl text-gray-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
             Kaggle competitions l have participated in, displaying my skill of working with structured datasets, for clssification, regression, EDA and so on
