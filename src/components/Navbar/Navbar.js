@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu, ChevronRight } from 'lucide-react';
+import { X, Menu } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,11 +37,10 @@ const Navbar = () => {
   }, [lastScrollY, scrollThreshold]);
 
   useEffect(() => {
-    // Apply blur to main content when menu is open
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
-      mainContent.style.filter = isMenuOpen ? 'blur(10px)' : 'none';  // To increase blur intensity, adjust the '10px' value
-      mainContent.style.transition = 'filter 0.5s ease-out';
+      mainContent.style.filter = isMenuOpen ? 'blur(16px)' : 'none';
+      mainContent.style.transition = 'filter 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
     }
     
     document.body.style.overflow = isMenuOpen ? 'hidden' : 'unset';
@@ -54,25 +53,29 @@ const Navbar = () => {
   }, [isMenuOpen]);
 
   const isActive = (path) => {
-    if (path === '/') {
-      return false;
+    // Exact match for home and about pages
+    if (path === '/' || path === '/about') {
+      return location.pathname === path;
     }
-    return location.pathname.startsWith(path);
+    // Special handling for projects section
+    if (path === '/projects') {
+      return location.pathname === '/projects' || location.pathname.startsWith('/projects/');
+    }
+    return false;
   };
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out 
+      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out 
         ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        backdrop-blur-md px-5 py-3 md:px-6`}>
+        backdrop-blur-md px-5 py-3 md:px-6`}
+        style={{ fontFamily: 'Roboto Slab, serif' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          {/* Logo */}
           <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-[#BCA37F] transition-colors duration-300">
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link, index) => (
               <Link
@@ -89,7 +92,6 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden text-white text-2xl hover:text-[#BCA37F] transition-colors duration-300"
             onClick={() => setIsMenuOpen(true)}
@@ -100,21 +102,18 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Off-canvas Menu Backdrop */}
-      {/* To increase backdrop blur intensity, adjust the backdrop-blur-md to backdrop-blur-lg or backdrop-blur-xl */}
       <div 
-        className={`fixed inset-0 bg-black/50 backdrop-blur-xl z-50 transition-opacity duration-500
+        className={`fixed inset-0 bg-black/40 backdrop-blur-2xl z-50 transition-all duration-500 ease-in-out
           ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={() => setIsMenuOpen(false)}
       />
 
-      {/* Off-canvas Menu */}
       <div 
-        className={`fixed top-0 right-0 w-full md:w-[400px] h-full bg-neutral-950/95 backdrop-blur-xl z-50 
-          transform transition-transform duration-500 ease-out
-          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 w-full md:w-[400px] h-full bg-neutral-950/90 backdrop-blur-2xl z-50 
+          transform transition-all duration-500 ease-in-out
+          ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+        style={{ fontFamily: 'Roboto Slab, serif' }}
       >
-        {/* Off-canvas Header */}
         <div className="flex items-center justify-between p-3 md:p-6 border-b border-neutral-800">
           <Link 
             to="/" 
@@ -133,22 +132,24 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Off-canvas Content */}
         <div className="h-[calc(100%-81px)] overflow-y-auto">
-          <div className="p-6 md:p-8">
-            <div className="space-y-8">
+          <div className="p-10 md:p-8">
+            <div className="space-y-9">
               {navLinks.map((link, index) => (
                 <Link
                   key={index}
                   to={link.to}
-                  className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
+                  className={`group flex items-center text-2xl md:text-3xl font-medium transition-all duration-300 ease-in-out
                     ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-neutral-300 hover:text-[#BCA37F]'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <ChevronRight className={`w-6 h-6 mr-3 transition-transform duration-300 transform 
-                    ${isActive(link.to) ? 'translate-x-0 opacity-100' : '-translate-x-3 opacity-0'}
-                    group-hover:translate-x-0 group-hover:opacity-100`} />
-                  <span>{link.label}</span>
+                  <span className="relative">
+                    {link.label}
+                    <span className={`absolute -left-2 -right-2 h-0.5 bg-[#BCA37F] bottom-0 transform origin-left
+                      transition-transform duration-300 ease-in-out scale-x-0
+                      ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
+                    />
+                  </span>
                 </Link>
               ))}
             </div>

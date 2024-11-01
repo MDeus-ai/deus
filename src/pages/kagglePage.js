@@ -96,7 +96,7 @@ const getMedalColor = (medal) => {
 return (
   <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
     {/* Hero Section */}
-    <header className="relative h-[40vh] bg-cover bg-center flex items-center justify-center">
+    <header className="relative h-[60vh] bg-cover bg-center flex items-center justify-center">
       <div className="absolute inset-0 overflow-hidden">
         <img 
           src="/assets/images/structdata/kaggle.png" 
