@@ -7,12 +7,12 @@ const ProjectsPage = () => {
   const projects = [
     {
       id: 1,
-      title: "Data Analysis Dashboard",
-      description: "Interactive visualization of complex datasets using React and D3.js, enabling users to explore and understand complex data patterns through intuitive interfaces.",
-      image: "/assets/images/project/cover_1.jpg",
+      title: "Pastie",
+      description: "A Vision model based on the Convolutional Neural Network Architecture(CNN) for detecting and classifying plant diseases based on plant leaves",
+      image: "/assets/images/project/pastie.jpg",
       github: "https://github.com/yourusername/data-dashboard",
       demo: "https://your-data-dashboard-demo.com",
-      tags: ["React", "D3.js", "Data Visualization"]
+      tags: ["Tensorflow", "Python", "Flutter", "Cuda"]
     },
     {
       id: 2,

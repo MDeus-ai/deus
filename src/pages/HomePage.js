@@ -56,18 +56,18 @@ const allProjects = [
 
 const certifications = [
   {
-    title: "Machine Learning Specialization",
-    provider: "DeepLearning.AI",
-    date: "2023",
-    image: "/assets/images/certs/dl-ai.png",
-    link: "#"
+    title: "Introduction To Machine Learning",
+    provider: "Kaggle",
+    date: "2024",
+    image: "/assets/images/certificates/M_deus.ai - Intro to Machine Learning.png",
+    link: "https://www.kaggle.com/learn/certification/muhumuzadeusai/intro-to-machine-learning"
   },
   {
-    title: "Deep Learning Specialization",
-    provider: "Coursera",
-    date: "2023",
+    title: "Intermediate Machine Learning",
+    provider: "Kaggle",
+    date: "2024",
     image: "/assets/images/certs/coursera.png",
-    link: "#"
+    link: "https://www.kaggle.com/learn/certification/muhumuzadeusai/intermediate-machine-learning"
   },
   {
     title: "Data Science Professional Certificate",
@@ -328,7 +328,7 @@ const HomePage = () => {
               <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
                 Certifications
               </h2>
-              <p className="text-gray-300 text-lg mb-8">Professional certifications and achievements in machine learning and data science</p>
+              <p className="text-gray-300 text-lg mb-8">Certifications and achievements in machine learning and data science</p>
             </div>
           </FadeInSection>
           
