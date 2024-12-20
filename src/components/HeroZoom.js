@@ -7,6 +7,12 @@ const HeroZoom = ({ children, backgroundImage }) => {
   const frameRef = useRef(null);
   const lastScrollY = useRef(window.scrollY);
   const lastScale = useRef(1);
+  const transformRef = useRef(transform);
+  
+  // Update the ref whenever transform changes
+  useEffect(() => {
+    transformRef.current = transform;
+  }, [transform]);
   
   useEffect(() => {
     const section = sectionRef.current;
@@ -22,26 +28,22 @@ const HeroZoom = ({ children, backgroundImage }) => {
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       
-      // Refined scroll progress calculation
       const scrollProgress = Math.max(0, Math.min(1, 1 - (rect.bottom / (viewportHeight + rect.height))));
       
-      // Enhanced scale calculation with smoother easing
-      const targetScale = 1 + (scrollProgress * 0.25); // Further reduced scale for subtlety
-      const smoothingFactor = 0.15; // Adjusted for smoother transition
+      const targetScale = 1 + (scrollProgress * 0.25);
+      const smoothingFactor = 0.15;
       
-      // Apply smooth scale transition
       const newScale = lerp(lastScale.current, targetScale, smoothingFactor);
       lastScale.current = newScale;
 
-      // Refined opacity calculation
       let newOpacity = 1;
       if (rect.top < -viewportHeight * 0.3) {
         newOpacity = Math.max(0, 1 - Math.abs(rect.top + viewportHeight * 0.3) / (viewportHeight * 0.7));
       }
 
-      // Only update if changes are meaningful
-      const scaleDiff = Math.abs(newScale - transform.scale);
-      const opacityDiff = Math.abs(newOpacity - transform.opacity);
+      const currentTransform = transformRef.current;
+      const scaleDiff = Math.abs(newScale - currentTransform.scale);
+      const opacityDiff = Math.abs(newOpacity - currentTransform.opacity);
       
       if (scaleDiff > 0.001 || opacityDiff > 0.001) {
         setTransform({
@@ -50,7 +52,6 @@ const HeroZoom = ({ children, backgroundImage }) => {
         });
       }
 
-      // Maintain smooth animation
       if (scaleDiff > 0.0001 || Math.abs(window.scrollY - lastScrollY.current) > 0.1) {
         frameRef.current = requestAnimationFrame(calculateTransform);
       }
@@ -69,10 +70,8 @@ const HeroZoom = ({ children, backgroundImage }) => {
       calculateTransform();
     };
 
-    // Initial setup
     calculateTransform();
 
-    // Event listeners with passive flag for better performance
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
 
@@ -83,7 +82,7 @@ const HeroZoom = ({ children, backgroundImage }) => {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, []);
+  }, []); // Empty dependency array since we're using refs
 
   return (
     <section
