@@ -10,7 +10,7 @@ module.exports = {
         'text-primary': '#ffffff',
         'text-secondary': '#d1d1d1',
         'text-tertiary': '#a0a0a0',
-        'accent': '#BCA37F',
+        'accent': 'rgba(168, 85, 247)',
         'accent-light': 'rgba(77, 128, 228, 0.1)',
         'heart': '#ff6b6b',
       },

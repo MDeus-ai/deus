@@ -86,7 +86,7 @@ const Navbar = () => {
         backdrop-blur-md px-5 py-3 md:px-6`}
         style={{ fontFamily: 'Roboto Slab, serif' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-[#BCA37F] transition-colors duration-300">
+          <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-pink-300 transition-colors duration-300">
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
           </Link>
 
@@ -96,9 +96,9 @@ const Navbar = () => {
                 key={index}
                 to={link.to}
                 className={`relative text-lg font-medium transition-colors duration-300
-                  ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-neutral-300 hover:text-[#BCA37F]'}
+                  ${isActive(link.to) ? 'text-pink-300' : 'text-neutral-300 hover:text-pink-300'}
                   after:content-[''] after:absolute after:bottom-0 after:left-0 
-                  after:w-0 after:h-0.5 after:bg-[#BCA37F] after:transition-all after:duration-300
+                  after:w-0 after:h-0.5 after:bg-pink-400 after:transition-all after:duration-300
                   hover:after:w-full ${isActive(link.to) ? 'after:w-full' : ''}`}
               >
                 {link.label}
@@ -107,7 +107,7 @@ const Navbar = () => {
           </div>
 
           <button
-            className="md:hidden text-white text-2xl hover:text-[#BCA37F] transition-colors duration-300"
+            className="md:hidden text-white text-2xl hover:text-pink-300 transition-colors duration-300"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open menu"
           >
@@ -155,13 +155,13 @@ const Navbar = () => {
             <div className="flex items-center justify-between p-3 md:p-6 border-b border-white/10">
               <Link 
                 to="/" 
-                className="text-white text-2xl md:text-3xl font-bold hover:text-[#BCA37F] transition-colors duration-300"
+                className="text-white text-2xl md:text-3xl font-bold hover:text-pink-300 transition-colors duration-300"
                 onClick={handleCloseMenu}
               >
                 <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
               </Link>
               <button
-                className="w-8 h-8 flex items-center justify-center text-white hover:text-[#BCA37F] 
+                className="w-8 h-8 flex items-center justify-center text-white hover:text-pink-300 
                   hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
                 onClick={handleCloseMenu}
                 aria-label="Close menu"
@@ -178,12 +178,12 @@ const Navbar = () => {
                       key={index}
                       to={link.to}
                       className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
-                        ${isActive(link.to) ? 'text-[#BCA37F]' : 'text-white hover:text-[#BCA37F]'}`}
+                        ${isActive(link.to) ? 'text-pink-300' : 'text-white hover:text-pink-300'}`}
                       onClick={handleCloseMenu}
                     >
                       <span className="relative">
                         {link.label}
-                        <span className={`absolute -left-2 -right-2 h-0.5 bg-[#BCA37F] bottom-0 transform origin-left
+                        <span className={`absolute -left-2 -right-2 h-0.5 bg-pink-400 bottom-0 transform origin-left
                           transition-transform duration-300 ease-out scale-x-0
                           ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
                         />
@@ -196,7 +196,7 @@ const Navbar = () => {
 
             {/* Copyright notice */}
             <div className="p-2 text-center text-sm text-neutral-400 border-t border-white/10">
-              © 2024 Muhumuza Deus. All rights reserved
+              &copy; {new Date().getFullYear()} Muhumuza Deus. All rights reserved.
             </div>
           </div>
         </div>

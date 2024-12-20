@@ -39,17 +39,25 @@ const techStack = [
 
 const IntroductionSection = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [startTyping, setStartTyping] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    // Store ref value in a variable to use in cleanup
     const currentRef = sectionRef.current;
     
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          // Add a small delay before starting the typing animation
+          setTimeout(() => {
+            setStartTyping(true);
+          }, 500);
+        } else {
+          // Reset states when section is out of view
+          setIsVisible(false);
+          setStartTyping(false);
         }
       },
       { threshold: 0.1 }
@@ -64,7 +72,7 @@ const IntroductionSection = () => {
         observer.unobserve(currentRef);
       }
     };
-  }, []); // Empty dependency array since we only want to run this once
+  }, []);
 
   const TechStackItem = ({ tech, index }) => (
     <a
@@ -121,12 +129,16 @@ const IntroductionSection = () => {
           `}>
             <h2 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative tracking-tight">
               <span className="opacity-20" />
-              <ReactTypingEffect 
-                text={["Welcome"]}
-                typingDelay={1500} 
-                speed={50} 
-                eraseDelay={10000000}
-              />
+              {startTyping ? (
+                <ReactTypingEffect 
+                  text={["Welcome"]}
+                  typingDelay={200}
+                  speed={30} 
+                  eraseDelay={10000000}
+                />
+              ) : (
+                <span className="opacity-0">Welcome</span>
+              )}
             </h2>
           </div>
 

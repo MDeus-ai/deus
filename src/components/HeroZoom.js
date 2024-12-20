@@ -1,104 +1,94 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ScrollPrompt from './ScrollPrompt';
 
 const HeroZoom = ({ children, backgroundImage }) => {
   const sectionRef = useRef(null);
-  const animationFrameRef = useRef(null);
-  const lastScrollYRef = useRef(window.scrollY);
   const [transform, setTransform] = useState({ scale: 1, opacity: 1 });
-
+  const frameRef = useRef(null);
+  const lastScrollY = useRef(window.scrollY);
+  const lastScale = useRef(1);
+  
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    // Use transform3d for hardware acceleration
-    const updateTransform = (scale, opacity) => {
-      section.style.setProperty('--scale', scale);
-      setTransform({ scale, opacity });
+    const lerp = (start, end, factor) => {
+      return start + (end - start) * factor;
     };
 
-    const calculateScale = () => {
+    const calculateTransform = () => {
+      if (!section) return;
+
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-      const scrollProgress = 1 - (rect.top + rect.height) / (viewportHeight + rect.height);
       
-      // Get current scale from the CSS variable
-      const currentScale = parseFloat(section.style.getPropertyValue('--scale') || '1');
+      // Refined scroll progress calculation
+      const scrollProgress = Math.max(0, Math.min(1, 1 - (rect.bottom / (viewportHeight + rect.height))));
       
-      // Calculate new scale with improved smoothing
-      let targetScale = 1 + (scrollProgress * 0.8);
-      targetScale = Math.max(1, Math.min(targetScale, 1.8));
+      // Enhanced scale calculation with smoother easing
+      const targetScale = 1 + (scrollProgress * 0.25); // Further reduced scale for subtlety
+      const smoothingFactor = 0.15; // Adjusted for smoother transition
       
-      // Enhanced easing with variable factor based on distance
-      const distance = Math.abs(targetScale - currentScale);
-      const easingFactor = Math.min(0.1, distance * 0.2); // Adaptive easing
-      const newScale = currentScale + (targetScale - currentScale) * easingFactor;
-      
-      // Improved opacity calculation
+      // Apply smooth scale transition
+      const newScale = lerp(lastScale.current, targetScale, smoothingFactor);
+      lastScale.current = newScale;
+
+      // Refined opacity calculation
       let newOpacity = 1;
-      if (rect.top < -viewportHeight * 0.6) {
-        newOpacity = Math.max(0, 1 - Math.abs(rect.top + viewportHeight * 0.6) / (rect.height * 0.4));
+      if (rect.top < -viewportHeight * 0.3) {
+        newOpacity = Math.max(0, 1 - Math.abs(rect.top + viewportHeight * 0.3) / (viewportHeight * 0.7));
       }
 
-      // Only update if the change is significant
-      if (Math.abs(newScale - currentScale) > 0.001 || Math.abs(newOpacity - transform.opacity) > 0.001) {
-        updateTransform(newScale, newOpacity);
+      // Only update if changes are meaningful
+      const scaleDiff = Math.abs(newScale - transform.scale);
+      const opacityDiff = Math.abs(newOpacity - transform.opacity);
+      
+      if (scaleDiff > 0.001 || opacityDiff > 0.001) {
+        setTransform({
+          scale: newScale,
+          opacity: newOpacity
+        });
       }
 
-      // Continue animation if needed
-      if (Math.abs(targetScale - newScale) > 0.001) {
-        animationFrameRef.current = requestAnimationFrame(calculateScale);
+      // Maintain smooth animation
+      if (scaleDiff > 0.0001 || Math.abs(window.scrollY - lastScrollY.current) > 0.1) {
+        frameRef.current = requestAnimationFrame(calculateTransform);
       }
+      
+      lastScrollY.current = window.scrollY;
     };
 
-    // Debounced scroll handler with throttling
     const handleScroll = () => {
-      if (animationFrameRef.current) return;
-      
-      const currentScrollY = window.scrollY;
-      const scrollDelta = Math.abs(currentScrollY - lastScrollYRef.current);
-      
-      // Only update if scroll change is significant
-      if (scrollDelta > 2) {
-        lastScrollYRef.current = currentScrollY;
-        animationFrameRef.current = requestAnimationFrame(() => {
-          calculateScale();
-          animationFrameRef.current = null;
-        });
+      if (!frameRef.current) {
+        frameRef.current = requestAnimationFrame(calculateTransform);
       }
     };
 
-    // Enhanced Intersection Observer
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            calculateScale();
-          }
-        });
-      },
-      {
-        threshold: Array.from({ length: 20 }, (_, i) => i / 20), // Reduced number of thresholds
-        rootMargin: "150px"
-      }
-    );
+    const handleResize = () => {
+      lastScale.current = 1;
+      calculateTransform();
+    };
 
-    observer.observe(section);
+    // Initial setup
+    calculateTransform();
+
+    // Event listeners with passive flag for better performance
     window.addEventListener('scroll', handleScroll, { passive: true });
-    section.style.setProperty('--scale', '1');
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [transform.opacity]); // Added transform.opacity to dependency array
+  }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="h-screen flex items-center justify-center relative overflow-hidden"
+      className="relative h-screen w-full overflow-hidden"
     >
       <div
         className="absolute inset-0 w-full h-full"
@@ -106,29 +96,31 @@ const HeroZoom = ({ children, backgroundImage }) => {
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          transform: `translate3d(0,0,0) scale(${transform.scale})`, // Hardware acceleration
+          transform: `translate3d(0,0,0) scale(${transform.scale})`,
           opacity: transform.opacity,
           willChange: 'transform, opacity',
-          transition: 'transform 0.1s cubic-bezier(0.2, 0, 0.1, 1)', // Faster, smoother transition
-          transformOrigin: 'center center'
+          transformOrigin: 'center center',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+          transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       />
       <div
-        className="absolute inset-0 bg-black"
+        className="absolute inset-0 bg-black/40"
         style={{ 
-          opacity: 0.5,
-          transition: 'opacity 0.2s ease-out'
+          transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       />
       <div 
-        className="relative z-10 text-center px-4"
+        className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4"
         style={{
-          transform: `translate3d(0,0,0) scale(${1 / Math.max(1, transform.scale * 0.9)})`, // Hardware acceleration
-          transition: 'transform 0.1s cubic-bezier(0.2, 0, 0.1, 1)' // Matching transition
+          transform: `scale(${1 / Math.max(1, transform.scale * 0.97)})`,
+          transition: 'transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         {children}
       </div>
+      <ScrollPrompt />
     </section>
   );
 };

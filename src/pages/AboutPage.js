@@ -27,8 +27,7 @@ const AboutPage = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-accent">Hello, I&apos;m Muhumuza Deus</h2>
             <p className="text-lg leading-relaxed">
               I&apos;m a passionate statistics student at Kyambogo University and a self-taught machine learning practitioner. 
-              My journey in the world of data science has been driven by curiosity and a desire to uncover insights 
-              hidden within complex datasets.
+              My journey in the world of machine learning and deep learning has been driven by curiosity. I also love learning about celestial bodies🔭 and astronomy🚀. Am someone how is always on the move to learn now things.
             </p>
           </div>
         </section>
@@ -52,7 +51,7 @@ const AboutPage = () => {
               <li className="text-text-primary">Deep Learning</li>
               <li className="text-text-primary">Data Visualization</li>
               <li className="text-text-primary">Python Programming</li>
-              <li className="text-text-primary">SQL</li>
+              <li className="text-text-primary">Microsoft Office Suite</li>
             </ul>
           </div>
 
@@ -60,8 +59,7 @@ const AboutPage = () => {
             <h3 className="text-xl font-bold text-accent mb-4">Current Focus</h3>
             <p className="leading-relaxed">
               I&apos;m currently diving deep into advanced neural network architectures and their applications 
-              in computer vision and natural language processing. I&apos;m also exploring the intersection of 
-              traditional statistical methods with modern machine learning approaches.
+              in computer vision and natural language processing. I&apos;m also creating youtube content for machine learning.
             </p>
           </div>
 
@@ -70,7 +68,7 @@ const AboutPage = () => {
             <p className="leading-relaxed">
               My aim is to contribute to the field of AI and statistics by developing innovative solutions 
               that can make a real-world impact. I&apos;m particularly interested in applications of AI in 
-              healthcare and environmental science.
+              healthcare, and its intersection with modern astronomy🚀
             </p>
           </div>
         </section>
