@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import AutoTransition from '../components/AutoTransition';
 import ZoomHeroSection from '../components/HeroZoom';
 import IntroductionSection from '../components/IntroductionSection';
+import MilestoneTimeline from '../components/MilestoneTimeline';
 import { FaCertificate } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
@@ -18,10 +19,10 @@ const allProjects = [
   },
   {
     title: 'My YouTube Content',
-    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
+    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\n🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
     link: '/youtube',
     coverImage: '/assets/images/structdata/DeusML_Logo.png',
-    technologies: ['Python', 'Manim', 'Adobe Premiere Pro', 'Canva'],
+    technologies: [],
   },
 ];
 
@@ -181,7 +182,7 @@ const HomePage = () => {
       </ZoomHeroSection>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-40">
-        {/* New Introduction Section */}
+        {/* Introduction Section */}
         <IntroductionSection />
 
         {/* Projects Section */}
@@ -224,10 +225,12 @@ const HomePage = () => {
             ))}
           </div>
         </section>
+
       </main>
+      {/* Milestones Section */}
+      <MilestoneTimeline />  
     </div>
   );
 };
-
 
 export default HomePage;

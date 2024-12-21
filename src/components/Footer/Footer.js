@@ -8,6 +8,7 @@ import {
   FaGithub, 
   FaXTwitter,
   FaWhatsapp,
+  FaYoutube,
   FaQuoteLeft,
   FaQuoteRight
 } from 'react-icons/fa6';
@@ -40,6 +41,13 @@ function Footer() {
       href: "https://wa.me/256776646758",
       label: "WhatsApp",
       hoverColor: "group-hover/icon:bg-green-500",
+      baseColor: "bg-gray-800"
+    },
+    {
+      icon: FaYoutube,
+      href: "https://www.youtube.com/@deusML",
+      label: "YouTube",
+      hoverColor: "group-hover/icon:bg-red-600",
       baseColor: "bg-gray-800"
     }
   ];
@@ -158,7 +166,7 @@ function Footer() {
 
         {/* Copyright Section */}
         <div className="relative mt-12 pt-6 text-center">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
           <p className="flex items-center justify-center text-gray-400 text-sm">
             Designed and built with 
             <FaHeart className="mx-2 text-red-500 animate-pulse hover:scale-110 transition-transform duration-300" />
