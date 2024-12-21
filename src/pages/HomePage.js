@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import AutoTransition from '../components/AutoTransition';
 import ZoomHeroSection from '../components/HeroZoom';
 import IntroductionSection from '../components/IntroductionSection';
-import { FaBrain, FaCertificate } from 'react-icons/fa';
+import { FaCertificate } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
@@ -14,39 +14,14 @@ const allProjects = [
     description: 'Notebooks, And Leaderboard Positions. See my work with structured datasets, including data cleaning, data-analysis, data-transformation, and leveraging machine-learning algorithms for classification and regression tasks',
     link: '/kaggle-competitions',
     coverImage: '/assets/images/structdata/kaggle_main_cover.png',
-    technologies: ['Python', 'Pandas', 'Numpy', 'Scikit-Learn'],
-  },
-  {
-    title: 'Predictive Modeling',
-    description: 'Machine learning models for business forecasting',
-    link: '/predictive-modeling',
-    coverImage: '/assets/images/structdata/struct_im2.jpg',
-    technologies: ['Scikit-learn', 'TensorFlow', 'NumPy'],
+    technologies: [],
   },
   {
     title: 'My YouTube Content',
-    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\n🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related...',
+    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
     link: '/youtube',
     coverImage: '/assets/images/structdata/DeusML_Logo.png',
     technologies: ['Python', 'Manim', 'Adobe Premiere Pro', 'Canva'],
-  },
-  {
-    title: 'Neural Network Architectures',
-    description: 'Designing and implementing cutting-edge neural network structures',
-    icon: <FaBrain />,
-    fullDescription:
-      'This project involves the exploration and implementation of advanced neural network architectures, focusing on novel structures for efficiency and tackling complex tasks.',
-    coverImage: '/assets/images/deeplearning/dl_im1.jpg',
-    technologies: ['PyTorch', 'TensorFlow', 'CUDA'],
-  },
-  {
-    title: 'Computer Vision Applications',
-    description: 'Object detection and image segmentation using CNNs',
-    icon: <FaBrain />,
-    fullDescription:
-      'Leveraging state-of-the-art CNNs to perform tasks such as real-time object detection and image segmentation.',
-    coverImage: '/assets/images/deeplearning/dl_im2.jpg',
-    technologies: ['OpenCV', 'TensorFlow', 'YOLO'],
   },
 ];
 
