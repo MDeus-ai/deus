@@ -10,7 +10,8 @@ import ProjectsPage from './pages/ProjectsPage';
 import './App.css';
 import '@fontsource/roboto-slab';
 
-
+import YouTubePage from './pages/YouTubePage';
+// In your router configuration
 function App() {
   return (
     <Router>
@@ -22,6 +23,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} /> 
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/kaggle-competitions" element={<KagglePage />} />
+          <Route path="/youtube" element={<YouTubePage />} />
         </Routes>
         <Footer />
       </div>

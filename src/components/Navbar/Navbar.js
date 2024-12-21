@@ -43,8 +43,12 @@ const Navbar = () => {
     if (isMenuOpen) {
       setIsMenuVisible(true);
       setIsFading(false);
+      // Dispatch event to hide scroll prompt
+      window.dispatchEvent(new CustomEvent('menuStateChange', { detail: true }));
     } else {
       setIsFading(true);
+      // Dispatch event to show scroll prompt if at top
+      window.dispatchEvent(new CustomEvent('menuStateChange', { detail: false }));
       timeoutId = setTimeout(() => {
         setIsMenuVisible(false);
         setIsFading(false);
@@ -73,20 +77,30 @@ const Navbar = () => {
     return false;
   };
 
+  const handleMenuToggle = (isOpen) => {
+    setIsMenuOpen(isOpen);
+    // Menu state change is handled in the useEffect above
+  };
+
   const handleCloseMenu = () => {
-    setIsMenuOpen(false);
+    handleMenuToggle(false);
   };
 
   return (
     <>
       {/* Navbar */}
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-out 
-        ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        backdrop-blur-md px-5 py-3 md:px-6`}
-        style={{ fontFamily: 'Roboto Slab, serif' }}>
+      <nav 
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-out 
+          ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
+          ${isVisible ? 'translate-y-0' : '-translate-y-full'}
+          backdrop-blur-md px-5 py-3 md:px-6`}
+        style={{ fontFamily: 'Roboto Slab, serif' }}
+      >
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-white text-xl md:text-2xl font-bold hover:text-pink-300 transition-colors duration-300">
+          <Link 
+            to="/" 
+            className="text-white text-xl md:text-2xl font-bold hover:text-pink-300 transition-colors duration-300"
+          >
             <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
           </Link>
 
@@ -108,7 +122,7 @@ const Navbar = () => {
 
           <button
             className="md:hidden text-white text-2xl hover:text-pink-300 transition-colors duration-300"
-            onClick={() => setIsMenuOpen(true)}
+            onClick={() => handleMenuToggle(true)}
             aria-label="Open menu"
           >
             <Menu />
@@ -116,19 +130,21 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Overlay with fade effect */}
+      {/* Overlay with enhanced fade effect */}
       {isMenuVisible && (
         <div 
-          className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-300
+          className={`fixed inset-0 bg-black/30 z-50 transition-all duration-300
             ${isMenuOpen && !isFading ? 'opacity-100' : 'opacity-0'}`}
           onClick={handleCloseMenu}
         >
-          <div className={`absolute inset-0 transition-opacity duration-300 delay-150
-            ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} />
+          <div 
+            className={`absolute inset-0 transition-opacity duration-300 delay-150
+              ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} 
+          />
         </div>
       )}
 
-      {/* Offcanvas with fade effect and copyright */}
+      {/* Enhanced offcanvas with improved animations */}
       {isMenuVisible && (
         <div 
           className={`fixed top-0 right-0 w-full md:w-[400px] h-full z-50 
@@ -144,13 +160,14 @@ const Navbar = () => {
             WebkitPerspective: '1000px',
           }}
         >
-          {/* Background with staggered blur effect */}
-          <div className={`absolute inset-0 transition-opacity duration-300 delay-75
-            bg-white/10 dark:bg-neutral-950/30
-            ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-xl' : 'opacity-0'}`} 
+          {/* Enhanced background blur effect */}
+          <div 
+            className={`absolute inset-0 transition-opacity duration-300 delay-75
+              bg-white/10 dark:bg-neutral-950/30
+              ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-xl' : 'opacity-0'}`} 
           />
 
-          {/* Content container */}
+          {/* Content container with improved layout */}
           <div className="relative h-full flex flex-col">
             <div className="flex items-center justify-between p-3 md:p-6 border-b border-white/10">
               <Link 
@@ -183,9 +200,10 @@ const Navbar = () => {
                     >
                       <span className="relative">
                         {link.label}
-                        <span className={`absolute -left-2 -right-2 h-0.5 bg-pink-400 bottom-0 transform origin-left
-                          transition-transform duration-300 ease-out scale-x-0
-                          ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
+                        <span 
+                          className={`absolute -left-2 -right-2 h-0.5 bg-pink-400 bottom-0 transform origin-left
+                            transition-transform duration-300 ease-out scale-x-0
+                            ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
                         />
                       </span>
                     </Link>

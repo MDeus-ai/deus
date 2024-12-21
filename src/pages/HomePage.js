@@ -24,11 +24,11 @@ const allProjects = [
     technologies: ['Scikit-learn', 'TensorFlow', 'NumPy'],
   },
   {
-    title: 'ETL Pipeline',
-    description: 'Efficient data processing and transformation',
-    link: '/etl-pipeline',
-    coverImage: '/assets/images/structdata/struct_im3.jpg',
-    technologies: ['Python', 'Apache Airflow', 'SQL'],
+    title: 'My YouTube Content',
+    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\n🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related...',
+    link: '/youtube',
+    coverImage: '/assets/images/structdata/DeusML_Logo.png',
+    technologies: ['Python', 'Manim', 'Adobe Premiere Pro', 'Canva'],
   },
   {
     title: 'Neural Network Architectures',
@@ -156,7 +156,9 @@ const ProjectCard = ({ project, isActive, index }) => {
             </h3>
             {project.icon && <div className="text-blue-400 text-xl">{project.icon}</div>}
           </div>
-          <p className="text-gray-300 text-sm leading-relaxed line-clamp-2">{project.description}</p>
+          <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line overflow-y-auto max-h-32">
+            {project.description}
+          </p>
           <div className="pt-2 flex flex-wrap gap-1">
             {project.technologies?.map((tech, index) => (
               <span

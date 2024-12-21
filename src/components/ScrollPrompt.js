@@ -12,19 +12,32 @@ const ScrollPrompt = () => {
       }
     };
 
+    const handleMenuState = (e) => {
+      if (e.detail) {
+        setIsVisible(false);
+      } else if (window.scrollY <= 100) {
+        setIsVisible(true);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('menuStateChange', handleMenuState);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('menuStateChange', handleMenuState);
+    };
   }, []);
 
   return (
     <div 
-      className={`fixed left-1/2 -translate-x-1/2 z-50 transition-opacity duration-300 ${
-        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
       style={{ bottom: '2rem' }}
     >
       <div className="flex flex-col items-center gap-3">
-        <span className="text-white text-sm font-medium tracking-wider">
+        <span className="text-white text-sm font-medium tracking-wider uppercase">
           Scroll Down
         </span>
         <div className="animate-bounce">
