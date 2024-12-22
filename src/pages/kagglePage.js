@@ -49,27 +49,6 @@ const KagglePortfolio = () => {
       tags: ["Regression", "Feature Selection", "XGBoost", "CatBoost", "LightGBM"],
       medal: "non"
     },
-    {
-      id: 3,
-      title: "MNIST Digit Recognizer",
-      description: "Deep learning approach to digit recognition. Implemented CNN architecture with data augmentation and ensemble techniques.",
-      status: "in-progress",
-      rank: 245,
-      totalParticipants: 8900,
-      score: 0.99125,
-      percentile: 95,
-      notebooks: [
-        {
-          title: "MNIST CNN with PyTorch",
-          link: "https://www.kaggle.com/code/username/mnist-cnn-pytorch",
-          stars: 18
-        }
-      ],
-      competitionLink: "https://www.kaggle.com/competitions/digit-recognizer",
-      githubRepo: "https://github.com/username/mnist-competition",
-      tags: ["Deep Learning", "Computer Vision", "PyTorch"],
-      medal: "bronze"
-    }
   ];
 
   const filteredCompetitions = competitions

@@ -41,13 +41,6 @@ const certifications = [
     image: "/assets/images/certs/coursera.png",
     link: "https://www.kaggle.com/learn/certification/muhumuzadeusai/intermediate-machine-learning"
   },
-  {
-    title: "Data Science Professional Certificate",
-    provider: "IBM",
-    date: "2023",
-    image: "/assets/images/certs/ibm.png",
-    link: "#"
-  }
 ];
 
 

@@ -14,33 +14,6 @@ const ProjectsPage = () => {
       demo: "https://your-data-dashboard-demo.com",
       tags: ["Tensorflow", "Python", "Flutter", "Cuda"]
     },
-    {
-      id: 2,
-      title: "Predictive Modeling for Business Forecasting",
-      description: "Machine learning models to predict business trends and outcomes, helping organizations make data-driven decisions with confidence.",
-      image: "/assets/images/project/cover_1.jpg",
-      github: "https://github.com/yourusername/predictive-modeling",
-      demo: "https://your-predictive-model-demo.com",
-      tags: ["Python", "Scikit-learn", "Pandas"]
-    },
-    {
-      id: 3,
-      title: "Neural Network for Image Classification",
-      description: "Deep learning model for classifying images using TensorFlow, achieving high accuracy in identifying and categorizing visual content.",
-      image: "/assets/images/project/cover_1.jpg",
-      github: "https://github.com/yourusername/image-classification",
-      demo: "https://your-image-classifier-demo.com",
-      tags: ["Python", "TensorFlow", "Deep Learning"]
-    },
-    {
-      id: 4,
-      title: "Natural Language Processing Chatbot",
-      description: "AI-powered chatbot using NLP techniques to provide natural and context-aware responses to user queries.",
-      image: "/assets/images/project/cover_1.jpg",
-      github: "https://github.com/yourusername/nlp-chatbot",
-      demo: "https://your-chatbot-demo.com",
-      tags: ["Python", "NLTK", "Machine Learning"]
-    }
   ];
 
   useEffect(() => {
