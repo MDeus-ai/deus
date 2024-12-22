@@ -1,34 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTrophy, FaGraduationCap, FaAward, FaCode } from 'react-icons/fa';
+import { FaTrophy, FaVideo, FaCode } from 'react-icons/fa';
 
 const milestones = [
   {
-    date: "December 2023",
-    title: "First Machine Learning Project",
-    description: "Successfully implemented and deployed a customer churn prediction model",
-    icon: FaCode,
-    category: "Project"
-  },
-  {
-    date: "January 2024",
-    title: "Kaggle Competition Top 10%",
-    description: "Ranked in the top 10% in Titanic Machine Learning Competition",
+    date: "Jan 2024",
+    title: "First Kaggle Competition",
+    description: "Successfully participated in my first kaggle competition, and made a successful submission",
     icon: FaTrophy,
     category: "Achievement"
   },
   {
-    date: "February 2024",
-    title: "IBM Data Science Certificate",
-    description: "Completed the IBM Data Science Professional Certificate",
-    icon: FaGraduationCap,
-    category: "Education"
+    date: "October 2024",
+    title: "Published My Website",
+    description: "I made my website go live, after months of coding and designing it",
+    icon: FaCode,
+    category: "Project"
   },
   {
-    date: "March 2024",
-    title: "Research Paper Published",
-    description: "Published first research paper on ML applications in healthcare",
-    icon: FaAward,
-    category: "Publication"
+    date: "October 2024",
+    title: "Ranked Top 11% In A Kaggle Competition",
+    description: "I participated in a kaggle competition were l ranked top 11% on the leaderboard in the whole world",
+    icon: FaTrophy,
+    category: "Achievement"
+  },
+  {
+    date: "December 2024",
+    title: "Published My First YouTube Video",
+    description: "Created a machine learning youtube channel and published my first YouTube which was about gradients",
+    icon: FaVideo,
+    category: "Project"
   }
 ];
 

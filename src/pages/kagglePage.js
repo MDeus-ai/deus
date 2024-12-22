@@ -30,8 +30,8 @@ const KagglePortfolio = () => {
     },
     {
       id: 2,
-      title: "Exploring Mental Health Data",
-      description: "Using data from a mental health survey to explore factors that may cause individuals to experience depression",
+      title: "Regression with an Insurance Dataset",
+      description: "The objectives of this challenge is to predict insurance premiums based on various factors",
       status: "in-progress",
       rank: 0,
       totalParticipants: 0,
@@ -39,14 +39,14 @@ const KagglePortfolio = () => {
       percentile: 0,
       notebooks: [
         {
-          title: "Mental Health-Depression Prediction",
+          title: "Regression with Insurance",
           link: "",
           stars: 45
         }
       ],
-      competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e11/overview",
+      competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e12/overview",
       githubRepo: "https://github.com/username/house-prices-competition",
-      tags: ["Classification", "Feature Selection", "XGBoost", "CatBoost", "LightGBM"],
+      tags: ["Regression", "Feature Selection", "XGBoost", "CatBoost", "LightGBM"],
       medal: "non"
     },
     {
