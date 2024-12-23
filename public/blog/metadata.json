@@ -4,8 +4,17 @@
       "title": "My First Blog Post",
       "date": "2024-03-23",
       "excerpt": "This is my first blog post about machine learning and AI.",
-      "coverImage": "/assets/images/structdata/kaggle.jpg",
+      "coverImage": "/assets/blog_assets/1.jpg",
       "tags": ["Machine Learning", "Introduction"],
       "readingTime": 5
+    },
+    {
+      "slug": "advanced-ml-post",
+      "title": "Understanding Neural Networks: A Deep Dive",
+      "date": "2024-03-25",
+      "excerpt": "A comprehensive guide to neural networks, including math equations, code examples, and visualizations.",
+      "coverImage": "/assets/blog_assets/7.jpg",
+      "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
+      "readingTime": 12
     }
-  ]
+]

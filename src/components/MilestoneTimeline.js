@@ -37,10 +37,13 @@ const MilestoneTimeline = () => {
   const [animationProgress, setAnimationProgress] = useState(0);
   const timelineRef = useRef(null);
   const itemRefs = useRef([]);
+  const observersRef = useRef([]);
 
   useEffect(() => {
+    let isSubscribed = true;
+    
     const handleScroll = () => {
-      if (timelineRef.current) {
+      if (timelineRef.current && isSubscribed) {
         const rect = timelineRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
         const progress = Math.max(0, Math.min(1, 
@@ -52,18 +55,26 @@ const MilestoneTimeline = () => {
 
     window.addEventListener('scroll', handleScroll);
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      isSubscribed = false;
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
-    const observers = itemRefs.current.map((ref, index) => {
+    observersRef.current = itemRefs.current.map((ref, index) => {
+      if (!ref) return null;
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               setVisibleItems(prev => new Set([...prev, index]));
             }, index * 300);
+            
             observer.unobserve(entry.target);
+            return () => clearTimeout(timeoutId);
           }
         },
         {
@@ -72,11 +83,13 @@ const MilestoneTimeline = () => {
         }
       );
 
-      if (ref) observer.observe(ref);
+      observer.observe(ref);
       return observer;
     });
 
-    return () => observers.forEach(observer => observer.disconnect());
+    return () => {
+      observersRef.current.forEach(observer => observer?.disconnect());
+    };
   }, []);
 
   return (
@@ -96,11 +109,8 @@ const MilestoneTimeline = () => {
       />
 
       <div className="relative z-10">
-        {/* Enhanced title with better visibility and animation */}
         <div className="text-center mb-16">
-          <h2 
-            className="relative inline text-4xl md:text-5xl font-bold"
-          >
+          <h2 className="relative inline text-4xl md:text-5xl font-bold">
             <span className="relative z-10 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Milestone Timeline
             </span>
@@ -162,7 +172,6 @@ const MilestoneTimeline = () => {
                     isLeft ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
                   }`}
                 >
-                  {/* Enhanced card with hover animations */}
                   <div 
                     className="relative bg-gray-800/80 p-4 md:p-6 rounded-xl shadow-xl overflow-hidden group 
                       transition-all duration-300 hover:scale-105"
@@ -222,13 +231,15 @@ const MilestoneTimeline = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes gradientMove {
-          0% { background-position: 0% 50% }
-          50% { background-position: 100% 50% }
-          100% { background-position: 0% 50% }
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes gradientMove {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+          }
+        `
+      }} />
     </section>
   );
 };

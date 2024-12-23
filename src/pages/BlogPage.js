@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Calendar, Clock, Search } from 'lucide-react';
+import { ChevronRight, Calendar, Clock, Search, ChevronDown } from 'lucide-react';
 
 const BlogPage = () => {
   const [posts, setPosts] = useState([]);
@@ -8,18 +8,17 @@ const BlogPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // Instead of using window.fs, fetch the metadata.json file directly
         const response = await fetch('/blog/metadata.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const postsData = await response.json();
         
-        // Sort posts by date (most recent first)
         const sortedPosts = postsData.sort((a, b) => 
           new Date(b.date) - new Date(a.date)
         );
@@ -35,10 +34,8 @@ const BlogPage = () => {
     fetchPosts();
   }, []);
 
-  // Get all unique tags from posts
   const allTags = [...new Set(posts.flatMap(post => post.tags))];
 
-  // Filter posts based on selected tag and search query
   const filteredPosts = posts.filter(post => {
     const matchesTag = !selectedTag || post.tags.includes(selectedTag);
     const matchesSearch = !searchQuery || 
@@ -64,21 +61,20 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 pt-16 md:pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-950 pt-16 md:pt-24 pb-16 px-4 sm:px-6 lg:px-8" style={{ fontFamily: 'Roboto Slab, serif' }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
             Blog
           </h1>
-          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto px-4">
-            Exploring machine learning, deep learning, and artificial intelligence through detailed tutorials and insights.
+          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            Machine learning, Deep learning, Artificial Intelligence, Astronomy, And Everything Else.
           </p>
         </div>
 
         {/* Search and Filter Section */}
         <div className="mb-8 md:mb-12 space-y-4 md:space-y-6">
-          {/* Mobile Search Toggle */}
           <div className="md:hidden flex justify-center mb-4">
             <button
               onClick={() => setIsSearchExpanded(!isSearchExpanded)}
@@ -88,7 +84,6 @@ const BlogPage = () => {
             </button>
           </div>
 
-          {/* Search Bar */}
           <div className={`relative max-w-xl mx-auto transition-all duration-300 ${
             isSearchExpanded ? 'scale-100 opacity-100' : 'scale-95 opacity-0 md:scale-100 md:opacity-100'
           }`}>
@@ -100,18 +95,59 @@ const BlogPage = () => {
               className="w-full px-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg 
                 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 
                 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             />
           </div>
 
-          {/* Tags ScrollView for Mobile */}
-          <div className="overflow-x-auto pb-2 -mx-4 px-4 md:overflow-visible md:pb-0 md:mx-0 md:px-0">
-            <div className="flex flex-nowrap md:flex-wrap gap-2 md:justify-center min-w-min">
+          {/* Mobile Dropdown */}
+          <div className="md:hidden relative">
+            <button
+              onClick={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
+              className="w-full px-4 py-2 bg-neutral-800 text-neutral-300 rounded-lg flex items-center justify-between"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
+            >
+              <span>{selectedTag || 'All Posts'}</span>
+              <ChevronDown className={`w-4 h-4 transform transition-transform ${isTagDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isTagDropdownOpen && (
+              <div className="absolute z-50 mt-2 w-full bg-neutral-800 rounded-lg shadow-lg">
+                <button
+                  onClick={() => {
+                    setSelectedTag(null);
+                    setIsTagDropdownOpen(false);
+                  }}
+                  className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${!selectedTag ? 'text-pink-500' : 'text-neutral-300'}`}
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
+                >
+                  All Posts
+                </button>
+                {allTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => {
+                      setSelectedTag(tag);
+                      setIsTagDropdownOpen(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${
+                      selectedTag === tag ? 'text-pink-500' : 'text-neutral-300'
+                    }`}
+                    style={{ fontFamily: 'Roboto Slab, serif' }}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Tags */}
+          <div className="hidden md:block">
+            <div className="flex flex-wrap gap-2 justify-center">
               <button
                 onClick={() => setSelectedTag(null)}
-                className={`flex-none px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
-                  ${!selectedTag 
-                    ? 'bg-pink-500 text-white' 
-                    : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
+                  ${!selectedTag ? 'bg-pink-500 text-white' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
+                style={{ fontFamily: 'Roboto Slab, serif' }}
               >
                 All Posts
               </button>
@@ -119,10 +155,9 @@ const BlogPage = () => {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className={`flex-none px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
-                    ${selectedTag === tag 
-                      ? 'bg-pink-500 text-white' 
-                      : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
+                    ${selectedTag === tag ? 'bg-pink-500 text-white' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
+                  style={{ fontFamily: 'Roboto Slab, serif' }}
                 >
                   {tag}
                 </button>
@@ -140,7 +175,6 @@ const BlogPage = () => {
               className="group bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 
                 hover:border-pink-500/50 transition-all duration-300 transform hover:-translate-y-1"
             >
-              {/* Post Image */}
               <div className="relative h-48 sm:h-56 overflow-hidden">
                 <img
                   src={post.coverImage}
@@ -150,9 +184,7 @@ const BlogPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 to-transparent" />
               </div>
 
-              {/* Post Content */}
               <div className="p-4 sm:p-6">
-                {/* Tags ScrollView for Mobile */}
                 <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0">
                   <div className="flex flex-nowrap sm:flex-wrap gap-2 min-w-min">
                     {post.tags.map((tag) => (
@@ -160,6 +192,7 @@ const BlogPage = () => {
                         key={tag}
                         className="flex-none px-3 py-1 bg-neutral-800 text-neutral-300 
                           rounded-full text-xs font-medium whitespace-nowrap"
+                        style={{ fontFamily: 'Roboto Slab, serif' }}
                       >
                         {tag}
                       </span>
@@ -168,15 +201,15 @@ const BlogPage = () => {
                 </div>
 
                 <h2 className="text-lg sm:text-xl font-bold text-white mt-3 mb-2 group-hover:text-pink-500 
-                  transition-colors duration-300 line-clamp-2">
+                  transition-colors duration-300 line-clamp-2" style={{ fontFamily: 'Roboto Slab, serif' }}>
                   {post.title}
                 </h2>
 
-                <p className="text-neutral-400 text-sm mb-4 line-clamp-2">
+                <p className="text-neutral-400 text-sm mb-4 line-clamp-2" style={{ fontFamily: 'Roboto Slab, serif' }}>
                   {post.excerpt}
                 </p>
 
-                <div className="flex items-center text-xs sm:text-sm text-neutral-500 space-x-4">
+                <div className="flex items-center text-xs sm:text-sm text-neutral-500 space-x-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
                     {formatDate(post.date)}
@@ -187,7 +220,7 @@ const BlogPage = () => {
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center text-pink-500 text-sm font-medium">
+                <div className="mt-4 flex items-center text-pink-500 text-sm font-medium" style={{ fontFamily: 'Roboto Slab, serif' }}>
                   Read More
                   <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
@@ -199,8 +232,8 @@ const BlogPage = () => {
         {/* Empty State */}
         {filteredPosts.length === 0 && (
           <div className="text-center py-16">
-            <h3 className="text-xl text-neutral-400 mb-2">No posts found</h3>
-            <p className="text-neutral-500">
+            <h3 className="text-xl text-neutral-400 mb-2" style={{ fontFamily: 'Roboto Slab, serif' }}>No posts found</h3>
+            <p className="text-neutral-500" style={{ fontFamily: 'Roboto Slab, serif' }}>
               Try adjusting your search or filter criteria
             </p>
           </div>

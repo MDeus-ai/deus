@@ -111,7 +111,7 @@ const Navbar = () => {
                 key={index}
                 to={link.to}
                 className={`relative text-lg font-medium transition-colors duration-300
-                  ${isActive(link.to) ? 'text-pink-300' : 'text-neutral-300 hover:text-pink-300'}
+                  ${isActive(link.to) ? 'text-pink-400' : 'text-neutral-400 hover:text-pink-400'}
                   after:content-[''] after:absolute after:bottom-0 after:left-0 
                   after:w-0 after:h-0.5 after:bg-pink-400 after:transition-all after:duration-300
                   hover:after:w-full ${isActive(link.to) ? 'after:w-full' : ''}`}

@@ -2,7 +2,7 @@
 title: "My First Blog Post"
 date: "2024-03-23"
 excerpt: "This is my first blog post about machine learning and AI."
-coverImage: "/assets/images/structdata/kaggle.jpg"
+coverImage: "/assets/blog_assets/7.jpg"
 tags: ["Machine Learning", "Introduction"]
 readingTime: 5
 ---
