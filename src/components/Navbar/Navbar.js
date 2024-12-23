@@ -179,7 +179,7 @@ const Navbar = () => {
                 <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
               </Link>
               <button
-                className="w-8 h-8 flex items-center justify-center text-white hover:text-pink-300 
+                className="w-8 h-8 flex items-center justify-center text-white hover:text-pink-400 
                   hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
                 onClick={handleCloseMenu}
                 aria-label="Close menu"
@@ -196,7 +196,7 @@ const Navbar = () => {
                       key={index}
                       to={link.to}
                       className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
-                        ${isActive(link.to) ? 'text-pink-300' : 'text-white hover:text-pink-300'}`}
+                        ${isActive(link.to) ? 'text-pink-400' : 'text-white hover:text-pink-400'}`}
                       onClick={handleCloseMenu}
                     >
                       <span className="relative">
