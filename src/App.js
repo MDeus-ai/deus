@@ -8,6 +8,8 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import './App.css';
+import BlogPage from './pages/BlogPage';
+import BlogPost from './pages/BlogPost';
 import '@fontsource/roboto-slab';
 
 import YouTubePage from './pages/YouTubePage';
@@ -24,6 +26,8 @@ function App() {
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/kaggle-competitions" element={<KagglePage />} />
           <Route path="/youtube" element={<YouTubePage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
         </Routes>
         <Footer />
       </div>

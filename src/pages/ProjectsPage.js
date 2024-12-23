@@ -47,7 +47,8 @@ const ProjectsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
+    <div className="min-h-screen bg-black text-gray-100">
+      {/* Hero Section - Kept unchanged as requested */}
       <header className="relative h-[40vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img 
@@ -80,7 +81,7 @@ const ProjectsPage = () => {
             <div 
               key={project.id}
               ref={el => projectRefs.current[index] = el}
-              className="opacity-0 translate-y-8 transition-all duration-700 ease-out bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700 hover:border-blue-500 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10 group"
+              className="opacity-0 translate-y-8 transition-all duration-700 ease-out bg-indigo-900/10 rounded-xl overflow-hidden border border-indigo-500/30 hover:border-indigo-400 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 group"
               style={{ transition: `transform 0.5s ease, opacity 0.7s ease ${index * 0.1}s` }}
             >
               <div className="relative h-56 md:h-64 overflow-hidden">
@@ -89,18 +90,18 @@ const ProjectsPage = () => {
                   alt={project.title}
                   className="w-full h-full object-cover object-center transform group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent opacity-60"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60"></div>
               </div>
 
               <div className="p-6 space-y-4">
                 <h3 
-                  className="text-xl md:text-2xl font-bold text-blue-400 line-clamp-2"
+                  className="text-xl md:text-2xl font-bold text-indigo-400 line-clamp-2"
                   style={{ fontFamily: 'Roboto Slab, serif' }}
                 >
                   {project.title}
                 </h3>
                 <p 
-                  className="text-gray-300 line-clamp-3"
+                  className="text-indigo-200 line-clamp-3"
                   style={{ fontFamily: 'Roboto Slab, serif' }}
                 >
                   {project.description}
@@ -110,7 +111,7 @@ const ProjectsPage = () => {
                   {project.tags.map((tag, index) => (
                     <span 
                       key={index}
-                      className="px-3 py-1 text-sm bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20"
+                      className="px-3 py-1 text-sm bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20"
                       style={{ fontFamily: 'Roboto Slab, serif' }}
                     >
                       {tag}
@@ -118,12 +119,12 @@ const ProjectsPage = () => {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center pt-4">
+                <div className="flex justify-between items-center pt-4 border-t border-indigo-500/30">
                   <a 
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                    className="flex items-center gap-2 text-indigo-300 hover:text-indigo-400 transition-colors"
                     style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
                     <FaGithub className="text-xl" />
@@ -133,7 +134,7 @@ const ProjectsPage = () => {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors"
+                    className="flex items-center gap-2 text-indigo-300 hover:text-indigo-400 transition-colors"
                     style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
                     <FaExternalLinkAlt className="text-lg" />
