@@ -52,7 +52,7 @@ const YouTubePage = () => {
   const [selectedTag, setSelectedTag] = useState('All');
   const videoRefs = useRef({});
 
-  // Modified Intersection Observer setup
+  // Intersection Observer setup
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

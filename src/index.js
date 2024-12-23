@@ -4,7 +4,6 @@ import App from './App';
 import './index.css';
 import '@fontsource/roboto-slab';
 
-// Create a root and render the app into it
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

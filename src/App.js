@@ -13,7 +13,7 @@ import BlogPost from './pages/BlogPost';
 import '@fontsource/roboto-slab';
 
 import YouTubePage from './pages/YouTubePage';
-// In your router configuration
+// router configuration
 function App() {
   return (
     <Router>

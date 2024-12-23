@@ -48,7 +48,7 @@ const ProjectsPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-gray-100">
-      {/* Hero Section - Kept unchanged as requested */}
+      {/* Hero Section */}
       <header className="relative h-[40vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img 
