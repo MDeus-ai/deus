@@ -70,7 +70,7 @@ const ProjectsPage = () => {
             className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
             style={{ fontFamily: 'Roboto Slab, serif' }}
           >
-            Check out the projects that l have worked on
+            Explore what has been keeping me busy lately
           </p>
         </div>
       </header>

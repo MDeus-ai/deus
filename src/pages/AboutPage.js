@@ -84,7 +84,7 @@ const AboutPage = () => {
             <h2 className="text-2xl md:text-4xl font-bold text-accent">Hello, I&apos;m Muhumuza Deus</h2>
             <p className="text-base md:text-lg leading-relaxed">
               I&apos;m a passionate statistics student at Kyambogo University and a self-taught machine learning practitioner. 
-              My journey in the world of machine learning and deep learning has been driven by curiosity. I also love learning about celestial bodies🔭 and astronomy🚀. Am someone how is always on the move to learn now things.
+              My journey in the world of machine learning and deep learning has been driven by curiosity. I also love learning about celestial bodies🔭 and astronomy🚀. Am always on the move to learn now things.
             </p>
           </div>
         </section>
@@ -98,9 +98,8 @@ const AboutPage = () => {
           >
             <h3 className="text-xl font-bold text-accent mb-4">My Background</h3>
             <p className="text-sm md:text-base leading-relaxed">
-              Currently pursuing my degree in Statistics, I&apos;ve combined my academic knowledge with practical 
-              experience in machine learning and deep learning. This unique blend allows me to approach 
-              data-driven problems with both statistical rigor and cutting-edge AI techniques.
+              I taught myself everything l know about machine learning and deep learning, and my knowledge has been strengthened through utilising online tutorials,
+              kaggle competitions and my projects. My desire to take the path least travelled, and doing hard things has been my driving force.
             </p>
           </div>
 
@@ -243,8 +242,9 @@ const AboutPage = () => {
           >
             <h3 className="text-xl font-bold text-accent mb-4">Current Focus</h3>
             <p className="text-sm md:text-base leading-relaxed">
-              I&apos;m currently diving deep into advanced neural network architectures and their applications 
+              I&apos;m currently focusing on deep learning and its applications 
               in computer vision and natural language processing. I&apos;m also creating youtube content for machine learning.
+              And am actively participating in kaggle competitions every month.
             </p>
           </div>
 
