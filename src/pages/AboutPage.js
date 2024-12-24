@@ -84,7 +84,7 @@ const AboutPage = () => {
             <h2 className="text-2xl md:text-4xl font-bold text-accent">Hello, I&apos;m Muhumuza Deus</h2>
             <p className="text-base md:text-lg leading-relaxed">
               I&apos;m a passionate statistics student at Kyambogo University and a self-taught machine learning practitioner. 
-              My journey in the world of machine learning and deep learning has been driven by curiosity. I also love learning about celestial bodies🔭 and astronomy🚀. Am always on the move to learn now things.
+              My journey in the world of machine learning and deep learning has been driven by curiosity. I also love learning about celestial bodies🔭 and astronomy🚀. Am always on the move to learn new things.
             </p>
           </div>
         </section>

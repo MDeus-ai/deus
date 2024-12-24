@@ -381,7 +381,7 @@ const YouTubePage = () => {
               style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               <FaExternalLinkAlt className="text-xl" />
-              YouTube Channel
+              Channel
             </a>
           </div>
         </div>
