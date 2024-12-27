@@ -14,7 +14,7 @@ const allProjects = [
     title: 'Kaggle Competitions',
     description: 'Notebooks, And Leaderboard Positions. See my work with structured datasets, including data cleaning, data-analysis, data-transformation, and leveraging machine-learning algorithms for classification and regression tasks',
     link: '/kaggle-competitions',
-    coverImage: '/assets/images/structdata/kaggle_main_cover.png',
+    coverImage: '/assets/images/structdata/kaggle_main_cover.jpg',
     technologies: [],
   },
   {
