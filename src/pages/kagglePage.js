@@ -3,7 +3,6 @@ import { FaGithub, FaKaggle, FaMedal, FaSearch, FaFilter } from 'react-icons/fa'
 import { SiJupyter } from 'react-icons/si';
 import NotebookModal from '../components/NotebookModal';
 
-
 const KagglePortfolio = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -127,36 +126,37 @@ const KagglePortfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-gray-100">
-    {/* Hero Section */}
-    <header className="relative h-[40vh] bg-cover bg-center flex items-center justify-center">
-      <div className="absolute inset-0 overflow-hidden">
-        <img 
-          src="/assets/images/structdata/kaggle.jpg" 
-          alt="Projects header"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/60"></div>
-      </div>
-      <div className="relative max-w-7xl mx-auto px-4">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Kaggle Portfolio
-          </h1>
-          <div className="mt-6">
-            <a 
-              href="https://www.kaggle.com/muhumuzadeusai" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors inline-flex justify-center"
-            >
-              <FaKaggle className="text-xl" />
-              Kaggle Profile
-            </a>
+    <div className="min-h-screen bg-black text-gray-100" style={{ fontFamily: 'Roboto Slab, serif' }}>
+      {/* Hero Section */}
+      <header className="relative h-[40vh] bg-cover bg-center flex items-center justify-center">
+        <div className="absolute inset-0 overflow-hidden">
+          <img 
+            src="/assets/images/structdata/kaggle.jpg" 
+            alt="Projects header"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>
+              Kaggle Portfolio
+            </h1>
+            <div className="mt-6">
+              <a 
+                href="https://www.kaggle.com/muhumuzadeusai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors inline-flex justify-center"
+                style={{ fontFamily: 'Roboto Slab, serif' }}
+              >
+                <FaKaggle className="text-xl" />
+                Kaggle Profile
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
       {/* Filters and Search */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -167,6 +167,7 @@ const KagglePortfolio = () => {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="bg-indigo-900/20 border border-indigo-500/30 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               <option value="all">All Competitions</option>
               <option value="completed">Completed</option>
@@ -181,6 +182,7 @@ const KagglePortfolio = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full md:w-80 bg-indigo-900/20 border border-indigo-500/30 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-indigo-500"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             />
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
           </div>
@@ -192,6 +194,7 @@ const KagglePortfolio = () => {
             <div 
               key={competition.id}
               className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
+              style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -287,89 +290,90 @@ const KagglePortfolio = () => {
       <NotebookModal
         notebook={selectedNotebook}
         isOpen={!!selectedNotebook}
-        onClose={() => setSelectedNotebook(null)}/>
+        onClose={() => setSelectedNotebook(null)}
+      />
 
-        {/* Analytics Section - Optional */}
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 p-6">
-            <h2 className="text-2xl font-bold text-indigo-300 mb-6" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              Portfolio Statistics
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-indigo-900/30 rounded-lg p-4">
-                <div className="text-sm text-indigo-300">Total Competitions</div>
-                <div className="text-2xl font-bold">{competitions.length}</div>
+      {/* Analytics Section */}
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 p-6">
+          <h2 className="text-2xl font-bold text-indigo-300 mb-6" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            Portfolio Statistics
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-indigo-900/30 rounded-lg p-4">
+              <div className="text-sm text-indigo-300">Total Competitions</div>
+              <div className="text-2xl font-bold">{competitions.length}</div>
+            </div>
+            <div className="bg-indigo-900/30 rounded-lg p-4">
+              <div className="text-sm text-indigo-300">Completed</div>
+              <div className="text-2xl font-bold">
+                {competitions.filter(comp => comp.status === 'completed').length}
               </div>
-              <div className="bg-indigo-900/30 rounded-lg p-4">
-                <div className="text-sm text-indigo-300">Completed</div>
-                <div className="text-2xl font-bold">
-                  {competitions.filter(comp => comp.status === 'completed').length}
-                </div>
-              </div>
-              <div className="bg-indigo-900/30 rounded-lg p-4">
-                <div className="text-sm text-indigo-300">In Progress</div>
-                <div className="text-2xl font-bold">
-                  {competitions.filter(comp => comp.status === 'in-progress').length}
-                </div>
+            </div>
+            <div className="bg-indigo-900/30 rounded-lg p-4">
+              <div className="text-sm text-indigo-300">In Progress</div>
+              <div className="text-2xl font-bold">
+                {competitions.filter(comp => comp.status === 'in-progress').length}
               </div>
             </div>
           </div>
         </div>
-  
-        {/* Footer */}
-        <footer className="bg-indigo-900/20 mt-16">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="text-center text-indigo-300">
-              <p>Portfolio last updated: December 2024</p>
-            </div>
-          </div>
-        </footer>
       </div>
-    );
-  };
-  
-  // Error Boundary Component
-  class ErrorBoundary extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { hasError: false, error: null };
-    }
-  
-    static getDerivedStateFromError(error) {
-      return { hasError: true, error };
-    }
-  
-    componentDidCatch(error, errorInfo) {
-      console.error('Kaggle Portfolio Error:', error, errorInfo);
-    }
-  
-    render() {
-      if (this.state.hasError) {
-        return (
-          <div className="min-h-screen bg-black text-gray-100 flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-red-400 mb-4">Something went wrong</h1>
-              <p className="text-indigo-300 mb-4">We're sorry, but there was an error loading the portfolio.</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-4 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                Reload Page
-              </button>
-            </div>
+
+      {/* Footer */}
+      <footer className="bg-indigo-900/20 mt-16">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center text-indigo-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
+            <p>Portfolio last updated: December 2024</p>
           </div>
-        );
-      }
-  
-      return this.props.children;
-    }
-  }
-  
-  // Wrap the main component with ErrorBoundary
-  const KagglePortfolioWithErrorBoundary = () => (
-    <ErrorBoundary>
-      <KagglePortfolio />
-    </ErrorBoundary>
+        </div>
+      </footer>
+    </div>
   );
-  
-  export default KagglePortfolioWithErrorBoundary;
+};
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Kaggle Portfolio Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-black text-gray-100 flex items-center justify-center" style={{ fontFamily: 'Roboto Slab, serif' }}>
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-red-400 mb-4">Something went wrong</h1>
+            <p className="text-indigo-300 mb-4">We're sorry, but there was an error loading the portfolio.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+// Wrap the main component with ErrorBoundary
+const KagglePortfolioWithErrorBoundary = () => (
+  <ErrorBoundary>
+    <KagglePortfolio />
+  </ErrorBoundary>
+);
+
+export default KagglePortfolioWithErrorBoundary;
