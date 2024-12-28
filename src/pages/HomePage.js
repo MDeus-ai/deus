@@ -21,7 +21,7 @@ const allProjects = [
     title: 'My YouTube Content',
     description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\n🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
     link: '/youtube',
-    coverImage: '/assets/images/structdata/DeusML_Logo.png',
+    coverImage: '/assets/images/structdata/youtube.jpg',
     technologies: [],
   },
 ];
@@ -105,7 +105,8 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl group h-[550px]">
+      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px] border border-neutral-800 
+        hover:border-pink-500/50 transition-all duration-300">
         <div className="relative h-80 overflow-hidden">
           <img
             src={project.coverImage}
@@ -116,23 +117,23 @@ const ProjectCard = ({ project, isActive, index }) => {
               e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
-        <div className="p-4 space-y-2">
+        <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
+            <h3 className="text-xl font-bold text-white group-hover:text-pink-500 transition-colors duration-300">
               {project.title}
             </h3>
-            {project.icon && <div className="text-blue-400 text-xl">{project.icon}</div>}
+            {project.icon && <div className="text-pink-500 text-xl">{project.icon}</div>}
           </div>
-          <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line overflow-y-auto max-h-32">
+          <p className="text-neutral-400 text-sm leading-relaxed whitespace-pre-line overflow-y-auto max-h-32">
             {project.description}
           </p>
-          <div className="pt-2 flex flex-wrap gap-1">
+          <div className="pt-2 flex flex-wrap gap-2">
             {project.technologies?.map((tech, index) => (
               <span
                 key={index}
-                className="px-2 py-1 text-xs font-medium bg-gray-700 rounded-full text-gray-300"
+                className="px-3 py-1 text-xs font-medium bg-neutral-800 text-neutral-300 rounded-full"
               >
                 {tech}
               </span>
@@ -161,10 +162,26 @@ const HomePage = () => {
     <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
       <ZoomHeroSection backgroundImage="/assets/hero.jpg">
-        <h1 className="text-4xl sm:text-7xl font-bold mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-          <ReactTypingEffect text="Muhumuza Deus" typingDelay={200} speed={100} eraseDelay={10000000} />
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl mb-4 whitespace-nowrap" 
+          style={{ 
+            fontFamily: "'OCR A Extended', monospace",
+            letterSpacing: '-0.05em'
+          }}>
+          <ReactTypingEffect 
+            text="Muhumuza Deus" 
+            typingDelay={200} 
+            speed={100} 
+            eraseDelay={10000000}
+            displayTextRenderer={(text) => {
+              return (
+                <div className="w-full overflow-hidden">
+                  {text}
+                </div>
+              );
+            }}
+          />
         </h1>
-        <div className="text-xl sm:text-2xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
+        <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
           <ReactTypingEffect 
             text="machine learning, deep-learning, statistics" 
             typingDelay={2000} 
