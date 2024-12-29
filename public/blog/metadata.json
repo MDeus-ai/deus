@@ -1,12 +1,12 @@
 [
     {
-      "slug": "my-first-post",
-      "title": "My First Blog Post",
-      "date": "2024-03-23",
-      "excerpt": "This is my first blog post about machine learning and AI.",
-      "coverImage": "/assets/blog_assets/1.jpg",
-      "tags": ["Machine Learning", "Introduction"],
-      "readingTime": 5
+      "slug": "BatchNormalization",
+      "title": "Batch Normalization Crush Course",
+      "date": "2024-12-29",
+      "excerpt": "Understanding the batch normalization alogrithm, and its impact on model performance",
+      "coverImage": "/assets/blog_assets/batch_norm.jpg",
+      "tags": ["Deep Learning", "Mathematics", "Neural Networks", "Algorithms", "Statistics"],
+      "readingTime": 10
     },
     {
       "slug": "advanced-ml-post",

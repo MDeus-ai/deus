@@ -78,6 +78,27 @@ const BlogPost = () => {
   }
 
   const MarkdownComponents = {
+    // Add the image component
+    img: ({ node, src, alt, ...props }) => {
+      // Handle both relative and absolute paths
+      const imgSrc = src.startsWith('/') ? src : `/${src}`;
+      return (
+        <div className="my-8">
+          <img
+            src={imgSrc}
+            alt={alt}
+            className="rounded-lg w-full max-w-3xl mx-auto"
+            loading="lazy"
+            {...props}
+          />
+          {alt && alt !== "my_math" && (
+            <p className="text-center text-sm text-neutral-400 mt-2" style={{ fontFamily: 'Roboto Slab, serif' }}>
+              {alt}
+            </p>
+          )}
+        </div>
+      );
+    },
     h1: ({ children, ...props }) => (
       <h1 className="text-3xl font-bold mt-8 mb-4" style={{ fontFamily: 'Roboto Slab, serif' }} {...props}>
         {children}
