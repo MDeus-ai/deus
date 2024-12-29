@@ -103,13 +103,13 @@ const CertificationCard = ({ cert, index }) => (
 
 const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
-    <div className={`transform transition-all duration-700
+    <div className={`transform transition-all duration-700 
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px] 
+      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px]
         border border-neutral-800 relative
-        hover:border-pink-500/50 transition-all duration-300
+        md:hover:border-pink-500/50 transition-all duration-300
         after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
-        after:opacity-0 group-hover:after:opacity-100
+        after:opacity-0 md:group-hover:after:opacity-100
         after:transition-opacity after:duration-300
         after:bg-gradient-to-r after:from-pink-500/0 after:via-pink-500/10 after:to-pink-500/0
         after:bg-[length:200%_200%] after:bg-clip-padding
@@ -118,17 +118,17 @@ const ProjectCard = ({ project, isActive, index }) => {
           <img
             src={project.coverImage}
             alt={project.title}
-            className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover transform transition-transform duration-700 md:group-hover:scale-110"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
         </div>
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white group-hover:text-pink-500 transition-colors duration-300">
+            <h3 className="text-xl font-bold text-white md:group-hover:text-pink-500 transition-colors duration-300">
               {project.title}
             </h3>
             {project.icon && <div className="text-pink-500 text-xl">{project.icon}</div>}
