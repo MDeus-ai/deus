@@ -105,8 +105,15 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px] border border-neutral-800 
-        hover:border-pink-500/50 transition-all duration-300">
+      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px] 
+        border border-neutral-800 relative
+        hover:border-pink-500/50 transition-all duration-300
+        after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
+        after:opacity-0 group-hover:after:opacity-100
+        after:transition-opacity after:duration-300
+        after:bg-gradient-to-r after:from-pink-500/0 after:via-pink-500/10 after:to-pink-500/0
+        after:bg-[length:200%_200%] after:bg-clip-padding
+        after:p-[1px] after:-m-[1px]">
         <div className="relative h-80 overflow-hidden">
           <img
             src={project.coverImage}
@@ -156,6 +163,7 @@ const ProjectCard = ({ project, isActive, index }) => {
     </FadeInSection>
   );
 };
+
 
 const HomePage = () => {
   return (

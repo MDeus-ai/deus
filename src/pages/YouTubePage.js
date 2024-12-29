@@ -350,7 +350,7 @@ const YouTubePage = () => {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       {/* Header */}
-      <header className="relative h-[25vh] md:h-[40vh]">
+      <header className="relative h-[40vh] md:h-[40vh]">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="/assets/images/youtube/ytcover.jpg" 
