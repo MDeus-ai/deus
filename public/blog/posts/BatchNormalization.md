@@ -117,7 +117,7 @@ model_1.compile(optimizer='sgd',
 model_1.fit(X, y, epochs=30, callbacks=tf_callback, validation_split=0.2)
 ```
 
-   ![metrics of a model without batch normalization layers](/assets/blog_assets/image_assets/bn_asset_4.png)
+   ![metrics (mse) of a model without batch normalization layers](/assets/blog_assets/image_assets/bn_asset_4.png)
 
 ```python
 # With Batch Normalization
@@ -152,13 +152,13 @@ model_1.compile(optimizer='sgd',
 model_1.fit(X, y, epochs=30, callbacks=tf_callback, validation_split=0.2)
 ```
 
-   ![metrics of a model with batch normalization layers](/assets/blog_assets/image_assets/bn_asset_2.png)
+   ![metrics (mse) of a model with batch normalization layers](/assets/blog_assets/image_assets/bn_asset_2.png)
 
 
 ## CONCLUSION:
 
-The Regression Model with Batch Normalization layers had a much lower error during training (red line), and on the validation set (light blue line) compared to the model without any BN layers (orange for training dark blue for validation sets). Hence Batch Normalization increases model performance
-   ![metrics of a model without vs model with batch normalization layes ](/assets/blog_assets/image_assets/bn_asset_3.png)
+The Regression Model with Batch Normalization layers had a much lower error during training (red line), and on the validation set (light blue line) and learns faster compared to the model without any BN layers (orange for training dark blue for validation sets). Hence Batch Normalization increases model performance
+   ![metrics (mse) of a model without vs model with batch normalization layes ](/assets/blog_assets/image_assets/bn_asset_3.png)
 
 
 
