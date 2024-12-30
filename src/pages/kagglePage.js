@@ -40,12 +40,11 @@ const KagglePortfolio = () => {
       percentile: 0,
       notebooks: [
         {
-          title: "Regression with Insurance",
-          link: "https://www.kaggle.com/code/muhumuzadeusai/insurance-regression",
+          title: "Regression With Insurance Premiums📈",
+          link: "https://www.kaggle.com/code/muhumuzadeusai/regression-with-insurance-premiums",
         }
       ],
       competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e12/overview",
-      githubRepo: "https://github.com/MDeus-ai/My_KAGGLE_Work",
       tags: ["Regression", "Feature Selection", "XGBoost", "CatBoost", "LightGBM"],
     },
     {
