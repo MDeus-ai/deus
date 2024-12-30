@@ -8,7 +8,7 @@ readingTime: 10
 ---
 
 
-When I began my journey into deep learning, one of the algorithms that stood out most to me was **Batch Normalization**. The main reason why is because it tries to solve some of the most common problems deep neural networks face  like **Internal Covariate shifts** (changes in the distribution of activations), **Vanishing & Exploding gradients**.
+As I began my journey into deep learning, one of the algorithms that stood out most to me was **Batch Normalization**.  The main reason why was because its simple to understand (as it relies on basic statistical concepts) and tries to solve some of the most common problems deep neural networks face  like **Internal Covariate shifts** (changes in the distribution of activations), **Vanishing & Exploding gradients**.
 
 It also removes the need for manual normalization of training data, and can also introduce some sort of **regularization** (reducing overfitting).
 
