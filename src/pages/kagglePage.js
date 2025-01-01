@@ -34,10 +34,10 @@ const KagglePortfolio = () => {
       title: "Regression with an Insurance Dataset",
       description: "Predicting insurance premiums using various regression techniques and feature engineering.",
       status: "in-progress",
-      rank: 0,
-      totalParticipants: 0,
-      score: 0,
-      percentile: 0,
+      rank: 576,
+      totalParticipants: 2390,
+      score: 1.04726,
+      percentile: 24,
       notebooks: [
         {
           title: "Regression With Insurance Premiums📈",
