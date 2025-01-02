@@ -181,7 +181,7 @@ const HomePage = () => {
         <section className="py-20">
           <FadeInSection>
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
+              <h2 className="text-4xl font-bold mb-4 text-[rgba(255,140,0,0.9)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
                 My Activities
               </h2>
             </div>
@@ -204,7 +204,7 @@ const HomePage = () => {
         <section className="py-2">
           <FadeInSection>
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent" style={{ fontFamily: 'Roboto Slab, serif' }}>
+              <h2 className="text-4xl font-bold mb-4 text-[rgba(255,140,0,0.9)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
                 Certifications
               </h2>
               <p className="text-gray-300 text-lg mb-8">Certifications and achievements in machine learning and data science</p>

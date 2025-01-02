@@ -12,7 +12,7 @@ const NAV_CONFIG = {
   capsuleTransitionDuration: 200,
   capsuleTransitionEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
   mobileMenuDuration: 400,
-  scrollThreshold: 100,
+  scrollThreshold: 60,
   showThreshold: 50,
   maxBlur: 8,
   maxBorderRadius: 20,
@@ -44,7 +44,7 @@ const ROBOTIC_TEXT_CONFIG = {
   },
   ANIMATION: {
     WORD_DURATION: 1500,
-    GLITCH_DURATION: 180,
+    GLITCH_DURATION: 190,
     CHAR_STAGGER_DELAY: 50,
     TRANSITION_SPRING: {
       STIFFNESS: 200,
@@ -54,7 +54,7 @@ const ROBOTIC_TEXT_CONFIG = {
   GLITCH: {
     SHADOW_COLOR_1: '#ff0080',
     SHADOW_COLOR_2: '#00ff80',
-    SHADOW_OFFSET: '2px'
+    SHADOW_OFFSET: '2.5px'
   },
   UNDERLINE: {
     HEIGHT: '2px',

@@ -77,21 +77,36 @@ const ROBOTIC_TEXT_CONFIG = {
 const NAME_CONFIG = {
   FIRST_NAME: "MUHUMUZA",
   LAST_NAME: "DEUS",
+  COLORS: {
+    FIRST_NAME: 'rgba(255, 140, 0, 0.9)',  // Orange color for MUHUMUZA
+    LAST_NAME: 'rgba(252, 225, 192, 0.95)'  // Lighter color for DEUS
+  },
   POSITION: {
     TOP_OFFSET: {
-      MOBILE: '-15%',  // Move up by 15% on mobile
-      DESKTOP: '-10%'  // Move up by 10% on desktop
+      MOBILE: '-15%',
+      DESKTOP: '-10%'
     }
   },
   FONT: {
     SIZE: {
-      MOBILE: '5rem',
-      SM: '7rem',
-      DEFAULT: '8rem',
-      MD: '12rem'
+      MOBILE: {
+        FIRST_NAME: '3rem',  // Smaller size for MUHUMUZA on mobile
+        LAST_NAME: '7.3rem'      // Bigger size for DEUS on mobile
+      },
+      SM: {
+        FIRST_NAME: '6rem',
+        LAST_NAME: '7rem'
+      },
+      DEFAULT: {
+        FIRST_NAME: '7rem',
+        LAST_NAME: '8rem'
+      },
+      MD: {
+        FIRST_NAME: '10rem',
+        LAST_NAME: '12rem'
+      }
     },
     WEIGHT: 'bold',
-    COLOR: 'rgba(252, 225, 192, 0.8)',
     LETTER_SPACING: '-0.05em'
   },
   GLITCH: {
@@ -353,7 +368,7 @@ const CyberNoiseOverlay = () => (
   />
 );
 
-const EnhancedGlitchingName = ({ text }) => {
+const EnhancedGlitchingName = ({ text, isFirstName, isMobile }) => {
   const [isGlitching, setIsGlitching] = useState(false);
   const [glitchedText, setGlitchedText] = useState(text);
   const [rgbOffset, setRgbOffset] = useState({ x: 0, y: 0 });
@@ -372,20 +387,17 @@ const EnhancedGlitchingName = ({ text }) => {
       if (Math.random() < NAME_CONFIG.GLITCH.PROBABILITY) {
         setIsGlitching(true);
         
-        // Generate glitched text
         const newGlitchedText = text
           .split('')
           .map(char => generateGlitchedChar(char))
           .join('');
         setGlitchedText(newGlitchedText);
         
-        // Random RGB split
         setRgbOffset({
           x: (Math.random() - 0.5) * parseFloat(NAME_CONFIG.GLITCH.EFFECTS.RGB_SPLIT_OFFSET),
           y: (Math.random() - 0.5) * parseFloat(NAME_CONFIG.GLITCH.EFFECTS.RGB_SPLIT_OFFSET)
         });
 
-        // Flicker effect
         const flickerInterval = setInterval(() => {
           setFlicker(Math.random() * NAME_CONFIG.GLITCH.EFFECTS.FLICKER_INTENSITY + 
             (1 - NAME_CONFIG.GLITCH.EFFECTS.FLICKER_INTENSITY));
@@ -405,11 +417,20 @@ const EnhancedGlitchingName = ({ text }) => {
     return () => clearInterval(intervalId);
   }, [text, generateGlitchedChar]);
 
+  const getFontSize = () => {
+    if (isMobile) {
+      return isFirstName ? NAME_CONFIG.FONT.SIZE.MOBILE.FIRST_NAME : NAME_CONFIG.FONT.SIZE.MOBILE.LAST_NAME;
+    }
+    return isFirstName ? NAME_CONFIG.FONT.SIZE.MD.FIRST_NAME : NAME_CONFIG.FONT.SIZE.MD.LAST_NAME;
+  };
+
   return (
     <motion.span
       className="inline-block relative"
       style={{
         opacity: flicker,
+        fontSize: getFontSize(),
+        color: isFirstName ? NAME_CONFIG.COLORS.FIRST_NAME : NAME_CONFIG.COLORS.LAST_NAME
       }}
     >
       {isGlitching && (
@@ -492,14 +513,21 @@ const HeroSection = () => {
       >
         <div className="w-full max-w-7xl mx-auto">
           <motion.h1 
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-[12rem] leading-tight md:leading-none font-bold text-white tracking-tighter break-words text-center"
+            className="flex flex-col items-center justify-center leading-tight md:leading-none font-bold tracking-tighter break-words text-center"
             style={{
               letterSpacing: NAME_CONFIG.FONT.LETTER_SPACING
             }}
           >
-            <EnhancedGlitchingName text={NAME_CONFIG.FIRST_NAME} />
-            <br className="block md:block" />
-            <EnhancedGlitchingName text={NAME_CONFIG.LAST_NAME} />
+            <EnhancedGlitchingName 
+              text={NAME_CONFIG.FIRST_NAME} 
+              isFirstName={true}
+              isMobile={isMobile}
+            />
+            <EnhancedGlitchingName 
+              text={NAME_CONFIG.LAST_NAME} 
+              isFirstName={false}
+              isMobile={isMobile}
+            />
           </motion.h1>
         </div>
 

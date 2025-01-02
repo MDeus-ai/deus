@@ -178,7 +178,7 @@ const MilestoneTimeline = () => {
                   > 
                     <div className="relative z-10">
                       <span 
-                        className="text-xs md:text-sm text-purple-400 font-medium block group-hover:text-purple-300 transition-colors duration-300"
+                        className="text-xs md:text-sm text-[rgba(255,140,0,0.9)] font-medium block group-hover:text-purple-300 transition-colors duration-300"
                         style={{
                           transform: isVisible ? 'none' : 'translateY(20px)',
                           opacity: isVisible ? 1 : 0,
