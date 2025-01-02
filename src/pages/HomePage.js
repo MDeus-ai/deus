@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AutoTransition from '../components/AutoTransition';
-import ZoomHeroSection from '../components/HeroZoom';
 import IntroductionSection from '../components/IntroductionSection';
 import MilestoneTimeline from '../components/MilestoneTimeline';
+import HeroSection from '../components/HeroSection';
 import { FaCertificate } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import ReactTypingEffect from 'react-typing-effect';
 
 
 
@@ -169,35 +168,10 @@ const HomePage = () => {
   return (
     <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
-      <ZoomHeroSection backgroundImage="/assets/hero.jpg">
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl mb-4 whitespace-nowrap" 
-          style={{ 
-            fontFamily: "'OCR A Extended', monospace",
-            letterSpacing: '-0.05em'
-          }}>
-          <ReactTypingEffect 
-            text="Muhumuza Deus" 
-            typingDelay={200} 
-            speed={100} 
-            eraseDelay={10000000}
-            displayTextRenderer={(text) => {
-              return (
-                <div className="w-full overflow-hidden">
-                  {text}
-                </div>
-              );
-            }}
-          />
-        </h1>
-        <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl" style={{ fontFamily: 'Roboto Slab, serif' }}>
-          <ReactTypingEffect 
-            text="machine learning, deep-learning, statistics" 
-            typingDelay={2000} 
-            speed={50} 
-            eraseDelay={10000000}
-          />
-        </div>
-      </ZoomHeroSection>
+
+      <HeroSection />
+
+      {/* Main Content */}
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-40">
         {/* Introduction Section */}

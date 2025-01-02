@@ -1,224 +1,345 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+// Navbar dimensions and positioning
+const NAV_CONFIG = {
+  maxWidth: 600,
+  desktopPaddingX: 12,
+  desktopPaddingY: 10,
+  desktopGap: 4,
+  capsuleTransitionDuration: 200,
+  capsuleTransitionEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  mobileMenuDuration: 400,
+  scrollThreshold: 100,
+  showThreshold: 50,
+  maxBlur: 8,
+  maxBorderRadius: 20,
+  maxOpacity: 0.3,
+  mobileBreakpoint: 768,
+  // Mobile menu specific configurations
+  mobile: {
+    headerHeight: '4rem',
+    footerHeight: '4rem',
+    menuPadding: '2rem',
+    fontSize: {
+      sm: '1.5rem',
+      base: '2rem',
+      lg: '2.5rem'
+    },
+    spacing: {
+      menuItems: '2rem'
+    }
+  }
+};
+
+// Robotic text animation configuration
+const ROBOTIC_TEXT_CONFIG = {
+  FONT: {
+    FAMILY: 'Space Mono, monospace',
+    LETTER_SPACING: '0.1em',
+    LINE_HEIGHT: '1.5',
+    COLOR: 'rgba(252, 225, 192, 0.8)'
+  },
+  ANIMATION: {
+    WORD_DURATION: 1500,
+    GLITCH_DURATION: 180,
+    CHAR_STAGGER_DELAY: 50,
+    TRANSITION_SPRING: {
+      STIFFNESS: 200,
+      DAMPING: 20
+    }
+  },
+  GLITCH: {
+    SHADOW_COLOR_1: '#ff0080',
+    SHADOW_COLOR_2: '#00ff80',
+    SHADOW_OFFSET: '2px'
+  },
+  UNDERLINE: {
+    HEIGHT: '2px',
+    COLOR: 'rgba(255, 255, 255, 0.5)',
+    MARGIN_TOP: '0.5rem'
+  }
+};
+
+const RoboticMenuItem = ({ to, label, isActive, onClick }) => {
+  const [isGlitching, setIsGlitching] = useState(false);
+
+  useEffect(() => {
+    const glitchInterval = setInterval(() => {
+      if (Math.random() < 0.3) {
+        setIsGlitching(true);
+        setTimeout(() => {
+          setIsGlitching(false);
+        }, ROBOTIC_TEXT_CONFIG.ANIMATION.GLITCH_DURATION);
+      }
+    }, ROBOTIC_TEXT_CONFIG.ANIMATION.WORD_DURATION);
+
+    return () => clearInterval(glitchInterval);
+  }, []);
+
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="block w-full"
+    >
+      <div className="flex flex-col items-start w-full">
+        <div 
+          className="font-mono relative overflow-hidden w-full"
+          style={{
+            fontFamily: ROBOTIC_TEXT_CONFIG.FONT.FAMILY,
+            letterSpacing: ROBOTIC_TEXT_CONFIG.FONT.LETTER_SPACING,
+            lineHeight: ROBOTIC_TEXT_CONFIG.FONT.LINE_HEIGHT,
+            color: isActive ? '#f97316' : ROBOTIC_TEXT_CONFIG.FONT.COLOR,
+            fontSize: NAV_CONFIG.mobile.fontSize.lg
+          }}
+        >
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              type: "spring",
+              ...ROBOTIC_TEXT_CONFIG.ANIMATION.TRANSITION_SPRING
+            }}
+          >
+            {label.split('').map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0, y: Math.random() * 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.1,
+                  delay: index * (ROBOTIC_TEXT_CONFIG.ANIMATION.CHAR_STAGGER_DELAY / 1000),
+                  type: "spring"
+                }}
+                className="inline-block"
+                style={{
+                  textShadow: isGlitching 
+                    ? `${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_COLOR_1},
+                       -${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} -${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_COLOR_2}`
+                    : 'none',
+                  transition: 'text-shadow 0.15s ease-in-out'
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
+        <div 
+          style={{
+            width: '100%',
+            height: ROBOTIC_TEXT_CONFIG.UNDERLINE.HEIGHT,
+            background: `linear-gradient(to right, transparent, ${ROBOTIC_TEXT_CONFIG.UNDERLINE.COLOR}, transparent)`,
+            marginTop: ROBOTIC_TEXT_CONFIG.UNDERLINE.MARGIN_TOP,
+            clipPath: isGlitching ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+            transition: 'clip-path 0.3s ease-in-out'
+          }}
+        />
+      </div>
+    </Link>
+  );
+};
 
 const Navbar = () => {
+  const [scrollPercentage, setScrollPercentage] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isFading, setIsFading] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [scrollThreshold, setScrollThreshold] = useState(0);
-  const [isFading, setIsFading] = useState(false);
-
+  const [scrollDirection, setScrollDirection] = useState('up');
+  
   const location = useLocation();
 
   const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/projects", label: "Projects" },
-    { to: "/about", label: "About" },
-    { to: "/blog", label: "Blog" }
+    { to: "/", label: "INDEX" },
+    { to: "/projects", label: "PROJECTS" },
+    { to: "/about", label: "ABOUT" },
+    { to: "/blog", label: "BLOG" }
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 70);
+      const scrollRange = 100;
+      const newScrollPercentage = Math.min(currentScrollY / scrollRange, 1);
+      setScrollPercentage(newScrollPercentage);
 
-      if (currentScrollY > lastScrollY && currentScrollY - scrollThreshold > 80) {
-        setIsVisible(false);
-        setScrollThreshold(currentScrollY);
-      } else if (currentScrollY < lastScrollY && lastScrollY - currentScrollY > 10) {
+      if (currentScrollY < NAV_CONFIG.showThreshold) {
         setIsVisible(true);
-        setScrollThreshold(currentScrollY);
+        setScrollDirection('up');
+      } else {
+        const deltaY = currentScrollY - lastScrollY;
+        if (Math.abs(deltaY) > NAV_CONFIG.scrollThreshold) {
+          const newDirection = deltaY > 0 ? 'down' : 'up';
+          if (newDirection !== scrollDirection) {
+            setScrollDirection(newDirection);
+            setIsVisible(newDirection === 'up');
+          }
+        }
       }
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, scrollThreshold]);
+  }, [lastScrollY, scrollDirection]);
 
   useEffect(() => {
     let timeoutId;
     if (isMenuOpen) {
       setIsMenuVisible(true);
       setIsFading(false);
-      // Dispatch event to hide scroll prompt
-      window.dispatchEvent(new CustomEvent('menuStateChange', { detail: true }));
+      document.body.style.overflow = 'hidden';
     } else {
       setIsFading(true);
-      // Dispatch event to show scroll prompt if at top
-      window.dispatchEvent(new CustomEvent('menuStateChange', { detail: false }));
+      document.body.style.overflow = '';
       timeoutId = setTimeout(() => {
         setIsMenuVisible(false);
         setIsFading(false);
-      }, 300);
+      }, NAV_CONFIG.mobileMenuDuration);
     }
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
-    return () => {
       document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
 
-  const isActive = (path) => {
-    if (path === '/' || path === '/about') {
-      return location.pathname === path;
-    }
-    if (path === '/projects') {
-      return location.pathname === '/projects' || location.pathname.startsWith('/projects/');
-    }
-    return false;
-  };
+  const isActive = (path) => location.pathname === path;
+  const handleMenuToggle = (isOpen) => setIsMenuOpen(isOpen);
+  const handleCloseMenu = () => handleMenuToggle(false);
 
-  const handleMenuToggle = (isOpen) => {
-    setIsMenuOpen(isOpen);
-    // Menu state change is handled in the useEffect above
-  };
-
-  const handleCloseMenu = () => {
-    handleMenuToggle(false);
+  const navStyles = {
+    maxWidth: `${NAV_CONFIG.maxWidth}px`,
+    background: `rgba(0, 0, 0, ${NAV_CONFIG.maxOpacity * scrollPercentage})`,
+    backdropFilter: `blur(${NAV_CONFIG.maxBlur * scrollPercentage}px)`,
+    borderRadius: `${NAV_CONFIG.maxBorderRadius * scrollPercentage}px`,
+    borderColor: `rgba(255, 255, 255, ${0.1 * scrollPercentage})`,
+    borderWidth: `${scrollPercentage}px`,
+    padding: `${NAV_CONFIG.desktopPaddingY + (scrollPercentage * 2)}px ${NAV_CONFIG.desktopPaddingX + (scrollPercentage * 4)}px`,
+    transition: `all ${NAV_CONFIG.capsuleTransitionDuration}ms ${NAV_CONFIG.capsuleTransitionEasing}`,
+    margin: '0 auto'
   };
 
   return (
     <>
-      {/* Navbar */}
-      <nav 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-out 
-          ${isScrolled ? 'bg-black/70' : 'bg-neutral-950/80'} 
-          ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-          backdrop-blur-md px-5 py-3 md:px-6`}
-        style={{ fontFamily: 'Roboto Slab, serif' }}
+      {/* Main Navbar */}
+      <div 
+        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full px-4 py-4 
+          transform transition-transform duration-300 ease-in-out
+          ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link 
-            to="/" 
-            className="text-white text-xl md:text-2xl font-bold hover:text-pink-300 transition-colors duration-300"
-          >
-            <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
-          </Link>
+        <div style={navStyles}>
+          <div className="flex items-center justify-between md:justify-center">
+            <Link 
+              to="/" 
+              className="md:hidden text-white text-xl font-bold hover:text-orange-400 transition-colors duration-300"
+            >
+              <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
+            </Link>
 
-          <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link, index) => (
-              <Link
-                key={index}
-                to={link.to}
-                className={`relative text-lg font-medium transition-colors duration-300
-                  ${isActive(link.to) ? 'text-pink-400' : 'text-neutral-400 hover:text-pink-400'}
-                  after:content-[''] after:absolute after:bottom-0 after:left-0 
-                  after:w-0 after:h-0.5 after:bg-pink-400 after:transition-all after:duration-300
-                  hover:after:w-full ${isActive(link.to) ? 'after:w-full' : ''}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <button
-            className="md:hidden text-white text-2xl hover:text-pink-300 transition-colors duration-300"
-            onClick={() => handleMenuToggle(true)}
-            aria-label="Open menu"
-          >
-            <Menu />
-          </button>
-        </div>
-      </nav>
-
-      {/* Overlay with enhanced fade effect */}
-      {isMenuVisible && (
-        <div 
-          className={`fixed inset-0 bg-black/30 z-50 transition-all duration-300
-            ${isMenuOpen && !isFading ? 'opacity-100' : 'opacity-0'}`}
-          onClick={handleCloseMenu}
-        >
-          <div 
-            className={`absolute inset-0 transition-opacity duration-300 delay-150
-              ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} 
-          />
-        </div>
-      )}
-
-      {/* Enhanced offcanvas with improved animations */}
-      {isMenuVisible && (
-        <div 
-          className={`fixed top-0 right-0 w-full md:w-[400px] h-full z-50 
-            transform will-change-transform transition-all duration-300
-            before:content-[''] before:absolute before:top-0 before:left-0 before:w-[1px] before:h-full 
-            before:bg-white/10 before:transition-opacity before:duration-300
-            ${isMenuOpen && !isFading ? 'translate-x-0 opacity-100 before:opacity-100' : 'translate-x-full opacity-0 before:opacity-0'}`}
-          style={{ 
-            fontFamily: 'Roboto Slab, serif',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            perspective: '1000px',
-            WebkitPerspective: '1000px',
-          }}
-        >
-          {/* Enhanced background blur effect */}
-          <div 
-            className={`absolute inset-0 transition-opacity duration-300 delay-75
-              bg-white/10 dark:bg-neutral-950/30
-              ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-xl' : 'opacity-0'}`} 
-          />
-
-          {/* Content container with improved layout */}
-          <div className="relative h-full flex flex-col">
-            <div className="flex items-center justify-between p-3 md:p-6 border-b border-white/10">
-              <Link 
-                to="/" 
-                className="text-white text-2xl md:text-3xl font-bold hover:text-pink-300 transition-colors duration-300"
-                onClick={handleCloseMenu}
-              >
-                <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
-              </Link>
-              <button
-                className="w-8 h-8 flex items-center justify-center text-white hover:text-pink-400 
-                  hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
-                onClick={handleCloseMenu}
-                aria-label="Close menu"
-              >
-                <X className="w-6 h-6" />
-              </button>
+            <div className={`hidden md:flex items-center gap-${NAV_CONFIG.desktopGap}`}>
+              {navLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  to={link.to}
+                  className={`text-sm font-medium tracking-wider transition-colors duration-300
+                    ${isActive(link.to) ? 'text-orange-400' : 'text-neutral-200 hover:text-orange-400'}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-10 md:p-8">
-                <div className="space-y-9">
-                  {navLinks.map((link, index) => (
-                    <Link
-                      key={index}
-                      to={link.to}
-                      className={`group flex items-center text-2xl md:text-3xl font-medium transition-colors duration-300
-                        ${isActive(link.to) ? 'text-pink-400' : 'text-white hover:text-pink-400'}`}
-                      onClick={handleCloseMenu}
-                    >
-                      <span className="relative">
-                        {link.label}
-                        <span 
-                          className={`absolute -left-2 -right-2 h-0.5 bg-pink-400 bottom-0 transform origin-left
-                            transition-transform duration-300 ease-out scale-x-0
-                            ${isActive(link.to) ? 'scale-x-100' : 'group-hover:scale-x-100'}`} 
-                        />
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+            <button
+              className="md:hidden text-white hover:text-orange-400 transition-colors duration-300"
+              onClick={() => handleMenuToggle(true)}
+              aria-label="Toggle menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuVisible && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-${NAV_CONFIG.mobileMenuDuration}
+              ${isMenuOpen && !isFading ? 'opacity-100' : 'opacity-0'}`}
+            onClick={handleCloseMenu}
+          >
+            <div 
+              className={`absolute inset-0 transition-opacity duration-${NAV_CONFIG.mobileMenuDuration} delay-150
+                ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} 
+            />
+          </div>
+
+          {/* Off-canvas Menu */}
+          <div 
+            className={`fixed inset-0 z-50 bg-black/95 backdrop-blur-xl
+              transform transition-transform duration-${NAV_CONFIG.mobileMenuDuration}
+              ${isMenuOpen && !isFading ? 'translate-x-0' : 'translate-x-full'}`}
+          >
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <header 
+                className="flex items-center justify-between px-6"
+                style={{ height: NAV_CONFIG.mobile.headerHeight }}
+              >
+                <Link 
+                  to="/" 
+                  className="text-white hover:text-orange-400 transition-colors duration-300"
+                  onClick={handleCloseMenu}
+                >
+                  <img src="/favicon.png" alt="Logo" className="w-6 h-6" />
+                </Link>
+                <button
+                  className="w-8 h-8 flex items-center justify-center text-white hover:text-orange-400 
+                    hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
+                  onClick={handleCloseMenu}
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </header>
+
+              {/* Navigation Content */}
+              <div className="flex-1 overflow-hidden">
+                <nav className="h-full flex flex-col justify-center overflow-y-auto px-6">
+                  <div 
+                    className="space-y-8 py-8"
+                    style={{ padding: NAV_CONFIG.mobile.menuPadding }}
+                  >
+                    {navLinks.map((link, index) => (
+                      <RoboticMenuItem
+                        key={index}
+                        to={link.to}
+                        label={link.label}
+                        isActive={isActive(link.to)}
+                        onClick={handleCloseMenu}
+                      />
+                    ))}
+                  </div>
+                </nav>
               </div>
-            </div>
 
-            {/* Copyright notice */}
-            <div className="p-2 text-center text-sm text-neutral-400 border-t border-white/10">
-              &copy; {new Date().getFullYear()} Muhumuza Deus. All rights reserved.
+              {/* Footer */}
+              <footer 
+                className="text-center text-sm text-neutral-400 border-t border-white/10 flex items-center justify-center"
+                style={{ height: NAV_CONFIG.mobile.footerHeight }}
+              >
+                © {new Date().getFullYear()} Muhumuza Deus. All rights reserved.
+              </footer>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
