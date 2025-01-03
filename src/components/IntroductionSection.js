@@ -146,7 +146,7 @@ const IntroductionSection = () => {
               <div className="prose prose-invert max-w-none mb-8">
                 <p className="text-neutral-400 text-base sm:text-lg leading-relaxed">
                   To my website! I'm at the exciting crossroads of machine learning and statistics. 
-                  Currently a statistics student at Kyambogo University and a self-taught machine-learning practitioner.
+                  A statistics major at Kyambogo University and a self-taught machine-learning practitioner.
                 </p>
               </div>
 
