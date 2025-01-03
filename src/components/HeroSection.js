@@ -40,7 +40,7 @@ const ROBOTIC_TEXT_CONFIG = {
       DESKTOP: '70%'
     },
     TRANSFORM: 'translateY(-50%)',
-    SPACING_BETWEEN_WORDS: '1.5rem'
+    SPACING_BETWEEN_WORDS: '1.2rem'
   },
   FONT: {
     FAMILY: 'Space Mono, monospace',
