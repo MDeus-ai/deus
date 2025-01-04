@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 // Navbar dimensions and positioning
 const NAV_CONFIG = {
-  maxWidth: 600,
+  maxWidth: 400,
   desktopPaddingX: 12,
   desktopPaddingY: 10,
   desktopGap: 4,
