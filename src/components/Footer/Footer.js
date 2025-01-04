@@ -36,16 +36,32 @@ const GlitchText = ({ text, className = '', glitchIntensity = 0.95, letterSpacin
     return () => clearInterval(glitchInterval);
   }, [text, glitchIntensity]);
 
+  const containerClass = `
+    relative inline-flex flex-wrap whitespace-pre-wrap
+    ${className}
+    ${!isTitle ? "font-['Roboto_Slab']" : ""}
+  `.trim();
+
   return (
-    <span 
-      className={`relative inline-block ${className} ${!isTitle ? "font-['Roboto_Slab']" : ""}`}
-      style={{
-        textShadow: isGlitching ? '2px 2px #ff0080, -2px -2px #00ff80' : 'none',
-        transition: 'text-shadow 0.1s ease-in-out',
-        letterSpacing
-      }}
-    >
-      {glitched}
+    <span className={containerClass}>
+      <span 
+        className="invisible"
+        style={{ letterSpacing }}
+        aria-hidden="true"
+      >
+        {text}
+      </span>
+      <span
+        className="absolute top-0 left-0"
+        style={{
+          textShadow: isGlitching ? '2px 2px #ff0080, -2px -2px #00ff80' : 'none',
+          transition: 'text-shadow 0.1s ease-in-out',
+          letterSpacing,
+          width: '100%',
+        }}
+      >
+        {glitched}
+      </span>
     </span>
   );
 };
@@ -168,7 +184,7 @@ export default function CyberpunkFooter() {
         <div className="mb-12 sm:mb-24 text-center">
           <GlitchText 
             text="C ON NECT" 
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-orange-500 tracking-wider font-mono"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-orange-500 tracking-wider font-mono break-words"
             glitchIntensity={0.85}
             letterSpacing="0.15em"
             isTitle={true}
@@ -182,12 +198,15 @@ export default function CyberpunkFooter() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
+              className="flex flex-col items-start"
             >
-              <GlitchText 
-                text="Let's Build Something Amazing"
-                className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6"
-                glitchIntensity={0.97}
-              />
+              <div className="w-full md:w-auto">
+                <GlitchText 
+                  text="Let's Build Something Amazing"
+                  className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 block"
+                  glitchIntensity={0.97}
+                />
+              </div>
               <p className="text-gray-300 text-base sm:text-lg mb-6 sm:mb-8">
                 Specializing in Deep Learning, Machine Learning, and Statistical Analysis. 
                 Let's collaborate on data-driven solutions that push the boundaries of what's possible.
@@ -209,17 +228,19 @@ export default function CyberpunkFooter() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
-              <GlitchText 
-                text="Get in Touch"
-                className="text-xl sm:text-2xl font-bold text-orange-500 mb-2 sm:mb-4"
-                glitchIntensity={0.97}
-              />
+              <div className="w-full md:w-auto">
+                <GlitchText 
+                  text="Get in Touch"
+                  className="text-xl sm:text-2xl font-bold text-orange-500 mb-2 sm:mb-4 block"
+                  glitchIntensity={0.97}
+                />
+              </div>
               <div className="flex items-center gap-2 sm:gap-3 text-gray-300 justify-end">
                 <span className="text-sm sm:text-base">Kampala, Uganda</span>
                 <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
               </div>
               <a 
-                href="mailto:info@example.com"
+                href="mailto:muhumuzadeus.ai@gmail.com"
                 className="flex items-center gap-2 sm:gap-3 text-gray-300 hover:text-orange-500 transition-colors duration-300 justify-end"
               >
                 <span className="text-sm sm:text-base">muhumuzadeus.ai@gmail.com</span>
