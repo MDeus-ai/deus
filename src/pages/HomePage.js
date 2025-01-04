@@ -106,7 +106,7 @@ const ProjectCard = ({ project, isActive, index }) => {
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
       <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px]
         border border-neutral-800 relative
-        md:hover:border-pink-500/50 transition-all duration-300
+        md:hover:border-[rgba(255,140,0,0.9)] transition-all duration-300
         after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
         after:opacity-0 md:group-hover:after:opacity-100
         after:transition-opacity after:duration-300
@@ -127,7 +127,7 @@ const ProjectCard = ({ project, isActive, index }) => {
         </div>
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white md:group-hover:text-pink-500 transition-colors duration-300">
+            <h3 className="text-xl font-bold text-white md:group-hover:text-[rgba(255,140,0,0.9)] transition-colors duration-300">
               {project.title}
             </h3>
             {project.icon && <div className="text-pink-500 text-xl">{project.icon}</div>}

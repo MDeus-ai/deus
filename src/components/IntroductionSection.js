@@ -171,7 +171,7 @@ const IntroductionSection = () => {
               lg:w-1/2 transition-all duration-1000 delay-700
               ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
             `}>
-              <h3 className="text-xl sm:text-2xl font-medium text-white border-b border-neutral-800 pb-2 mb-6">
+              <h3 className="text-xl sm:text-2xl font-medium text-[rgba(252,225,192,0.95)] border-b border-neutral-800 pb-2 mb-6">
                 Technologies I work with.
               </h3>
               
