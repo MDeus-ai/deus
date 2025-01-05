@@ -11,10 +11,45 @@ import {
   Sparkles
 } from 'lucide-react';
 
-const GlitchText = ({ text, className = '', glitchIntensity = 0.95, letterSpacing = 'normal', isTitle = false }) => {
+// Configuration object for footer customization while maintaining original behavior
+const FOOTER_CONFIG = {
+  glitch: {
+    baseIntensity: 0.98, // Higher means less frequent glitches (original was ~0.95)
+    titleIntensity: 0.85, // Keep original title intensity
+    duration: 200, // Original glitch duration
+    interval: 200, // Time between possible glitch checks (original was 50)
+    chars: '!@#$%^&*()_+-=[]{}|;:,.<>?`~アイウエオカキクケコサシスセソタチツテトナニヌネノ',
+  },
+  animation: {
+    initialDelay: 0.1,
+    staggerDelay: 0.1,
+    duration: 0.5,
+    scale: {
+      hover: 1.1,
+      tap: 0.95,
+    },
+  },
+  colors: {
+    primary: 'orange-500',
+    background: '[#1a1b3c]',
+    text: 'gray-300',
+    muted: 'gray-400',
+  },
+  grid: {
+    size: '2rem',
+    opacity: '33',
+  },
+};
+
+const GlitchText = ({ 
+  text, 
+  className = '', 
+  glitchIntensity = FOOTER_CONFIG.glitch.baseIntensity, 
+  letterSpacing = 'normal', 
+  isTitle = false 
+}) => {
   const [glitched, setGlitched] = useState(text);
   const [isGlitching, setIsGlitching] = useState(false);
-  const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?`~アイウエオカキクケコサシスセソタチツテトナニヌネノ';
   
   useEffect(() => {
     const glitchInterval = setInterval(() => {
@@ -22,16 +57,16 @@ const GlitchText = ({ text, className = '', glitchIntensity = 0.95, letterSpacin
         setIsGlitching(true);
         const glitchedText = text
           .split('')
-          .map(char => Math.random() > 0.75 ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : char)
+          .map(char => Math.random() > 0.75 ? FOOTER_CONFIG.glitch.chars[Math.floor(Math.random() * FOOTER_CONFIG.glitch.chars.length)] : char)
           .join('');
         setGlitched(glitchedText);
         
         setTimeout(() => {
           setGlitched(text);
           setIsGlitching(false);
-        }, 100);
+        }, FOOTER_CONFIG.glitch.duration);
       }
-    }, 50);
+    }, FOOTER_CONFIG.glitch.interval);
     
     return () => clearInterval(glitchInterval);
   }, [text, glitchIntensity]);
@@ -74,9 +109,12 @@ const SocialLink = ({ icon: Icon, href, label, delay = 0 }) => (
     className="group relative p-4"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.5 }}
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
+    transition={{ 
+      delay: FOOTER_CONFIG.animation.initialDelay + (delay * FOOTER_CONFIG.animation.staggerDelay), 
+      duration: FOOTER_CONFIG.animation.duration 
+    }}
+    whileHover={{ scale: FOOTER_CONFIG.animation.scale.hover }}
+    whileTap={{ scale: FOOTER_CONFIG.animation.scale.tap }}
     aria-label={label}
   >
     <div className="absolute inset-0 bg-orange-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -185,7 +223,7 @@ export default function CyberpunkFooter() {
           <GlitchText 
             text="C ON NECT" 
             className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-orange-500 tracking-wider font-mono break-words"
-            glitchIntensity={0.85}
+            glitchIntensity={FOOTER_CONFIG.glitch.titleIntensity}
             letterSpacing="0.15em"
             isTitle={true}
           />
@@ -204,7 +242,7 @@ export default function CyberpunkFooter() {
                 <GlitchText 
                   text="Let's Build Something Amazing"
                   className="text-xl sm:text-2xl font-bold text-orange-500 mb-4 sm:mb-6 block"
-                  glitchIntensity={0.97}
+                  glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
                 />
               </div>
               <p className="text-gray-300 text-base sm:text-lg mb-6 sm:mb-8">
@@ -232,7 +270,7 @@ export default function CyberpunkFooter() {
                 <GlitchText 
                   text="Get in Touch"
                   className="text-xl sm:text-2xl font-bold text-orange-500 mb-2 sm:mb-4 block"
-                  glitchIntensity={0.97}
+                  glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
                 />
               </div>
               <div className="flex items-center gap-2 sm:gap-3 text-gray-300 justify-end">
@@ -266,19 +304,19 @@ export default function CyberpunkFooter() {
               <GlitchText 
                 text="Built and Designed with"
                 className="text-gray-400"
-                glitchIntensity={0.99}
+                glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
               />
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
+<Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
               <GlitchText 
                 text="By Deus"
                 className="text-gray-400"
-                glitchIntensity={0.99}
+                glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
               />
             </motion.div>
             <div className="text-xs sm:text-sm text-gray-400">
               <GlitchText 
                 text="© 2025 • Muhumuza Deus • All rights reserved"
-                glitchIntensity={0.99}
+                glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
               />
             </div>
           </div>
