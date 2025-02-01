@@ -101,24 +101,6 @@ const KagglePortfolio = () => {
       competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e1/overview",
       tags: ["RandomForest Classifier", "SGD Classifier", "Ensemble Learning"],
     },
-    {
-      id: 6,
-      title: "Forecasting Sticker Sales",
-      description: "The objective of this challenge is to forecast sticker sales in different countries.",
-      status: "in-progress",
-      rank: 0,
-      totalParticipants: 0,
-      score: 0,
-      percentile: 0,
-      notebooks: [
-        {
-          title: "Sticker Sales Forecast 📈😊🧐",
-          link: "https://www.kaggle.com/code/muhumuzadeusai/sticker-sales-forecast",
-        }
-      ],
-      competitionLink: "https://www.kaggle.com/competitions/playground-series-s5e1/overview",
-      tags: ["Regression"],
-    },
   ];
 
   const filteredCompetitions = competitions

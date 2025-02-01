@@ -257,8 +257,7 @@ const AboutPage = () => {
             <h3 className="text-xl font-bold text-accent mb-4">Future Goals</h3>
             <p className="text-sm md:text-base leading-relaxed">
               My aim is to contribute to the field of AI and statistics by developing innovative solutions 
-              that can make a real-world impact. I&apos;m particularly interested in applications of AI in 
-              healthcare, and its intersection with modern astronomy🚀
+              that can make a real-world impact, and making this knowledge free for everyone. 
             </p>
           </div>
         </div>

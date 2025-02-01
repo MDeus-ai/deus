@@ -123,7 +123,7 @@ const IntroductionSection = () => {
             text-center mb-12 transition-all duration-1000 delay-300
             ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
           `}>
-            <h2 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[rgba(255,140,0,0.9)]">
+            <h2 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[rgba(252,225,192,0.95)]">
               {startTyping ? (
                 <ReactTypingEffect 
                   text={["Welcome"]}
