@@ -88,7 +88,7 @@ const AutoTransition = ({ items, renderItem, interval = 5000 }) => {
       <button 
         onClick={prevSlide}
         disabled={isAnimating} 
-        className="absolute left-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group z-10 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group z-10 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <FaChevronLeft className="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" />
       </button>
@@ -96,7 +96,7 @@ const AutoTransition = ({ items, renderItem, interval = 5000 }) => {
       <button 
         onClick={nextSlide}
         disabled={isAnimating} 
-        className="absolute right-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group z-10 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:bg-opacity-75 hover:scale-110 focus:outline-none group z-10 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <FaChevronRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
       </button>

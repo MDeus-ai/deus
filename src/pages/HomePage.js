@@ -103,27 +103,30 @@ const CertificationCard = ({ cert, index }) => (
 const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700 
-      ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px]
-        border border-neutral-800 relative
+      ${isActive ? 'scale-75 opacity-100' : 'scale-95 opacity-50'}`}>
+      <div className="bg-neutral-950 rounded-xl overflow-hidden shadow-2xl group h-[550px]
+        border border-neutral-800 relative isolate
         md:hover:border-[rgba(252,225,192,0.95)] transition-all duration-300
         after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
         after:opacity-0 md:group-hover:after:opacity-100
         after:transition-opacity after:duration-300
         after:bg-gradient-to-r after:from-pink-500/0 after:via-pink-500/10 after:to-pink-500/0
         after:bg-[length:200%_200%] after:bg-clip-padding
-        after:p-[1px] after:-m-[1px]">
+        after:p-[1px] after:-m-[1px] after:z-20">
         <div className="relative h-80 overflow-hidden">
-          <img
-            src={project.coverImage}
-            alt={project.title}
-            className="w-full h-full object-cover transform transition-transform duration-700 md:group-hover:scale-110"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src={project.coverImage}
+              alt={project.title}
+              className="w-full h-full object-cover transform transition-transform duration-700 md:group-hover:scale-110"
+              style={{ objectPosition: 'center' }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
+              }}
+            />
+          </div>
+        
         </div>
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
@@ -178,7 +181,7 @@ const HomePage = () => {
         <IntroductionSection />
 
         {/* Projects Section */}
-        <section className="py-20">
+        <section className="py-20 -mx-6 sm:mx-0">
           <FadeInSection>
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-4 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
@@ -187,17 +190,19 @@ const HomePage = () => {
             </div>
           </FadeInSection>
 
-          <AutoTransition 
-            items={allProjects}
-            interval={5000}
-            renderItem={(project, isActive, index) => (
-              <ProjectCard 
-                project={project} 
-                isActive={isActive} 
-                index={index}
-              />
-            )}
-          />
+          <div className="px-0 sm:px-6 w-full">
+            <AutoTransition 
+              items={allProjects}
+              interval={5000}
+              renderItem={(project, isActive, index) => (
+                <ProjectCard 
+                  project={project} 
+                  isActive={isActive} 
+                  index={index}
+                />
+              )}
+            />
+          </div>
         </section>
 
         {/* Certifications Section */}
