@@ -104,7 +104,7 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700 
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-2xl group h-[550px]
+      <div className="bg-neutral-950 rounded-xl overflow-hidden shadow-2xl group h-[550px]
         border border-neutral-800 relative
         md:hover:border-[rgba(252,225,192,0.95)] transition-all duration-300
         after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
@@ -123,7 +123,6 @@ const ProjectCard = ({ project, isActive, index }) => {
               e.target.src = `${process.env.PUBLIC_URL}/assets/placeholder.jpg`;
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/90 via-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
         </div>
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">

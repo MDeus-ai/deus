@@ -69,7 +69,7 @@ const BlogPage = () => {
             Blog
           </h1>
           <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Machine learning, Deep learning, Artificial Intelligence, Astronomy, And Everything Else.
+            Machine learning, Deep learning, Artificial Intelligence, My Learning Experiences And Everything Else.
           </p>
         </div>
 
