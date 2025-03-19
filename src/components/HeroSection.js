@@ -10,7 +10,7 @@ const CHECKERBOARD_CONFIG = {
   FADE_IN_DURATION: 300,
   FADE_OUT_DURATION: 500,
   FADE_TIMING_FUNCTION: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  CELL_DARK_OPACITY: 0.16,
+  CELL_DARK_OPACITY: 0.5,
   BASE_GRID_OPACITY: 0.0,
   BASE_GRID_COLOR: '#2a2a4a'
 };
@@ -155,7 +155,7 @@ const Cell = ({ row, col, shouldBeDark, size }) => {
         transition: `
           opacity ${shouldBeDark ? CHECKERBOARD_CONFIG.FADE_IN_DURATION : CHECKERBOARD_CONFIG.FADE_OUT_DURATION}ms ${CHECKERBOARD_CONFIG.FADE_TIMING_FUNCTION}
         `,
-        backgroundColor: 'rgb(0, 0, 0)',
+        backgroundColor: '#1a1a2e',
         opacity
       }}
     />

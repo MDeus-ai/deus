@@ -18,9 +18,16 @@ const allProjects = [
   },
   {
     title: 'My YouTube Content',
-    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\n🚀Topics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
+    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\nTopics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
     link: '/youtube',
     coverImage: '/assets/images/structdata/youtube.jpg',
+    technologies: [],
+  },
+  {
+    title: 'Data Stories',
+    description: 'Uncovering interesting patterns in fictional and real datasets through various data analysis techniques, leveraging my insights to develop a playful and story like narrative\n (Playing with statistics)',
+    link: '/datastory',
+    coverImage: '/assets/images/datastories/ds-cover.jpg',
     technologies: [],
   },
 ];
@@ -83,7 +90,7 @@ const FadeInSection = ({ children, delay = 0, className = '' }) => {
 
 const CertificationCard = ({ cert, index }) => (
   <FadeInSection delay={index * 200}>
-    <div className="bg-gray-800 rounded-xl p-6 transition-all duration-600 transform 
+    <div className="bg-[#1a1a2e] rounded-xl p-6 transition-all duration-600 transform 
       hover:transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20">
       <div className="flex items-center gap-4 mb-4">
         <FaCertificate className="text-3xl text-purple-400" />
@@ -104,9 +111,9 @@ const ProjectCard = ({ project, isActive, index }) => {
   const cardContent = (
     <div className={`transform transition-all duration-700 
       ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-50'}`}>
-      <div className="bg-neutral-950 rounded-xl overflow-hidden shadow-2xl group h-[550px]
+      <div className="bg-[#1a1a2e] rounded-xl overflow-hidden shadow-2xl group h-[550px]
         border border-neutral-800 relative
-        md:hover:border-[rgba(252,225,192,0.95)] transition-all duration-300
+        md:hover:border-[#1a1a2e] transition-all duration-300
         after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
         after:opacity-0 md:group-hover:after:opacity-100
         after:transition-opacity after:duration-300
@@ -150,7 +157,7 @@ const ProjectCard = ({ project, isActive, index }) => {
   );
 
   return (
-    <FadeInSection delay={index * 200}>
+    <FadeInSection delay={index * 300}>
       {project.link ? (
         <Link to={project.link} className="block">
           {cardContent}
@@ -165,7 +172,7 @@ const ProjectCard = ({ project, isActive, index }) => {
 
 const HomePage = () => {
   return (
-    <div className="bg-black text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
+    <div className="bg-[#1a1b3c] text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
       {/* Hero Section */}
 
       <HeroSection />
@@ -188,7 +195,7 @@ const HomePage = () => {
 
           <AutoTransition 
             items={allProjects}
-            interval={5000}
+            interval={2500}
             renderItem={(project, isActive, index) => (
               <ProjectCard 
                 project={project} 

@@ -111,11 +111,12 @@ const IntroductionSection = () => {
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
       `}
     >
-      <div className="relative bg-neutral-950 rounded-xl p-6 md:p-12 border border-neutral-800">
+      <div className="relative bg-[#1a1a2e] rounded-xl p-6 md:p-12 border border-neutral-800">
         {/* Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#262626_0.5px,transparent_0.5px),linear-gradient(to_bottom,#262626_0.5px,transparent_0.5px)] bg-[size:2rem_2rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)] bg-[size:8rem_8rem]" />
-        </div>
+        <div className="absolute inset-1">
+        <div className="absolute inset-2.5 bg-[linear-gradient(to_right,#FFA50033_1px,transparent_1px),linear-gradient(to_bottom,#FFA50033_1px,transparent_1px)] bg-[size:2rem_2rem]" />
+        <div className="absolute inset-2.5 bg-gradient-to-b from-transparent via-orange-500/5 to-orange-500/10" />
+      </div>
 
         <div className="relative z-10 max-w-6xl mx-auto">
           {/* Title Section */}

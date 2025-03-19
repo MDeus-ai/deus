@@ -8,7 +8,7 @@ import {
   Youtube,
   Globe,
   Code,
-  Sparkles
+  Heart
 } from 'lucide-react';
 
 // Configuration object for footer customization while maintaining original behavior
@@ -292,7 +292,7 @@ export default function CyberpunkFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 sm:mt-24 pt-6 sm:pt-8 border-t border-orange-500/20">
+        <div className="mt-12 sm:mt-24 pt-6 sm:pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
             <motion.div
               className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400"
@@ -306,7 +306,7 @@ export default function CyberpunkFooter() {
                 className="text-gray-400"
                 glitchIntensity={FOOTER_CONFIG.glitch.baseIntensity}
               />
-<Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
+              <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
               <GlitchText 
                 text="By Deus"
                 className="text-gray-400"

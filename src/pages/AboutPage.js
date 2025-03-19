@@ -36,11 +36,11 @@ const AboutPage = () => {
 
   const skills = [
     { name: 'Statistical Analysis', proficiency: 70, color: '#4C51BF' },
-    { name: 'Machine Learning', proficiency: 75, color: '#48BB78' },
+    { name: 'Machine Learning', proficiency: 65, color: '#48BB78' },
     { name: 'Deep Learning', proficiency: 50, color: '#4299E1' },
-    { name: 'Data Visualization', proficiency: 80, color: '#ED8936' },
-    { name: 'Python Programming', proficiency: 80, color: '#9F7AEA' },
-    { name: 'Microsoft Office Suite', proficiency: 95, color: '#F56565' }
+    { name: 'Data Visualization', proficiency: 65, color: '#ED8936' },
+    { name: 'Python Programming', proficiency: 60, color: '#9F7AEA' },
+    { name: 'Microsoft Office Suite', proficiency: 85, color: '#F56565' }
   ];
 
   const CustomTooltip = ({ active, payload }) => {
@@ -56,7 +56,7 @@ const AboutPage = () => {
   };
 
   return (
-    <div className="bg-background text-text-primary font-roboto-slab min-h-screen">
+    <div className="bg-[#1a1b3c] text-text-primary font-roboto-slab min-h-screen">
       <header 
         className="relative h-[40vh] bg-cover bg-center flex items-center justify-center" 
         style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/about/picture_1.jpg)` }}
@@ -93,7 +93,7 @@ const AboutPage = () => {
           <div 
             data-section="background"
             style={{ zIndex: hoveredSkill ? 0 : 1 }}
-            className={`bg-accent-light p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
+            className={`bg-[#1a1a2e] p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
               ${isVisible.background ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <h3 className="text-xl font-bold text-accent mb-4">My Background</h3>
@@ -105,7 +105,7 @@ const AboutPage = () => {
 
           <div 
             data-section="skills"
-            className={`bg-accent-light p-4 md:p-8 rounded-xl shadow-md transition-all duration-1000 ease-out hover:-translate-y-2 hover:shadow-2xl row-span-2 relative z-10
+            className={`bg-[#1a1a2e] p-4 md:p-8 rounded-xl shadow-md transition-all duration-1000 ease-out hover:-translate-y-2 hover:shadow-2xl row-span-2 relative z-10
               ${isVisible.skills ? 'opacity-100 translate-y-0 rotate-0' : 'opacity-0 translate-y-10 rotate-2'}`}
           >
             <h3 className="text-xl font-bold text-accent mb-4 flex justify-between items-center">
@@ -237,7 +237,7 @@ const AboutPage = () => {
           <div 
             data-section="focus"
             style={{ zIndex: hoveredSkill ? 0 : 1 }}
-            className={`bg-accent-light p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
+            className={`bg-[#1a1a2e] p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
               ${isVisible.focus ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <h3 className="text-xl font-bold text-accent mb-4">Current Focus</h3>
@@ -251,7 +251,7 @@ const AboutPage = () => {
           <div 
             data-section="goals"
             style={{ zIndex: hoveredSkill ? 0 : 1 }}
-            className={`bg-accent-light p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
+            className={`bg-[#1a1a2e] p-6 md:p-8 rounded-xl shadow-md transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-2xl
               ${isVisible.goals ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <h3 className="text-xl font-bold text-accent mb-4">Future Goals</h3>

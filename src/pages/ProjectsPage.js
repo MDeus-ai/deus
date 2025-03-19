@@ -47,7 +47,7 @@ const ProjectsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-gray-100">
+    <div className="min-h-screen bg-[#1a1b3c] text-gray-100">
       {/* Hero Section */}
       <header className="relative h-[40vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
@@ -81,7 +81,7 @@ const ProjectsPage = () => {
             <div 
               key={project.id}
               ref={el => projectRefs.current[index] = el}
-              className="opacity-0 translate-y-8 transition-all duration-700 ease-out bg-indigo-900/10 rounded-xl overflow-hidden border border-indigo-500/30 hover:border-indigo-400 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 group"
+              className="opacity-0 translate-y-8 transition-all duration-700 ease-out bg-[#1a1a2e] rounded-xl overflow-hidden border border-indigo-500/30 hover:border-indigo-400 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 group"
               style={{ transition: `transform 0.5s ease, opacity 0.7s ease ${index * 0.1}s` }}
             >
               <div className="relative h-56 md:h-64 overflow-hidden">

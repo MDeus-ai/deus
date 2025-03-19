@@ -192,7 +192,7 @@ const KagglePortfolio = () => {
           {filteredCompetitions.map((competition) => (
             <div 
               key={competition.id}
-              className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
+              className="bg-[#1a1a2e] rounded-xl border border-indigo-500/30 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
               style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               <div className="p-6">

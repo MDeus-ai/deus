@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 // Navbar dimensions and positioning
 const NAV_CONFIG = {
-  maxWidth: 400,
+  maxWidth: 500,
   desktopPaddingX: 12,
   desktopPaddingY: 10,
   desktopGap: 4,
@@ -283,7 +283,7 @@ const Navbar = () => {
 
           {/* Off-canvas Menu */}
           <div 
-            className={`fixed inset-0 z-50 bg-black/95 backdrop-blur-xl
+            className={`fixed inset-0 z-50 bg-[#1a1a2e] backdrop-blur-xl
               transform transition-transform duration-${NAV_CONFIG.mobileMenuDuration}
               ${isMenuOpen && !isFading ? 'translate-x-0' : 'translate-x-full'}`}
           >
@@ -332,7 +332,7 @@ const Navbar = () => {
 
               {/* Footer */}
               <footer 
-                className="text-center text-sm text-neutral-400 border-t border-white/10 flex items-center justify-center"
+                className="text-center text-sm text-neutral-400 border-t border-white/20 flex items-center justify-center"
                 style={{ 
                   height: NAV_CONFIG.mobile.footerHeight,
                   fontFamily: 'Roboto Slab, serif' 
