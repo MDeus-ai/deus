@@ -7,7 +7,7 @@ const ProjectsPage = () => {
   const projects = [
     {
       id: 1,
-      title: "Pastie",
+      title: "PlantVision(cv001dd)",
       description: "A Vision model based on the Convolutional Neural Network Architecture(CNN) for detecting and classifying plant diseases based on plant leaves",
       image: "/assets/images/project/pastie.jpg",
       github: "https://github.com/yourusername/data-dashboard",
