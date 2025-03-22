@@ -1,19 +1,31 @@
 import React, { useEffect, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaArrowRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const ProjectsPage = () => {
   const projectRefs = useRef([]);
 
+  useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'My Projects | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
+
   const projects = [
     {
       id: 1,
+      slug: "plantvision-cv001dd", // Added slug for routing
       title: "PlantVision(cv001dd)",
       description: "A Vision model based on the Convolutional Neural Network Architecture(CNN) for detecting and classifying plant diseases based on plant leaves",
-      image: "/assets/images/project/pastie.jpg",
-      github: "https://github.com/yourusername/data-dashboard",
-      demo: "https://your-data-dashboard-demo.com",
-      tags: ["Tensorflow", "Python", "Flutter", "Cuda"]
+      image: "/assets/images/project/plantvision.jpg",
+      github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
+      tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"]
     },
+    // You can add more projects here
   ];
 
   useEffect(() => {
@@ -84,22 +96,26 @@ const ProjectsPage = () => {
               className="opacity-0 translate-y-8 transition-all duration-700 ease-out bg-[#1a1a2e] rounded-xl overflow-hidden border border-indigo-500/30 hover:border-indigo-400 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20 group"
               style={{ transition: `transform 0.5s ease, opacity 0.7s ease ${index * 0.1}s` }}
             >
-              <div className="relative h-56 md:h-64 overflow-hidden">
+              {/* Project image - now wrapped in Link */}
+              <Link to={`/projects/${project.slug}`} className="block relative h-56 md:h-64 overflow-hidden">
                 <img 
                   src={project.image} 
                   alt={project.title}
                   className="w-full h-full object-cover object-center transform group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-60"></div>
-              </div>
+              </Link>
 
               <div className="p-6 space-y-4">
-                <h3 
-                  className="text-xl md:text-2xl font-bold text-indigo-400 line-clamp-2"
+                {/* Project title - now a Link */}
+                <Link 
+                  to={`/projects/${project.slug}`}
+                  className="block text-xl md:text-2xl font-bold text-indigo-400 line-clamp-2 hover:text-indigo-300 transition-colors"
                   style={{ fontFamily: 'Roboto Slab, serif' }}
                 >
                   {project.title}
-                </h3>
+                </Link>
+                
                 <p 
                   className="text-indigo-200 line-clamp-3"
                   style={{ fontFamily: 'Roboto Slab, serif' }}
@@ -130,16 +146,16 @@ const ProjectsPage = () => {
                     <FaGithub className="text-xl" />
                     <span>GitHub</span>
                   </a>
-                  <a 
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  
+                  {/* View Details Link */}
+                  <Link 
+                    to={`/projects/${project.slug}`}
                     className="flex items-center gap-2 text-indigo-300 hover:text-indigo-400 transition-colors"
                     style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
-                    <FaExternalLinkAlt className="text-lg" />
-                    <span>Live Demo</span>
-                  </a>
+                    <span>View Details</span>
+                    <FaArrowRight className="text-sm" />
+                  </Link>
                 </div>
               </div>
             </div>

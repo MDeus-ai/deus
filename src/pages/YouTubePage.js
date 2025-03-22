@@ -261,6 +261,16 @@ const YouTubePage = () => {
   const [expandedVideo, setExpandedVideo] = useState(null);
   const [selectedTag, setSelectedTag] = useState('All');
   const videoRefs = useRef({});
+  
+  useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'YouTube | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

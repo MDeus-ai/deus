@@ -14,6 +14,16 @@ const AboutPage = () => {
   });
 
   useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'About Me | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {

@@ -332,7 +332,7 @@ const Navbar = () => {
 
               {/* Footer */}
               <footer 
-                className="text-center text-sm text-neutral-400 border-t border-white/10 flex items-center justify-center"
+                className="text-center text-sm text-neutral-400 border-t border-white/5 flex items-center justify-center"
                 style={{ 
                   height: NAV_CONFIG.mobile.footerHeight,
                   fontFamily: 'Roboto Slab, serif' 

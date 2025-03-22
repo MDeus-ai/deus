@@ -11,6 +11,16 @@ const BlogPage = () => {
   const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
 
   useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'Blog | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await fetch('/blog/metadata.json');

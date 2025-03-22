@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaGithub, FaKaggle, FaMedal, FaSearch, FaFilter } from 'react-icons/fa';
 import { SiJupyter } from 'react-icons/si';
 import NotebookModal from '../components/NotebookModal';
@@ -7,6 +7,16 @@ const KagglePortfolio = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedNotebook, setSelectedNotebook] = useState(null);
+
+  useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'Kaggle | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
 
   const competitions = [
     {

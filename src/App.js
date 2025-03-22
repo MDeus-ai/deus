@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
+import ProjectDetailPage from './pages/PlantVisionPage';
 import './App.css';
 import BlogPage from './pages/BlogPage';
 import BlogPost from './pages/BlogPost';
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} /> 
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
           <Route path="/kaggle-competitions" element={<KagglePage />} />
           <Route path="/youtube" element={<YouTubePage />} />
           <Route path="/blog" element={<BlogPage />} />
