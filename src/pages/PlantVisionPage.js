@@ -77,57 +77,126 @@ Input Layer → Convolutional Layers → Pooling Layers → Fully Connected Laye
     `,
     codeSnippets: [
       {
-        title: "Model Definition",
+        title: "Data Augmentation Script",
         language: "python",
-        code: `def create_model(input_shape=(224, 224, 3), num_classes=38):
-    """
-    Create a CNN model for plant disease classification.
-    """
-    base_model = tf.keras.applications.ResNet50(
-        include_top=False,
-        weights='imagenet',
-        input_shape=input_shape
-    )
-    
-    # Freeze the base model
-    base_model.trainable = False
-    
-    model = tf.keras.Sequential([
-        base_model,
-        tf.keras.layers.GlobalAveragePooling2D(),
-        tf.keras.layers.Dense(1024, activation='relu'),
-        tf.keras.layers.Dropout(0.5),
-        tf.keras.layers.Dense(512, activation='relu'),
-        tf.keras.layers.Dropout(0.3),
-        tf.keras.layers.Dense(num_classes, activation='softmax')
-    ])
-    
-    return model`
+        code: `
+              import tensorflow as tf
+              import os
+              import random
+              from tensorflow.keras.preprocessing.image import load_img, img_to_array, save_img
+
+              def augment_images(input_dir, output_dir, num_augmentations):
+                  """
+                  Augments a specified number of images from a directory with diverse transformations 
+                  and saves the augmented dataset, maintaining the original image sizes.
+
+                  Parameters:
+                  input_dir (str): Path to the directory containing the original images.
+                  output_dir (str): Path to the output directory for augmented images.
+                  num_augmentations (int): Number of images to randomly augment.
+                  """
+                  # Create the output directory if it doesn't exist
+                  if not os.path.exists(output_dir):
+                      os.makedirs(output_dir)
+
+                  # List all image files in the input directory
+                  image_files = [f for f in os.listdir(input_dir) if f.lower().endswith(('png', 'jpg', 'jpeg'))]
+                  
+                  if len(image_files) < num_augmentations:
+                      raise ValueError("Number of augmentations exceeds the available images in the directory.")
+                  
+                  # Randomly select images for augmentation
+                  selected_images = random.sample(image_files, num_augmentations)
+
+                  # Define a function to apply diverse and advanced transformations
+                  def apply_augmentations(image):
+                      # Randomly flip
+                      image = tf.image.random_flip_left_right(image)
+                      image = tf.image.random_flip_up_down(image)
+
+                      # Random rotation
+                      radians = random.uniform(-45, 45) * (3.14159265 / 180.0)  # Limit rotation to ±30 degrees
+                      image = rotate_image(image, radians)
+
+                      # Random zoom
+                      scales = [1.0, 1.2, 1.3, 1.5, 1.7, 1.9, 2.1, 2.4]
+                      scale = random.choice(scales)
+                      image = random_zoom(image, scale)
+
+                      # Subtle brightness, contrast, saturation, and hue adjustments
+                      image = tf.image.random_brightness(image, max_delta=0.35)
+                      image = tf.image.random_contrast(image, lower=0.8, upper=1.2)
+                      image = tf.image.random_saturation(image, lower=0.8, upper=1.2)
+                      image = tf.image.random_hue(image, max_delta=0.1)  # Small hue adjustment
+
+                      # Apply Gaussian noise
+                      noise = tf.random.normal(shape=tf.shape(image), mean=0.0, stddev=0.037, dtype=tf.float32)  # Reduced noise
+                      image = image + noise
+
+                      # Clip pixel values to [0, 1]
+                      image = tf.clip_by_value(image, 0.0, 1.0)
+                      return image
+
+                  def rotate_image(image, radians):
+                      """Rotate the image using TensorFlow."""
+                      image = tf.expand_dims(image, axis=0)
+                      rotated_image = tf.keras.layers.RandomRotation(factor=(radians / (2 * 3.14159265)))(image)
+                      return tf.squeeze(rotated_image, axis=0)
+
+                  def random_zoom(image, scale):
+                      """Apply random zoom by cropping and resizing."""
+                      crop_height = min(int(scale * image.shape[0]), image.shape[0])
+                      crop_width = min(int(scale * image.shape[1]), image.shape[1])
+                      cropped_image = tf.image.random_crop(image, size=[crop_height, crop_width, image.shape[-1]])
+                      return tf.image.resize(cropped_image, [image.shape[0], image.shape[1]])
+
+                  # Process each selected image
+                  for img_file in selected_images:
+                      # Load the image
+                      img_path = os.path.join(input_dir, img_file)
+                      image = load_img(img_path)
+                      image_array = img_to_array(image)
+
+                      # Normalize the image
+                      image_array = tf.convert_to_tensor(image_array / 255.0)
+
+                      # Apply augmentations
+                      augmented_image = apply_augmentations(image_array)
+
+                      # Convert back to a valid image format
+                      augmented_image = tf.clip_by_value(augmented_image * 255.0, 0, 255)
+                      augmented_image = tf.cast(augmented_image, tf.uint8)
+
+                      # Save the augmented image
+                      augmented_img_path = os.path.join(output_dir, f"aug2_{img_file}")
+                      save_img(augmented_img_path, augmented_image.numpy())
+
+                  print(f"Augmented images saved in '{output_dir}'.")`
       },
-      {
-        title: "Data Augmentation",
-        language: "python",
-        code: `def create_data_generators():
-    """
-    Create data generators with augmentation.
-    """
-    train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        rescale=1./255,
-        rotation_range=20,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        shear_range=0.2,
-        zoom_range=0.2,
-        horizontal_flip=True,
-        fill_mode='nearest'
-    )
+    //   {
+    //     title: "Data Augmentation",
+    //     language: "python",
+    //     code: `def create_data_generators():
+    // """
+    // Create data generators with augmentation.
+    // """
+    // train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+    //     rescale=1./255,
+    //     rotation_range=20,
+    //     width_shift_range=0.2,
+    //     height_shift_range=0.2,
+    //     shear_range=0.2,
+    //     zoom_range=0.2,
+    //     horizontal_flip=True,
+    //     fill_mode='nearest'
+    // )
     
-    valid_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-        rescale=1./255
-    )
+    // valid_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+    //     rescale=1./255
+    // )
     
-    return train_datagen, valid_datagen`
-      }
+    // return train_datagen, valid_datagen`
+    //   }
     ],
     challenges: [
       "Dealing with imbalanced classes in the dataset",
@@ -391,20 +460,47 @@ const ProjectDetailPage = () => {
       content: () => (
         <div className="bg-neutral-800 rounded-lg p-3 md:p-6 shadow-md border border-neutral-700">
           <pre className="text-gray-200 font-mono text-xs md:text-sm whitespace-pre-line">
-{`project-root/
-├── public/
-│   ├── index.html        # Main HTML file
-│   └── assets/
-│       └── images/       # Image assets
-├── src/
-│   ├── components/       # Reusable components
-│   ├── pages/            # Page components
-│   ├── App.js            # Root component
-│   └── index.js          # Entry point
-└── package.json          # Project configuration`}
+{`
+cv001dd/
+├── data/
+│   ├── data/ 
+│   └── raw/
+│   └── processed/
+├── logs/
+│   ├── train/
+│   └── validation/          
+├── outputs/            
+│   ├── checkpoints/          
+│   └── best-model.hs           
+├── src/  
+|    ├── callbacks/            
+|    │   ├── checkpoints.py          
+|    │   └──tensorboard.py        
+|    ├── data/            
+|    │   └──tensorboard.py       
+|    ├── models/            
+|    │   └──model.py        
+|    ├── train/            
+|    │   └──train.py        
+|    ├── evaluation/           
+|    │   └──evaluation.py        
+|    ├── utils/            
+|    │   └──logger.py        
+|    └── __init__.py            
+├── notebooks/            
+├── tests/  
+|    ├── test_models.py          
+|    ├── test_train.py 
+|    └── test_data.py 
+├── scripts/  
+|    ├── inference.py          
+|    └── deploy.py 
+├── requirements.txt
+├── README.md           
+└── .gitignore `}
           </pre>
           <p className="mt-3 md:mt-4 text-gray-400 text-xs md:text-sm font-roboto-slab">
-            Edit this structure easily by adding or removing folders/files as needed.
+            End of project structure
           </p>
         </div>
       )
