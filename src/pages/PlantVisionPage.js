@@ -473,28 +473,28 @@ cv001dd/
 │   ├── checkpoints/          
 │   └── best-model.hs           
 ├── src/  
-|    ├── callbacks/            
-|    │   ├── checkpoints.py          
-|    │   └──tensorboard.py        
-|    ├── data/            
-|    │   └──tensorboard.py       
-|    ├── models/            
-|    │   └──model.py        
-|    ├── train/            
-|    │   └──train.py        
-|    ├── evaluation/           
-|    │   └──evaluation.py        
-|    ├── utils/            
-|    │   └──logger.py        
-|    └── __init__.py            
+│    ├── callbacks/            
+│    │   ├── checkpoints.py          
+│    │   └──tensorboard.py        
+│    ├── data/            
+│    │   └──tensorboard.py       
+│    ├── models/            
+│    │   └──model.py        
+│    ├── train/            
+│    │   └──train.py        
+│    ├── evaluation/           
+│    │   └──evaluation.py        
+│    ├── utils/            
+│    │   └──logger.py        
+│    └── __init__.py            
 ├── notebooks/            
 ├── tests/  
-|    ├── test_models.py          
-|    ├── test_train.py 
-|    └── test_data.py 
+│    ├── test_models.py          
+│    ├── test_train.py 
+│    └── test_data.py 
 ├── scripts/  
-|    ├── inference.py          
-|    └── deploy.py 
+│    ├── inference.py          
+│    └── deploy.py 
 ├── requirements.txt
 ├── README.md           
 └── .gitignore `}
