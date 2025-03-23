@@ -80,123 +80,156 @@ Input Layer → Convolutional Layers → Pooling Layers → Fully Connected Laye
         title: "Data Augmentation Script",
         language: "python",
         code: `
-              import tensorflow as tf
-              import os
-              import random
-              from tensorflow.keras.preprocessing.image import load_img, img_to_array, save_img
+import tensorflow as tf
+import os
+import random
+from tensorflow.keras.preprocessing.image import load_img, img_to_array, save_img
 
-              def augment_images(input_dir, output_dir, num_augmentations):
-                  """
-                  Augments a specified number of images from a directory with diverse transformations 
-                  and saves the augmented dataset, maintaining the original image sizes.
+def augment_images(input_dir, output_dir, num_augmentations):
+    """
+    Augments a specified number of images from a directory with diverse transformations 
+    and saves the augmented dataset, maintaining the original image sizes.
 
-                  Parameters:
-                  input_dir (str): Path to the directory containing the original images.
-                  output_dir (str): Path to the output directory for augmented images.
-                  num_augmentations (int): Number of images to randomly augment.
-                  """
-                  # Create the output directory if it doesn't exist
-                  if not os.path.exists(output_dir):
-                      os.makedirs(output_dir)
+    Parameters:
+    input_dir (str): Path to the directory containing the original images.
+    output_dir (str): Path to the output directory for augmented images.
+    num_augmentations (int): Number of images to randomly augment.
+    """
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-                  # List all image files in the input directory
-                  image_files = [f for f in os.listdir(input_dir) if f.lower().endswith(('png', 'jpg', 'jpeg'))]
-                  
-                  if len(image_files) < num_augmentations:
-                      raise ValueError("Number of augmentations exceeds the available images in the directory.")
-                  
-                  # Randomly select images for augmentation
-                  selected_images = random.sample(image_files, num_augmentations)
+    # List all image files in the input directory
+    image_files = [f for f in os.listdir(input_dir) if f.lower().endswith(('png', 'jpg', 'jpeg'))]
+    
+    if len(image_files) < num_augmentations:
+        raise ValueError("Number of augmentations exceeds the available images in the directory.")
+    
+    # Randomly select images for augmentation
+    selected_images = random.sample(image_files, num_augmentations)
 
-                  # Define a function to apply diverse and advanced transformations
-                  def apply_augmentations(image):
-                      # Randomly flip
-                      image = tf.image.random_flip_left_right(image)
-                      image = tf.image.random_flip_up_down(image)
+    # Define a function to apply diverse and advanced transformations
+    def apply_augmentations(image):
+        # Randomly flip
+        image = tf.image.random_flip_left_right(image)
+        image = tf.image.random_flip_up_down(image)
 
-                      # Random rotation
-                      radians = random.uniform(-45, 45) * (3.14159265 / 180.0)  # Limit rotation to ±30 degrees
-                      image = rotate_image(image, radians)
+        # Random rotation
+        radians = random.uniform(-45, 45) * (3.14159265 / 180.0)  # Limit rotation to ±30 degrees
+        image = rotate_image(image, radians)
 
-                      # Random zoom
-                      scales = [1.0, 1.2, 1.3, 1.5, 1.7, 1.9, 2.1, 2.4]
-                      scale = random.choice(scales)
-                      image = random_zoom(image, scale)
+        # Random zoom
+        scales = [1.0, 1.2, 1.3, 1.5, 1.7, 1.9, 2.1, 2.4]
+        scale = random.choice(scales)
+        image = random_zoom(image, scale)
 
-                      # Subtle brightness, contrast, saturation, and hue adjustments
-                      image = tf.image.random_brightness(image, max_delta=0.35)
-                      image = tf.image.random_contrast(image, lower=0.8, upper=1.2)
-                      image = tf.image.random_saturation(image, lower=0.8, upper=1.2)
-                      image = tf.image.random_hue(image, max_delta=0.1)  # Small hue adjustment
+        # Subtle brightness, contrast, saturation, and hue adjustments
+        image = tf.image.random_brightness(image, max_delta=0.35)
+        image = tf.image.random_contrast(image, lower=0.8, upper=1.2)
+        image = tf.image.random_saturation(image, lower=0.8, upper=1.2)
+        image = tf.image.random_hue(image, max_delta=0.1)  # Small hue adjustment
 
-                      # Apply Gaussian noise
-                      noise = tf.random.normal(shape=tf.shape(image), mean=0.0, stddev=0.037, dtype=tf.float32)  # Reduced noise
-                      image = image + noise
+        # Apply Gaussian noise
+        noise = tf.random.normal(shape=tf.shape(image), mean=0.0, stddev=0.037, dtype=tf.float32)  # Reduced noise
+        image = image + noise
 
-                      # Clip pixel values to [0, 1]
-                      image = tf.clip_by_value(image, 0.0, 1.0)
-                      return image
+        # Clip pixel values to [0, 1]
+        image = tf.clip_by_value(image, 0.0, 1.0)
+        return image
 
-                  def rotate_image(image, radians):
-                      """Rotate the image using TensorFlow."""
-                      image = tf.expand_dims(image, axis=0)
-                      rotated_image = tf.keras.layers.RandomRotation(factor=(radians / (2 * 3.14159265)))(image)
-                      return tf.squeeze(rotated_image, axis=0)
+    def rotate_image(image, radians):
+        """Rotate the image using TensorFlow."""
+        image = tf.expand_dims(image, axis=0)
+        rotated_image = tf.keras.layers.RandomRotation(factor=(radians / (2 * 3.14159265)))(image)
+        return tf.squeeze(rotated_image, axis=0)
 
-                  def random_zoom(image, scale):
-                      """Apply random zoom by cropping and resizing."""
-                      crop_height = min(int(scale * image.shape[0]), image.shape[0])
-                      crop_width = min(int(scale * image.shape[1]), image.shape[1])
-                      cropped_image = tf.image.random_crop(image, size=[crop_height, crop_width, image.shape[-1]])
-                      return tf.image.resize(cropped_image, [image.shape[0], image.shape[1]])
+    def random_zoom(image, scale):
+        """Apply random zoom by cropping and resizing."""
+        crop_height = min(int(scale * image.shape[0]), image.shape[0])
+        crop_width = min(int(scale * image.shape[1]), image.shape[1])
+        cropped_image = tf.image.random_crop(image, size=[crop_height, crop_width, image.shape[-1]])
+        return tf.image.resize(cropped_image, [image.shape[0], image.shape[1]])
 
-                  # Process each selected image
-                  for img_file in selected_images:
-                      # Load the image
-                      img_path = os.path.join(input_dir, img_file)
-                      image = load_img(img_path)
-                      image_array = img_to_array(image)
+    # Process each selected image
+    for img_file in selected_images:
+        # Load the image
+        img_path = os.path.join(input_dir, img_file)
+        image = load_img(img_path)
+        image_array = img_to_array(image)
 
-                      # Normalize the image
-                      image_array = tf.convert_to_tensor(image_array / 255.0)
+        # Normalize the image
+        image_array = tf.convert_to_tensor(image_array / 255.0)
 
-                      # Apply augmentations
-                      augmented_image = apply_augmentations(image_array)
+        # Apply augmentations
+        augmented_image = apply_augmentations(image_array)
 
-                      # Convert back to a valid image format
-                      augmented_image = tf.clip_by_value(augmented_image * 255.0, 0, 255)
-                      augmented_image = tf.cast(augmented_image, tf.uint8)
+        # Convert back to a valid image format
+        augmented_image = tf.clip_by_value(augmented_image * 255.0, 0, 255)
+        augmented_image = tf.cast(augmented_image, tf.uint8)
 
-                      # Save the augmented image
-                      augmented_img_path = os.path.join(output_dir, f"aug2_{img_file}")
-                      save_img(augmented_img_path, augmented_image.numpy())
+        # Save the augmented image
+        augmented_img_path = os.path.join(output_dir, f"aug2_{img_file}")
+        save_img(augmented_img_path, augmented_image.numpy())
 
-                  print(f"Augmented images saved in '{output_dir}'.")`
+    print(f"Augmented images saved in '{output_dir}'.")`
       },
-    //   {
-    //     title: "Data Augmentation",
-    //     language: "python",
-    //     code: `def create_data_generators():
-    // """
-    // Create data generators with augmentation.
-    // """
-    // train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    //     rescale=1./255,
-    //     rotation_range=20,
-    //     width_shift_range=0.2,
-    //     height_shift_range=0.2,
-    //     shear_range=0.2,
-    //     zoom_range=0.2,
-    //     horizontal_flip=True,
-    //     fill_mode='nearest'
-    // )
-    
-    // valid_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    //     rescale=1./255
-    // )
-    
-    // return train_datagen, valid_datagen`
-    //   }
+      {
+        title: "Data Loaders (data_loader.py)",
+        language: "python",
+        code: `import torch
+from torchvision import datasets
+from torchvision.transforms import v2
+from torch.utils.data import DataLoader
+
+# Define image transformations for training and validation
+train_transforms = v2.Compose([
+    v2.Resize((224, 224)),
+    v2.RandomHorizontalFlip(),
+    v2.RandomRotation(10),
+    v2.ToImage(),
+    v2.ToDtype(torch.float32, scale=True),
+    v2.Normalize(
+        mean=[0.485, 0.456, 0.406], 
+        std=[0.229, 0.224, 0.225]
+    )
+])
+val_transforms = v2.Compose([
+    v2.Resize((224, 224)),
+    v2.ToImage(),
+    v2.ToDtype(torch.float32, scale=True),
+    v2.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+
+# CREATING DATASETS
+train_dataset = datasets.ImageFolder(
+    root='/path/to/train/data',
+    transform=train_transforms
+)
+val_dataset = datasets.ImageFolder(
+    root='/path/to/validation/data',
+    transform=val_transforms
+)
+
+# DATASET LOADERS
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=64,
+    shuffle=True,
+    num_workers=2,
+    pin_memory=True
+)
+val_loader = DataLoader(
+    val_dataset,
+    batch_size=64,
+    shuffle=False,
+    num_workers=2,
+    pin_memory=True
+)`
+      }
     ],
     challenges: [
       "Dealing with imbalanced classes in the dataset",
@@ -531,20 +564,15 @@ cv001dd/
     },
     {
       id: SectionTypes.DATA_LINKS,
-      title: "Data Sources & Papers",
+      title: "Relevant Research Papers",
       icon: <FaLink />,
       content: () => (
         <div className="bg-neutral-800 rounded-lg p-3 md:p-6 shadow-md border border-neutral-700">
           <ul className="list-disc list-inside space-y-2 text-sm md:text-base font-roboto-slab">
             <li>
-              <a href="https://example.com/dataset" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                Plant Disease Dataset
-              </a> - Public dataset used for training.
-            </li>
-            <li>
-              <a href="https://example.com/research-paper" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                Relevant Research Paper
-              </a> - Paper on CNN architectures for plant disease detection.
+              <a href="https://arxiv.org/abs/1905.11946" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                EfficientNet Paper
+              </a> - Paper on the EfficientNet structure and model scaling techniques it uses for better performance
             </li>
           </ul>
         </div>
