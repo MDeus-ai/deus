@@ -21,31 +21,25 @@ const projectsData = {
     github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
     tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
     metrics: [
-      { name: "Model Accuracy", value: 94.7 },
-      { name: "Precision", value: 92.3 },
-      { name: "Recall", value: 91.8 },
-      { name: "F1 Score", value: 92.0 },
-      { name: "Top 1% Accuracy", value: 98.5 },
-      { name: "Top 5% Accuracy", value: 96.7 }
+      { name: "Model Accuracy", value: 0 },
+      { name: "Precision", value: 0 },
+      { name: "Recall", value: 0 },
+      { name: "F1 Score", value: 0 },
+      { name: "Top 1% Accuracy", value: 0 },
+      { name: "Top 5% Accuracy", value: 0 }
     ],
     documentation: `
-# PlantVision Documentation
-
-## Introduction
-
-PlantVision is an innovative computer vision system designed for real-time identification and classification of plant diseases. It utilizes deep learning techniques to analyze plant leaf images and provide accurate diagnoses, helping in early disease detection and treatment.
-
-## Architecture Overview
+# Architecture Overview
 
 The system consists of three main components:
 
-1. **CNN-based Image Classification Model**: Built with TensorFlow and PyTorch.
+1. **CNN-based Image Classification Model based on an EfficientNet-2b**: Built with TensorFlow and PyTorch.
 2. **Mobile Application**: Developed using Flutter.
 3. **Backend API**: Handles image processing, model inference, and treatment recommendations.
 
-## Model Details
+# Model Details
 
-The CNN architecture includes:
+The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
 
 \`\`\`
 Input Layer → Convolutional Layers → Pooling Layers → Fully Connected Layers → Output Layer
