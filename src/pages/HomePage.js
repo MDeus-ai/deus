@@ -15,17 +15,17 @@ const allProjects = [
     technologies: [],
   },
   {
-    title: 'My YouTube Content',
-    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\nTopics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
-    link: '/youtube',
-    coverImage: '/assets/images/structdata/youtube.jpg',
-    technologies: [],
-  },
-  {
     title: 'Data Stories...',
     description: 'Uncovering interesting patterns in fictional and real datasets through various data analysis techniques, leveraging my insights to develop a playful and story like narrative\n (Playing with statistics)',
     link: '/datastory',
     coverImage: '/assets/images/datastories/ds-cover.jpg',
+    technologies: [],
+  },
+  {
+    title: 'YouTube Content',
+    description: 'Inspired From My Name, Deus (.M.L is for Machine Learning;)\nTopics I Cover include Machine Learning, Deep Learning, Coding tutorials, The underlying Math, and anything related',
+    link: '/youtube',
+    coverImage: '/assets/images/structdata/youtube.jpg',
     technologies: [],
   },
 ];
