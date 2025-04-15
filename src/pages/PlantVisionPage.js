@@ -488,7 +488,7 @@ const ProjectDetailPage = () => {
         <div className="bg-neutral-800 rounded-lg p-3 md:p-6 shadow-md border border-neutral-700">
           <pre className="text-gray-200 font-mono text-xs md:text-sm whitespace-pre-line">
 {`
-cv001dd/
+cv001dd/ #Root directory
 ├── data/
 │   ├── data/ 
 │   └── raw/
@@ -516,8 +516,7 @@ cv001dd/
 │    └── __init__.py            
 ├── notebooks/            
 ├── tests/  
-│    ├── test_models.py          
-│    ├── test_train.py 
+│    ├── test_models.py                                                                                                                                                      
 │    └── test_data.py 
 ├── scripts/  
 │    ├── inference.py          

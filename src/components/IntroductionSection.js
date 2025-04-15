@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPython, FaUserCircle } from 'react-icons/fa';
-import { SiPandas, SiNumpy, SiScikitlearn, SiTensorflow } from 'react-icons/si';
+import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch} from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
@@ -9,32 +9,32 @@ const techStack = [
     icon: FaPython, 
     name: 'Python',
     description: 'Core language',
-    link: 'https://www.python.org/'
+    // link: 'https://www.python.org/'
   },
   { 
     icon: SiPandas, 
     name: 'Pandas',
     description: 'Data analysis',
-    link: 'https://pandas.pydata.org/'
+    // link: 'https://pandas.pydata.org/'
   },
   { 
     icon: SiNumpy, 
     name: 'NumPy',
     description: 'Array computing',
-    link: 'https://numpy.org/'
+    // link: 'https://numpy.org/'
   },
   { 
     icon: SiScikitlearn, 
     name: 'Scikit-learn',
     description: 'ML algorithms',
-    link: 'https://scikit-learn.org/'
+    // link: 'https://scikit-learn.org/'
   },
   { 
-    icon: SiTensorflow, 
-    name: 'TensorFlow',
+    icon: SiPytorch, 
+    name: 'Pytorch',
     description: 'Deep learning',
-    link: 'https://www.tensorflow.org/'
-  }
+    // link: 'https://pytorch.org/'
+  },
 ];
 
 const IntroductionSection = () => {
@@ -111,14 +111,14 @@ const IntroductionSection = () => {
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
       `}
     >
-      <div className="relative bg-[#1a1a2e] rounded-xl p-6 md:p-12 border border-neutral-800">
+      <div className="relative max-w-5xl mx-auto bg-[#1a1a2e] rounded-xl p-6 md:p-12 border border-neutral-800">
         {/* Grid Background */}
         <div className="absolute inset-1">
         <div className="absolute inset-2.5 bg-[linear-gradient(to_right,#FFA50033_1px,transparent_1px),linear-gradient(to_bottom,#FFA50033_1px,transparent_1px)] bg-[size:2rem_2rem]" />
         <div className="absolute inset-2.5 bg-gradient-to-b from-transparent via-orange-500/5 to-orange-500/10" />
       </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="relative z-10">
           {/* Title Section */}
           <div className={`
             text-center mb-12 transition-all duration-1000 delay-300
@@ -173,7 +173,7 @@ const IntroductionSection = () => {
               ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
             `}>
               <h3 className="text-xl sm:text-2xl font-medium text-[rgba(252,225,192,0.95)] border-b border-neutral-800 pb-2 mb-6">
-                Technologies I work with.
+                Technologies & libraries I work with.
               </h3>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">

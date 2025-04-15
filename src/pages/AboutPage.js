@@ -252,8 +252,8 @@ const AboutPage = () => {
           >
             <h3 className="text-xl font-bold text-accent mb-4">Current Focus</h3>
             <p className="text-sm md:text-base leading-relaxed">
-              I&apos;m currently focusing on deep learning and its applications 
-              in computer vision and natural language processing. I&apos;m also creating youtube content for machine learning.
+              I&apos;m currently focusing on mastering advanced statistical methods, machine learning and its applications 
+              in computer vision. I&apos;m also creating youtube content for machine learning.
               And am actively participating in kaggle competitions every month.
             </p>
           </div>
