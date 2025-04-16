@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPython, FaUserCircle } from 'react-icons/fa';
-import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch, SiMysql } from 'react-icons/si';
+import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch, SiPostgresql } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
@@ -36,9 +36,9 @@ const techStack = [
     // link: 'https://pytorch.org/'
   },
   { 
-    icon: SiMysql, 
-    name: 'SQL',
-    description: 'Database',
+    icon: SiPostgresql, 
+    name: 'PostgreSQL',
+    description: 'Databases',
     // link: 'https://pytorch.org/'
   },
 ];

@@ -11,6 +11,8 @@ import ProjectDetailPage from './pages/PlantVisionPage';
 import './App.css';
 import BlogPage from './pages/BlogPage';
 import BlogPost from './pages/BlogPost';
+import DataStoriesPage from './pages/DataStoriesPage';
+import DataStoryDetailPage from './pages/DataStoryDetailPage';
 import '@fontsource/roboto-slab';
 
 import YouTubePage from './pages/YouTubePage';
@@ -30,6 +32,8 @@ function App() {
           <Route path="/youtube" element={<YouTubePage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/datastory" element={<DataStoriesPage />} />
+          <Route path="/datastory/:storyId" element={<DataStoryDetailPage />} />
         </Routes>
         <Footer />
       </div>
