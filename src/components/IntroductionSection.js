@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaPython, FaUserCircle } from 'react-icons/fa';
-import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch} from 'react-icons/si';
+import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch, SiMysql } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
@@ -33,6 +33,12 @@ const techStack = [
     icon: SiPytorch, 
     name: 'Pytorch',
     description: 'Deep learning',
+    // link: 'https://pytorch.org/'
+  },
+  { 
+    icon: SiMysql, 
+    name: 'SQL',
+    description: 'Database',
     // link: 'https://pytorch.org/'
   },
 ];
