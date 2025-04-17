@@ -4,14 +4,14 @@ import { SiPandas, SiNumpy, SiScikitlearn, SiPytorch, SiPostgresql } from 'react
 import { Link } from 'react-router-dom';
 import ReactTypingEffect from 'react-typing-effect';
 
-// Add custom floating animation
+// Add custom floating animation with reduced height
 const floatingAnimation = `
 @keyframes float {
   0% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
   }
   100% {
     transform: translateY(0px);
@@ -101,17 +101,13 @@ const IntroductionSection = () => {
   }, []);
 
   const TechStackItem = ({ tech, index }) => (
-    <a
-      href={tech.link}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
       className={`
         group relative flex flex-col p-2 sm:p-2.5 
         bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 
         hover:border-pink-500/50 transition-all duration-500 ease-in-out
-        transform hover:-translate-y-1 hover:scale-105 hover:shadow-lg hover:shadow-pink-500/20
-        ${activeIndex === index ? 'border-pink-500/50 scale-105' : ''}
-        ${animationPhase >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+        ${activeIndex === index ? 'border-pink-500/50' : ''}
+        ${animationPhase >= 3 ? 'opacity-100' : 'opacity-0'}
       `}
       style={{
         transitionDelay: `${800 + index * 120}ms`
@@ -130,7 +126,7 @@ const IntroductionSection = () => {
           {tech.description}
         </p>
       </div>
-    </a>
+    </div>
   );
 
   return (
@@ -139,18 +135,18 @@ const IntroductionSection = () => {
       <section
         ref={sectionRef}
         className={`
-          relative transition-all duration-1000 ease-out transform max-w-5xl mx-auto p-6 md:p-12
-          ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}
+          relative transition-all duration-1000 ease-out transform max-w-5xl mx-auto p-4 sm:p-6 md:p-8
+          ${isVisible ? 'opacity-100' : 'opacity-0'}
         `}
       >
-      <div className="relative z-10">
+      <div className="relative z-10 overflow-hidden">
         {/* Title Section with floating animation */}
         <div className={`
-          text-center mb-12 transition-all duration-1000 ease-in-out
-          ${animationPhase >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+          text-center mb-8 sm:mb-12 transition-all duration-1000 ease-in-out
+          ${animationPhase >= 1 ? 'opacity-100' : 'opacity-0'}
           animate-float
         `}>
-          <h2 className="relative text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[rgba(252,225,192,0.95)]">
+          <h2 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[rgba(252,225,192,0.95)]">
             {startTyping ? (
               <ReactTypingEffect 
                 text={["Welcome"]}
@@ -165,13 +161,13 @@ const IntroductionSection = () => {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-          {/* Left Column with slide and fade animation */}
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Left Column with fade animation */}
           <div className={`
             lg:w-1/2 transition-all duration-1000 ease-in-out
-            ${animationPhase >= 2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'}
+            ${animationPhase >= 2 ? 'opacity-100' : 'opacity-0'}
           `}>
-            <div className="prose prose-invert max-w-none mb-8 relative">
+            <div className="prose prose-invert max-w-none mb-6 sm:mb-8 relative">
               <p className="text-neutral-400 text-base sm:text-lg leading-relaxed">
                 To my website! I'm at the exciting crossroads of machine learning and statistics. 
                 A statistics major at Kyambogo University and a self-taught machine-learning practitioner.
@@ -181,27 +177,26 @@ const IntroductionSection = () => {
 
             <Link
               to="/about"
-              className="group inline-flex items-center space-x-2 px-4 sm:px-6 py-2.5 sm:py-3 
+              className="group inline-flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 
                 bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 
-                hover:border-pink-500/50 hover:bg-neutral-800/80 transition-all duration-500 ease-in-out 
-                transform hover:-translate-y-1 hover:scale-105 hover:shadow-lg hover:shadow-pink-500/20 relative"
+                hover:border-pink-500/50 hover:bg-neutral-800/80 transition-all duration-300 ease-in-out relative"
             >
               <FaUserCircle className="text-neutral-400 group-hover:text-pink-500 transition-colors duration-300" />
               <span className="text-sm sm:text-base text-neutral-400 group-hover:text-white transition-colors duration-300">
                 Learn More About Me
               </span>
-              <span className="inline-block transition-transform duration-500 ease-in-out group-hover:translate-x-2 text-pink-500">
+              <span className="inline-block transition-transform duration-300 ease-in-out group-hover:translate-x-1 text-pink-500">
                 →
               </span>
             </Link>
           </div>
 
-          {/* Right Column with slide and fade animation */}
+          {/* Right Column with fade animation */}
           <div className={`
             lg:w-1/2 transition-all duration-1000 ease-in-out
-            ${animationPhase >= 2 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'}
+            ${animationPhase >= 2 ? 'opacity-100' : 'opacity-0'}
           `}>
-            <h3 className="text-xl sm:text-2xl font-medium text-[rgba(252,225,192,0.95)] border-b border-neutral-800 pb-2 mb-6">
+            <h3 className="text-lg sm:text-xl font-medium text-[rgba(252,225,192,0.95)] border-b border-neutral-800 pb-2 mb-4 sm:mb-6">
               Technologies & libraries I work with.
             </h3>
             

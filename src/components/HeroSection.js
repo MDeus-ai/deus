@@ -3,16 +3,16 @@ import { motion } from 'framer-motion';
 
 // Checkerboard configuration
 const CHECKERBOARD_CONFIG = {
-  CELL_SIZE_REM: 2.5,
-  DARK_CELLS_PERCENTAGE: 0.5,
-  BASE_UPDATE_INTERVAL: 400,
-  MAX_LAG_TIME: 1000,
+  CELL_SIZE_REM: 5,
+  DARK_CELLS_PERCENTAGE: 0.4,
+  BASE_UPDATE_INTERVAL: 600,
+  MAX_LAG_TIME: 800,
   FADE_IN_DURATION: 300,
   FADE_OUT_DURATION: 500,
   FADE_TIMING_FUNCTION: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  CELL_DARK_OPACITY: 0.5,
-  BASE_GRID_OPACITY: 0.0,
-  BASE_GRID_COLOR: '#2a2a4a'
+  CELL_DARK_OPACITY: 0.9,
+  BASE_GRID_OPACITY: 0.01,
+  BASE_GRID_COLOR: '#c3c3e0'
 };
 
 // Robotic text configuration
@@ -36,8 +36,8 @@ const ROBOTIC_TEXT_CONFIG = {
       DESKTOP: '3rem'
     },
     TOP_OFFSET: {
-      MOBILE: '90%',
-      DESKTOP: '70%'
+      MOBILE: '85%',
+      DESKTOP: '75%'
     },
     TRANSFORM: 'translateY(-50%)',
     SPACING_BETWEEN_WORDS: '1.2rem'
@@ -83,27 +83,27 @@ const NAME_CONFIG = {
   },
   POSITION: {
     TOP_OFFSET: {
-      MOBILE: '-15%',
-      DESKTOP: '-10%'
+      MOBILE: '-10%',
+      DESKTOP: '0%'
     }
   },
   FONT: {
     SIZE: {
       MOBILE: {
-        FIRST_NAME: '3rem',  // Smaller size for MUHUMUZA on mobile
-        LAST_NAME: '7.3rem'      // Bigger size for DEUS on mobile
+        FIRST_NAME: '2.5rem',  // Smaller size for MUHUMUZA on mobile
+        LAST_NAME: '5.5rem'    // Bigger size for DEUS on mobile
       },
       SM: {
+        FIRST_NAME: '5rem',
+        LAST_NAME: '6rem'
+      },
+      DEFAULT: {
         FIRST_NAME: '6rem',
         LAST_NAME: '7rem'
       },
-      DEFAULT: {
-        FIRST_NAME: '7rem',
-        LAST_NAME: '8rem'
-      },
       MD: {
-        FIRST_NAME: '10rem',
-        LAST_NAME: '12rem'
+        FIRST_NAME: '8rem',
+        LAST_NAME: '10rem'
       }
     },
     WEIGHT: 'bold',
@@ -115,39 +115,56 @@ const NAME_CONFIG = {
     BASE_SHADOW_COLOR_1: '#ff0080',
     BASE_SHADOW_COLOR_2: '#00ff80',
     SHADOW_OFFSET: '2px',
-    PROBABILITY: 1,
+    PROBABILITY: 0.8,
     EFFECTS: {
       CHAR_REPLACE_POOL: '01アイウエオカキクケコサシスセソタチツテトナニヌネノ░█▓▒><}{/\\|=+-*&^%$#@!',
       CHAR_REPLACE_PROBABILITY: 0.4,
       SCAN_LINE_HEIGHT: '2px',
       SCAN_LINE_COLOR: 'rgba(255, 255, 255, 0.1)',
-      NOISE_OPACITY: 0.05,
+      NOISE_OPACITY: 0.03,
       RGB_SPLIT_OFFSET: '3px',
       FLICKER_INTENSITY: 0.8
     }
   },
   ANIMATION: {
-    INITIAL_DELAY: 500,
-    DURATION: 800,
+    INITIAL_DELAY: 300,
+    DURATION: 600,
     STAGGER_DELAY: 50
   }
 };
 
-// Bottom fade configuration
-const BOTTOM_FADE_CONFIG = {
-  HEIGHT: {
-    MOBILE: '15vh',
-    DESKTOP: '20vh'
+// Gradient background configuration
+const GRADIENT_BG_CONFIG = {
+  COLORS: {
+    PRIMARY: '#0f0f23',      // Deep dark blue
+    SECONDARY: '#1a1b3c',    // Slightly lighter dark blue
+    ACCENT: '#2a2a4a',       // Accent color
   },
-  GRADIENT: {
-    START_COLOR: 'rgba(26, 27, 60, 0)',  // #1a1b3c with 0 opacity
-    END_COLOR: 'rgba(26, 27, 60, 1)'     // #1a1b3c with full opacity
+  ANIMATION: {
+    DURATION: '20s',
+    TIMING: 'ease-in-out',
+    DIRECTION: 'alternate',
+    ITERATION: 'infinite'
+  }
+};
+
+// Subtitle configuration
+const SUBTITLE_CONFIG = {
+  TEXT: "DATA SCIENTIST & ML ENGINEER",
+  COLOR: "rgba(255, 140, 0, 0.9)",
+  FONT_SIZE: {
+    MOBILE: "sm",
+    DESKTOP: "lg"
   },
-  POSITION: 'absolute',
-  BOTTOM: 0,
-  LEFT: 0,
-  RIGHT: 0,
-  Z_INDEX: 10
+  LETTER_SPACING: "0.25em",
+  MARGIN_TOP: {
+    MOBILE: "0.5rem",
+    DESKTOP: "1rem"
+  },
+  ANIMATION: {
+    DELAY: 1200,
+    DURATION: 1000
+  }
 };
 
 const Cell = ({ row, col, shouldBeDark, size }) => {
@@ -173,7 +190,7 @@ const Cell = ({ row, col, shouldBeDark, size }) => {
         transition: `
           opacity ${shouldBeDark ? CHECKERBOARD_CONFIG.FADE_IN_DURATION : CHECKERBOARD_CONFIG.FADE_OUT_DURATION}ms ${CHECKERBOARD_CONFIG.FADE_TIMING_FUNCTION}
         `,
-        backgroundColor: '#1a1a2e',
+        backgroundColor: GRADIENT_BG_CONFIG.COLORS.ACCENT,
         opacity
       }}
     />
@@ -308,7 +325,7 @@ const RoboticText = () => {
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.8, delay: 0.5 }}
     >
       {activeWords.map((word, wordIndex) => (
         <div key={word} className="flex flex-col items-end">
@@ -381,21 +398,6 @@ const CyberNoiseOverlay = () => (
           transparent calc(${NAME_CONFIG.GLITCH.EFFECTS.SCAN_LINE_HEIGHT} * 2)
         )
       `,
-    }}
-  />
-);
-
-const BottomFade = ({ isMobile }) => (
-  <div
-    style={{
-      position: BOTTOM_FADE_CONFIG.POSITION,
-      bottom: BOTTOM_FADE_CONFIG.BOTTOM,
-      left: BOTTOM_FADE_CONFIG.LEFT,
-      right: BOTTOM_FADE_CONFIG.RIGHT,
-      height: isMobile ? BOTTOM_FADE_CONFIG.HEIGHT.MOBILE : BOTTOM_FADE_CONFIG.HEIGHT.DESKTOP,
-      background: `linear-gradient(to bottom, ${BOTTOM_FADE_CONFIG.GRADIENT.START_COLOR}, ${BOTTOM_FADE_CONFIG.GRADIENT.END_COLOR})`,
-      zIndex: BOTTOM_FADE_CONFIG.Z_INDEX,
-      pointerEvents: 'none'
     }}
   />
 );
@@ -511,6 +513,40 @@ const EnhancedGlitchingName = ({ text, isFirstName, isMobile }) => {
   );
 };
 
+const Subtitle = ({ isMobile }) => (
+  <motion.p
+    className={`text-${isMobile ? SUBTITLE_CONFIG.FONT_SIZE.MOBILE : SUBTITLE_CONFIG.FONT_SIZE.DESKTOP} text-center tracking-widest`}
+    style={{
+      color: SUBTITLE_CONFIG.COLOR,
+      letterSpacing: SUBTITLE_CONFIG.LETTER_SPACING,
+      marginTop: isMobile ? SUBTITLE_CONFIG.MARGIN_TOP.MOBILE : SUBTITLE_CONFIG.MARGIN_TOP.DESKTOP
+    }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ 
+      duration: SUBTITLE_CONFIG.ANIMATION.DURATION / 1000,
+      delay: SUBTITLE_CONFIG.ANIMATION.DELAY / 1000
+    }}
+  >
+    {SUBTITLE_CONFIG.TEXT}
+  </motion.p>
+);
+
+// Custom keyframes for animated gradient
+const gradientKeyframes = `
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+`;
+
 const HeroSection = () => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -525,16 +561,13 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url(/assets/hero.jpg)',
-          filter: 'brightness(0.3)'
-        }}
-      />
+    <div className="relative h-screen w-full overflow-hidden">
+      <style>{gradientKeyframes}</style>
       
+      {/* Checkerboard pattern */}
       <AnimatedCheckerboard />
+      
+      {/* Subtle scanline effect */}
       <CyberNoiseOverlay />
 
       <div 
@@ -545,7 +578,7 @@ const HeroSection = () => {
       >
         <div className="w-full max-w-7xl mx-auto">
           <motion.h1 
-            className="flex flex-col items-center justify-center leading-tight md:leading-none font-bold tracking-tighter break-words text-center"
+            className="flex flex-col items-center justify-center leading-none font-bold tracking-tighter break-words text-center"
             style={{
               letterSpacing: NAME_CONFIG.FONT.LETTER_SPACING
             }}
@@ -561,13 +594,13 @@ const HeroSection = () => {
               isMobile={isMobile}
             />
           </motion.h1>
+          
+          {/* Added subtitle for better introduction */}
+          <Subtitle isMobile={isMobile} />
         </div>
 
         <RoboticText />
       </div>
-      
-      {/* Bottom fade gradient overlay with custom color */}
-      <BottomFade isMobile={isMobile} />
     </div>
   );
 };

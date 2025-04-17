@@ -51,6 +51,7 @@ const AboutPage = () => {
     { name: 'Data Visualization', proficiency: 65, color: '#ED8936' },
     { name: 'Python Programming', proficiency: 60, color: '#9F7AEA' },
     { name: 'Microsoft Office Suite', proficiency: 85, color: '#F56565' },
+    { name: 'SQL & PostgreSQL', proficiency: 5, color: '#5424e3' },
   ];
 
   const CustomTooltip = ({ active, payload }) => {

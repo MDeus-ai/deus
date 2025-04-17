@@ -332,7 +332,6 @@ const dataStoriesDetails = {
     description: 'Exploring global COVID-19 data to uncover patterns in transmission rates and vaccination effectiveness across different regions.',
     coverImage: '/assets/datastories_assets/images/earth.jpg',
     date: 'March 10, 2024',
-    author: 'Deus M.L',
     readTime: '12 min read',
     tags: ['Data Analysis', 'Visualization', 'Pandas', 'Time Series'],
     summary: 'This analysis explores how different policies affected COVID-19 transmission rates globally. By analyzing data from 2020-2023, I discovered fascinating correlations between policy implementation timing and outcome effectiveness.',
@@ -424,7 +423,6 @@ const dataStoriesDetails = {
     description: 'Analysis of 100 years of weather data to identify climate change patterns and predict future trends.',
     coverImage: '/assets/datastories_assets/images/analysis1.jpg',
     date: 'January 15, 2024',
-    author: 'Deus M.L',
     readTime: '15 min read',
     tags: ['Climate Data', 'Time Series', 'Forecasting', 'Matplotlib'],
     summary: 'By analyzing historical weather data spanning the last century, this project aims to visualize climate change patterns and develop predictive models for future climate scenarios.',
@@ -592,10 +590,6 @@ const DataStoryDetailPage = () => {
         <div className="flex items-center bg-purple-900/30 px-3 py-1 rounded-full">
             <span className="mr-1">📚</span>
             <span>{story.readTime}</span>
-        </div>
-        <div className="flex items-center bg-purple-900/30 px-3 py-1 rounded-full">
-            <span className="mr-1">👤</span>
-            <span>By {story.author}</span>
         </div>
         </div>
         
