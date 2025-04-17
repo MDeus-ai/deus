@@ -133,6 +133,23 @@ const NAME_CONFIG = {
   }
 };
 
+// Bottom fade configuration
+const BOTTOM_FADE_CONFIG = {
+  HEIGHT: {
+    MOBILE: '15vh',
+    DESKTOP: '20vh'
+  },
+  GRADIENT: {
+    START_COLOR: 'rgba(26, 27, 60, 0)',  // #1a1b3c with 0 opacity
+    END_COLOR: 'rgba(26, 27, 60, 1)'     // #1a1b3c with full opacity
+  },
+  POSITION: 'absolute',
+  BOTTOM: 0,
+  LEFT: 0,
+  RIGHT: 0,
+  Z_INDEX: 10
+};
+
 const Cell = ({ row, col, shouldBeDark, size }) => {
   const [opacity, setOpacity] = useState(0);
   
@@ -368,6 +385,21 @@ const CyberNoiseOverlay = () => (
   />
 );
 
+const BottomFade = ({ isMobile }) => (
+  <div
+    style={{
+      position: BOTTOM_FADE_CONFIG.POSITION,
+      bottom: BOTTOM_FADE_CONFIG.BOTTOM,
+      left: BOTTOM_FADE_CONFIG.LEFT,
+      right: BOTTOM_FADE_CONFIG.RIGHT,
+      height: isMobile ? BOTTOM_FADE_CONFIG.HEIGHT.MOBILE : BOTTOM_FADE_CONFIG.HEIGHT.DESKTOP,
+      background: `linear-gradient(to bottom, ${BOTTOM_FADE_CONFIG.GRADIENT.START_COLOR}, ${BOTTOM_FADE_CONFIG.GRADIENT.END_COLOR})`,
+      zIndex: BOTTOM_FADE_CONFIG.Z_INDEX,
+      pointerEvents: 'none'
+    }}
+  />
+);
+
 const EnhancedGlitchingName = ({ text, isFirstName, isMobile }) => {
   const [isGlitching, setIsGlitching] = useState(false);
   const [glitchedText, setGlitchedText] = useState(text);
@@ -533,6 +565,9 @@ const HeroSection = () => {
 
         <RoboticText />
       </div>
+      
+      {/* Bottom fade gradient overlay with custom color */}
+      <BottomFade isMobile={isMobile} />
     </div>
   );
 };
