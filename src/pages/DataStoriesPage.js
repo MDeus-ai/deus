@@ -42,42 +42,35 @@ const FadeInSection = ({ children, delay = 0, className = '' }) => {
   );
 };
 
-// Sample datastories data
+
+
+
+
+// DATA STORIES
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 const dataStories = [
   {
-    id: 'covid-data-analysis',
-    title: 'COVID-19 Data Analysis',
-    description: 'Exploring global COVID-19 data to uncover patterns in transmission rates and vaccination effectiveness across different regions.',
-    coverImage: '/assets/datastories_assets/images/earth.jpg',
+    id: 'titanic-data-analysis',
+    title: 'Titanic',
+    description: 'Using the titanic dataset from kaggle to dig deep and understand the titanic disaster of 1912',
+    coverImage: '/assets/datastories_assets/images/titanic.jpg',
     date: 'March 2024',
-    tags: ['Data Analysis', 'Visualization', 'Pandas', 'Time Series'],
-    summary: 'This analysis explores how different policies affected COVID-19 transmission rates globally. By analyzing data from 2020-2023, I discovered fascinating correlations between policy implementation timing and outcome effectiveness.',
-    notebookUrl: '/assets/datastories_assets/notebooks/storytime.ipynb',
+    tags: ['Pandas', 'Seaborn', 'Matplotlib', 'Logistic Regression', 'Classification', 'Pandas'],
+    notebookUrl: '/assets/datastories_assets/notebooks/titanic_story_nb.ipynb',
     featured: true,
   },
-  {
-    id: 'weather-patterns',
-    title: 'Climate Change Patterns',
-    description: 'Analysis of 100 years of weather data to identify climate change patterns and predict future trends.',
-    coverImage: '/assets/datastories_assets/images/analysis1.jpg',
-    date: 'January 2024',
-    tags: ['Climate Data', 'Time Series', 'Forecasting', 'Matplotlib'],
-    summary: 'By analyzing historical weather data spanning the last century, this project aims to visualize climate change patterns and develop predictive models for future climate scenarios.',
-    notebookUrl: '/notebooks/climate-analysis.ipynb',
-    featured: true,
-  },
-  {
-    id: 'netflix-viewing-habits',
-    title: 'Netflix Viewing Habits',
-    description: 'Analyzing viewing patterns across different demographics to uncover interesting trends in content consumption.',
-    coverImage: '/assets/datastories_assets/images/analysis1.jpg',
-    date: 'February 2024',
-    tags: ['Entertainment', 'User Behavior', 'Demographics', 'Visualization'],
-    summary: 'This study dives into viewing habits across different age groups and regions, revealing surprising patterns in content preferences and binge-watching behaviors.',
-    notebookUrl: '/notebooks/netflix-analysis.ipynb',
-    featured: false,
-  },
+
 ];
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 // Component for story cards - optimized for mobile
 const StoryCard = ({ story, index }) => {
@@ -272,8 +265,8 @@ const DataStoriesPage = () => {
                   )}
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-10 px-2">
-                  Uncovering interesting patterns and insights through data analysis, statistical modeling and visualization. 
-                  Each story presents a unique perspective on data-driven discoveries.
+                Uncovering interesting patterns and information in fictional and real world datasets through various data analysis 
+                and statistical modelling techniques , leveraging my insights to tell a story
                 </p>
                 
                 {/* Search and filter controls - Mobile friendly */}

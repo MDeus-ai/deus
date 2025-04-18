@@ -16,7 +16,7 @@ const allProjects = [
   },
   {
     title: 'Data Stories...',
-    description: 'Uncovering interesting patterns in fictional and real datasets through various data analysis techniques, leveraging my insights to develop a playful and story like narrative\n (Playing with statistics)',
+    description: 'Uncovering interesting patterns and information in fictional and real world datasets through various data analysis and statistical modelling techniques , leveraging my insights to tell a story',
     link: '/datastory',
     coverImage: '/assets/images/datastories/ds-cover.jpg',
     technologies: [],

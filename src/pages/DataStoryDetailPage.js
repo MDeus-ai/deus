@@ -46,394 +46,338 @@ const FadeInSection = ({ children, delay = 0, className = '' }) => {
 // Notebook viewer component
 // A simple custom implementation of a Jupyter notebook viewer
 const NotebookViewer = ({ notebookUrl }) => {
-    const [notebookData, setNotebookData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showCode, setShowCode] = useState(true);
-  
-    useEffect(() => {
-      setIsLoading(true);
-      setError(null);
-      
-      fetch(notebookUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to load notebook (${response.status})`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log("Loaded notebook data:", {
-            hasMetadata: !!data.metadata,
-            cellsCount: data.cells?.length || 0,
-            nbformat: data.nbformat
-          });
-          setNotebookData(data);
-          setIsLoading(false);
-        })
-        .catch(err => {
-          console.error("Failed to load notebook:", err);
-          setError(err.message);
-          setIsLoading(false);
+  const [notebookData, setNotebookData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showCode, setShowCode] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    
+    fetch(notebookUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to load notebook (${response.status})`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Loaded notebook data:", {
+          hasMetadata: !!data.metadata,
+          cellsCount: data.cells?.length || 0,
+          nbformat: data.nbformat
         });
-    }, [notebookUrl]);
-  
-    if (isLoading) {
-      return (
-        <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 flex flex-col items-center justify-center h-96">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-purple-500/30 mb-4 flex items-center justify-center">
-              <FaCode className="text-2xl text-purple-300 animate-spin" />
-            </div>
-            <div className="h-5 w-64 bg-purple-500/30 rounded-full mb-4"></div>
-            <div className="h-3 w-48 bg-purple-500/20 rounded-full"></div>
-          </div>
-        </div>
-      );
-    }
-  
-    if (error) {
-      return (
-        <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-red-500/20 flex flex-col items-center justify-center h-96">
-          <FaExclamationTriangle className="text-4xl text-red-400 mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">Failed to load notebook</h3>
-          <p className="text-gray-400 text-center">{error}</p>
-          <div className="flex gap-4 mt-6">
-            <button 
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              Try Again
-            </button>
-            <a 
-              href={notebookUrl} 
-              download
-              className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
-            >
-              <FaDownload className="mr-1" /> Download Raw
-            </a>
-          </div>
-        </div>
-      );
-    }
-  
-    if (!notebookData || !notebookData.cells || !Array.isArray(notebookData.cells)) {
-      return (
-        <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-yellow-500/20 flex flex-col items-center justify-center h-96">
-          <FaExclamationTriangle className="text-4xl text-yellow-400 mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">Invalid Notebook Format</h3>
-          <p className="text-gray-400 text-center">The notebook doesn't have the expected structure.</p>
-          <a 
-            href={notebookUrl} 
-            download
-            className="mt-6 px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
-          >
-            <FaDownload className="mr-1" /> Download Raw
-          </a>
-        </div>
-      );
-    }
-  
-    // Helper function to render cell content based on cell type
-    const renderCell = (cell, index) => {
-      // Markdown cell
-      if (cell.cell_type === 'markdown') {
-        return (
-          <div key={index} className="notebook-cell markdown-cell py-3 px-4 border-b border-purple-500/10">
-            <div className="markdown-content prose prose-invert max-w-none" 
-                 dangerouslySetInnerHTML={{ __html: convertMarkdown(cell.source) }}>
-            </div>
-          </div>
-        );
-      }
-      
-      // Code cell
-      else if (cell.cell_type === 'code') {
-        return (
-          <div key={index} className="notebook-cell code-cell py-3 border-b border-purple-500/10">
-            {/* Input */}
-            {showCode && (
-              <div className="flex">
-                <div className="cell-prompt px-3 py-2 text-purple-400 font-mono text-sm text-right w-16">
-                  In [{cell.execution_count || ' '}]:
-                </div>
-                <div className="cell-input bg-[#111827] flex-1 p-2 rounded-lg my-1 overflow-x-auto">
-                  <pre className="font-mono text-sm text-gray-300">{Array.isArray(cell.source) ? cell.source.join('') : cell.source}</pre>
-                </div>
-              </div>
-            )}
-            
-            {/* Output */}
-            {cell.outputs && cell.outputs.length > 0 && (
-              <div className="flex mt-1">
-                <div className="cell-prompt px-3 py-2 text-purple-400 font-mono text-sm text-right w-16">
-                  Out [{cell.execution_count || ' '}]:
-                </div>
-                <div className="cell-output bg-[#111827]/50 flex-1 p-2 rounded-lg my-1 overflow-x-auto">
-                  {cell.outputs.map((output, i) => renderOutput(output, i))}
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      }
-      
-      // Unknown cell type
-      return (
-        <div key={index} className="notebook-cell unknown-cell py-2 px-4 border-b border-purple-500/10 text-gray-400 italic">
-          Unsupported cell type: {cell.cell_type}
-        </div>
-      );
-    };
-  
-    // Helper function to render cell outputs
-    const renderOutput = (output, index) => {
-      // Text/plain output
-      if (output.output_type === 'stream' || (output.output_type === 'execute_result' && output.data && output.data['text/plain'])) {
-        const text = output.text || output.data['text/plain'];
-        return (
-          <pre key={index} className="font-mono text-sm text-gray-300 whitespace-pre-wrap">
-            {Array.isArray(text) ? text.join('') : text}
-          </pre>
-        );
-      }
-      
-      // Display data (images, HTML, etc.)
-      else if (output.output_type === 'display_data' || output.output_type === 'execute_result') {
-        // Handle HTML
-        if (output.data && output.data['text/html']) {
-          const html = Array.isArray(output.data['text/html']) 
-            ? output.data['text/html'].join('') 
-            : output.data['text/html'];
-          return (
-            <div key={index} dangerouslySetInnerHTML={{ __html: html }}></div>
-          );
-        }
-        
-        // Handle images
-        else if (output.data && output.data['image/png']) {
-          const imgData = output.data['image/png'];
-          return (
-            <div key={index} className="flex justify-center py-2">
-              <img 
-                src={`data:image/png;base64,${imgData}`} 
-                alt="Output visualization" 
-                className="max-w-full rounded-lg" 
-              />
-            </div>
-          );
-        }
-      }
-      
-      // Error output
-      else if (output.output_type === 'error') {
-        return (
-          <div key={index} className="error-output text-red-400 font-mono text-sm">
-            <div className="font-bold">{output.ename}: {output.evalue}</div>
-            {output.traceback && (
-              <pre className="mt-1 whitespace-pre-wrap text-xs">{output.traceback.join('\n')}</pre>
-            )}
-          </div>
-        );
-      }
-      
-      // Fallback for unknown output types
-      return (
-        <div key={index} className="text-gray-400 italic text-sm">
-          [Unsupported output type: {output.output_type}]
-        </div>
-      );
-    };
-  
-    // Simple markdown to HTML conversion (ideally you would use a library like marked.js)
-    const convertMarkdown = (markdown) => {
-      // This is a very basic implementation, consider using a proper markdown library
-      if (Array.isArray(markdown)) {
-        markdown = markdown.join('');
-      }
-      
-      // Handle headers
-      markdown = markdown.replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold text-purple-300 my-3">$1</h3>');
-      markdown = markdown.replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-purple-200 my-4">$1</h2>');
-      markdown = markdown.replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-purple-100 my-5">$1</h1>');
-      
-      // Handle code blocks
-      markdown = markdown.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-800 p-2 rounded-lg my-3 overflow-x-auto">$1</pre>');
-      
-      // Handle inline code
-      markdown = markdown.replace(/`([^`]+)`/g, '<code class="bg-gray-800 px-1 rounded text-purple-300">$1</code>');
-      
-      // Handle paragraphs - split by double newlines and wrap in p tags
-      const paragraphs = markdown.split(/\n\n+/);
-      markdown = paragraphs.map(p => {
-        if (p.startsWith('<h') || p.startsWith('<pre')) {
-          return p;
-        }
-        return `<p class="my-2">${p}</p>`;
-      }).join('');
-      
-      return markdown;
-    };
-  
+        setNotebookData(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to load notebook:", err);
+        setError(err.message);
+        setIsLoading(false);
+      });
+  }, [notebookUrl]);
+
+  if (isLoading) {
     return (
-      <div className="notebook-viewer w-full">
-        <div className="controls mb-4 flex flex-wrap justify-between items-center bg-[#1a1a2e] p-3 rounded-t-xl border border-purple-500/10">
-          <div className="flex items-center">
-            <button
-              onClick={() => setShowCode(!showCode)}
-              className={`px-3 py-1 text-sm rounded-md flex items-center mr-2 ${
-                showCode 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-purple-600/30 text-purple-300 hover:bg-purple-600/50'
-              }`}
-            >
-              {showCode ? 'Hide Code Cells' : 'Show All Cells'}
-            </button>
+      <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 flex flex-col items-center justify-center h-96">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 rounded-full bg-purple-500/30 mb-4 flex items-center justify-center">
+            <FaCode className="text-2xl text-purple-300 animate-spin" />
           </div>
-          <a 
-            href={notebookUrl} 
-            download
-            className="px-3 py-1 text-sm bg-purple-600/50 hover:bg-purple-600 text-white rounded-md flex items-center transition-colors"
-          >
-            <FaDownload className="mr-1" /> Download Raw
-          </a>
-        </div>
-        
-        <div 
-          className="bg-[#1a1a2e]/80 backdrop-blur-md rounded-b-xl border border-purple-500/10 w-full"
-          style={{ scrollbarWidth: 'thin', scrollbarColor: '#4c1d95 #1a1a2e' }}
-        >
-          <div className="notebook-contents p-4">
-            {/* Notebook metadata */}
-            {notebookData.metadata && notebookData.metadata.kernelspec && (
-              <div className="text-sm text-gray-400 mb-4">
-                <span className="font-bold">Kernel:</span> {notebookData.metadata.kernelspec.display_name || notebookData.metadata.kernelspec.name}
-                {notebookData.metadata.language_info && (
-                  <span className="ml-2">({notebookData.metadata.language_info.name})</span>
-                )}
-              </div>
-            )}
-            
-            {/* Render all cells */}
-            {notebookData.cells.map((cell, index) => renderCell(cell, index))}
-          </div>
+          <div className="h-5 w-64 bg-purple-500/30 rounded-full mb-4"></div>
+          <div className="h-3 w-48 bg-purple-500/20 rounded-full"></div>
         </div>
       </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-red-500/20 flex flex-col items-center justify-center h-96">
+        <FaExclamationTriangle className="text-4xl text-red-400 mb-4" />
+        <h3 className="text-xl font-bold text-white mb-2">Failed to load notebook</h3>
+        <p className="text-gray-400 text-center">{error}</p>
+        <div className="flex gap-4 mt-6">
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Try Again
+          </button>
+          <a 
+            href={notebookUrl} 
+            download
+            className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
+          >
+            <FaDownload className="mr-1" /> Download Raw
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (!notebookData || !notebookData.cells || !Array.isArray(notebookData.cells)) {
+    return (
+      <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-yellow-500/20 flex flex-col items-center justify-center h-96">
+        <FaExclamationTriangle className="text-4xl text-yellow-400 mb-4" />
+        <h3 className="text-xl font-bold text-white mb-2">Invalid Notebook Format</h3>
+        <p className="text-gray-400 text-center">The notebook doesn't have the expected structure.</p>
+        <a 
+          href={notebookUrl} 
+          download
+          className="mt-6 px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
+        >
+          <FaDownload className="mr-1" /> Download Raw
+        </a>
+      </div>
+    );
+  }
+
+  // Helper function to render cell content based on cell type
+  const renderCell = (cell, index) => {
+    // Markdown cell
+    if (cell.cell_type === 'markdown') {
+      return (
+        <div key={index} className="notebook-cell markdown-cell py-3 px-4 border-b border-purple-500/10">
+          <div className="markdown-content prose prose-invert max-w-none" 
+               dangerouslySetInnerHTML={{ __html: convertMarkdown(cell.source) }}>
+          </div>
+        </div>
+      );
+    }
+    
+    // Code cell
+    else if (cell.cell_type === 'code') {
+      return (
+        <div key={index} className="notebook-cell code-cell py-3 border-b border-purple-500/10">
+          {/* Input */}
+          {showCode && (
+            <div className="flex">
+              {/* Hidden on mobile, visible with better spacing on desktop */}
+              <div className="hidden md:block cell-prompt py-2 text-purple-400 font-mono text-sm w-16 flex-shrink-0 select-none text-center">
+                {cell.execution_count ? `[${cell.execution_count}]` : ''}
+              </div>
+              <div className="cell-input bg-[#111827] flex-1 p-2 rounded-lg my-1 overflow-x-auto">
+                <pre className="font-mono text-xs sm:text-sm text-gray-300">{Array.isArray(cell.source) ? cell.source.join('') : cell.source}</pre>
+              </div>
+            </div>
+          )}
+          
+          {/* Output */}
+          {cell.outputs && cell.outputs.length > 0 && (
+            <div className="flex mt-1">
+              {/* Hidden on mobile, visible with better spacing on desktop */}
+              <div className="hidden md:block cell-prompt py-2 text-purple-400 font-mono text-sm w-16 flex-shrink-0 select-none text-center">
+                {/* Empty space to maintain alignment, no text */}
+              </div>
+              <div className="cell-output bg-[#111827]/50 flex-1 p-2 rounded-lg my-1 overflow-x-auto">
+                {cell.outputs.map((output, i) => renderOutput(output, i))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    // Unknown cell type
+    return (
+      <div key={index} className="notebook-cell unknown-cell py-2 px-4 border-b border-purple-500/10 text-gray-400 italic">
+        Unsupported cell type: {cell.cell_type}
+      </div>
+    );
+  };
+
+  // Helper function to render cell outputs
+  const renderOutput = (output, index) => {
+    // Text/plain output
+    if (output.output_type === 'stream' || (output.output_type === 'execute_result' && output.data && output.data['text/plain'])) {
+      const text = output.text || output.data['text/plain'];
+      return (
+        <pre key={index} className="font-mono text-xs sm:text-sm text-gray-300 whitespace-pre-wrap">
+          {Array.isArray(text) ? text.join('') : text}
+        </pre>
+      );
+    }
+    
+    // Display data (images, HTML, etc.)
+    else if (output.output_type === 'display_data' || output.output_type === 'execute_result') {
+      // Handle HTML
+      if (output.data && output.data['text/html']) {
+        const html = Array.isArray(output.data['text/html']) 
+          ? output.data['text/html'].join('') 
+          : output.data['text/html'];
+        return (
+          <div key={index} dangerouslySetInnerHTML={{ __html: html }}></div>
+        );
+      }
+      
+      // Handle images
+      else if (output.data && output.data['image/png']) {
+        const imgData = output.data['image/png'];
+        return (
+          <div key={index} className="flex justify-center py-2">
+            <img 
+              src={`data:image/png;base64,${imgData}`} 
+              alt="Output visualization" 
+              className="max-w-full rounded-lg" 
+            />
+          </div>
+        );
+      }
+    }
+    
+    // Error output
+    else if (output.output_type === 'error') {
+      return (
+        <div key={index} className="error-output text-red-400 font-mono text-xs sm:text-sm">
+          <div className="font-bold">{output.ename}: {output.evalue}</div>
+          {output.traceback && (
+            <pre className="mt-1 whitespace-pre-wrap text-xs">{output.traceback.join('\n')}</pre>
+          )}
+        </div>
+      );
+    }
+    
+    // Fallback for unknown output types
+    return (
+      <div key={index} className="text-gray-400 italic text-xs sm:text-sm">
+        [Unsupported output type: {output.output_type}]
+      </div>
+    );
+  };
+
+  // Simple markdown to HTML conversion (ideally you would use a library like marked.js)
+  const convertMarkdown = (markdown) => {
+    // This is a very basic implementation, consider using a proper markdown library
+    if (Array.isArray(markdown)) {
+      markdown = markdown.join('');
+    }
+    
+    // Handle headers
+    markdown = markdown.replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold text-purple-300 my-3">$1</h3>');
+    markdown = markdown.replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-purple-200 my-4">$1</h2>');
+    markdown = markdown.replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-purple-100 my-5">$1</h1>');
+    
+    // Handle code blocks
+    markdown = markdown.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-800 p-2 rounded-lg my-3 overflow-x-auto">$1</pre>');
+    
+    // Handle inline code
+    markdown = markdown.replace(/`([^`]+)`/g, '<code class="bg-gray-800 px-1 rounded text-purple-300">$1</code>');
+    
+    // Handle paragraphs - split by double newlines and wrap in p tags
+    const paragraphs = markdown.split(/\n\n+/);
+    markdown = paragraphs.map(p => {
+      if (p.startsWith('<h') || p.startsWith('<pre')) {
+        return p;
+      }
+      return `<p class="my-2">${p}</p>`;
+    }).join('');
+    
+    return markdown;
+  };
+
+  return (
+    <div className="notebook-viewer w-full">
+      <div className="controls mb-4 flex flex-wrap justify-between items-center bg-[#1a1a2e] p-3 rounded-t-xl border border-purple-500/10">
+        <div className="flex items-center">
+          <button
+            onClick={() => setShowCode(!showCode)}
+            className={`px-3 py-1 text-sm rounded-md flex items-center mr-2 ${
+              showCode 
+                ? 'bg-purple-600 text-white' 
+                : 'bg-purple-600/30 text-purple-300 hover:bg-purple-600/50'
+            }`}
+          >
+            {showCode ? 'Hide Code Cells' : 'Show All Cells'}
+          </button>
+        </div>
+      </div>
+      
+      <div 
+        className="bg-[#1a1a2e]/80 backdrop-blur-md rounded-b-xl border border-purple-500/10 w-full"
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#4c1d95 #1a1a2e' }}
+      >
+        <div className="notebook-contents p-2 sm:p-4">
+          {/* Notebook metadata */}
+          {notebookData.metadata && notebookData.metadata.kernelspec && (
+            <div className="text-xs sm:text-sm text-gray-400 mb-4">
+              <span className="font-bold">Kernel:</span> {notebookData.metadata.kernelspec.display_name || notebookData.metadata.kernelspec.name}
+              {notebookData.metadata.language_info && (
+                <span className="ml-2">({notebookData.metadata.language_info.name})</span>
+              )}
+            </div>
+          )}
+          
+          {/* Render all cells */}
+          {notebookData.cells.map((cell, index) => renderCell(cell, index))}
+        </div>
+      </div>
+    </div>
+  );
 };
   
 
 
 
-// Sample data for individual stories - kept from original code
+
+
+
+
+// DATA STORIES
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 const dataStoriesDetails = {
-  'covid-data-analysis': {
-    title: 'COVID-19 Data Analysis',
-    description: 'Exploring global COVID-19 data to uncover patterns in transmission rates and vaccination effectiveness across different regions.',
-    coverImage: '/assets/datastories_assets/images/earth.jpg',
+  'titanic-data-analysis': {
+    title: 'Titanic',
+    description: 'Using the titanic dataset from kaggle to dig deep and understand the titanic disaster of 1912',
+    coverImage: '/assets/datastories_assets/images/titanic.jpg',
     date: 'March 10, 2024',
     readTime: '12 min read',
-    tags: ['Data Analysis', 'Visualization', 'Pandas', 'Time Series'],
-    summary: 'This analysis explores how different policies affected COVID-19 transmission rates globally. By analyzing data from 2020-2023, I discovered fascinating correlations between policy implementation timing and outcome effectiveness.',
-    notebookUrl: '/assets/datastories_assets/notebooks/storytime.ipynb',
+    tags: ['Pandas', 'Seaborn', 'Matplotlib', 'Logistic Regression', 'Classification', 'Pandas'],
+    notebookUrl: '/assets/datastories_assets/notebooks/titanic_story_nb.ipynb',
     featured: true,
     sections: [
-        {
-            title: 'Introduction',
-            content: 'The COVID-19 pandemic presented an unprecedented global challenge with varying responses and outcomes across different regions. This data story aims to examine how timing and strictness of lockdown measures correlated with case trajectories and mortality rates. By analyzing public health data from multiple countries, I sought to identify patterns that could inform future pandemic responses.',
-            visualizations: [
-              {
-                id: 'global-cases-chart',
-                title: 'Global COVID-19 Cases Timeline',
-                description: 'Visualization of global case counts from January 2020 through December 2023',
-                imageUrl: '/assets/images/datastories/covid-cases-timeline.jpg'
-              }
-            ]
-          },
-          {
-            title: 'Data Collection & Methodology',
-            content: 'For this analysis, I collected data from the Johns Hopkins COVID-19 data repository, Our World in Data, and the Oxford COVID-19 Government Response Tracker. The dataset includes daily case counts, deaths, testing rates, vaccination rates, and a stringency index measuring the strictness of government responses. Data preprocessing involved handling missing values, normalizing population-dependent metrics, and aligning time-series data across different sources.',
-            codeSnippet: `
-    # Load and preprocess the COVID-19 dataset
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    
-    # Load datasets
-    jhu_data = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
-    owid_data = pd.read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv')
-    oxford_data = pd.read_csv('https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv')
-    
-    # Data preprocessing
-    # Convert JHU data from wide to long format
-    jhu_long = pd.melt(
-        jhu_data, 
-        id_vars=['Province/State', 'Country/Region', 'Lat', 'Long'],
-        var_name='date', 
-        value_name='confirmed'
-    )
-    jhu_long['date'] = pd.to_datetime(jhu_long['date'])
-    
-    # Merge datasets
-    merged_data = pd.merge(
-        jhu_long, 
-        owid_data[['location', 'date', 'total_deaths', 'total_tests', 'people_vaccinated']], 
-        left_on=['Country/Region', 'date'],
-        right_on=['location', 'date'],
-        how='left'
-    )
-    
-    # Merge stringency index
-    merged_data = pd.merge(
-        merged_data,
-        oxford_data[['CountryName', 'Date', 'StringencyIndex']],
-        left_on=['Country/Region', jhu_long['date'].dt.strftime('%Y%m%d')],
-        right_on=['CountryName', 'Date'],
-        how='left'
-    )
-    `
-          },
-          {
-            title: 'Key Findings',
-            content: 'The analysis revealed several interesting patterns:\n\n1. **Early Intervention Impact**: Countries that implemented strict measures within 2 weeks of their first 100 cases experienced 34% lower peak case rates on average.\n\n2. **Vaccination Correlation**: For every 10% increase in vaccination rate, there was an average 12% decrease in mortality from the Delta variant.\n\n3. **Regional Differences**: East Asian countries maintained lower case rates despite varying stringency levels, suggesting cultural factors beyond government policy played important roles.\n\n4. **Wave Pattern Consistency**: Regardless of geography or policy, most countries experienced similar wave patterns, though with different magnitudes and timing.',
-            visualizations: [
-              {
-                id: 'stringency-impact',
-                title: 'Stringency Index vs. Case Growth Rate',
-                description: 'Scatterplot showing the relationship between policy stringency and subsequent case growth',
-                imageUrl: '/assets/images/datastories/stringency-impact.jpg'
-              },
-              {
-                id: 'vaccination-mortality',
-                title: 'Vaccination Rate vs. Mortality',
-                description: 'Analysis of how increasing vaccination rates affected COVID-19 mortality across different countries',
-                imageUrl: '/assets/images/datastories/vaccination-mortality.jpg'
-              }
-            ]
-          },
-          {
-            title: 'Conclusions & Future Work',
-            content: 'The data suggests that while timing of interventions played a crucial role in determining pandemic outcomes, cultural factors and healthcare system capacity were equally important determinants. Future pandemic response planning should account for these multiple factors rather than focusing solely on lockdown timing or stringency.\n\nFor future work, I plan to incorporate mobility data to better understand the relationship between policy stringency and actual behavioral changes. Additionally, economic impact data would provide a more comprehensive view of the tradeoffs involved in different pandemic response strategies.',
-        }
+        // {
+        //     title: 'Introduction',
+        //     content: 'The COVID-19 pandemic presented an unprecedented global challenge with varying responses and outcomes across different regions. This data story aims to examine how timing and strictness of lockdown measures correlated with case trajectories and mortality rates. By analyzing public health data from multiple countries, I sought to identify patterns that could inform future pandemic responses.',
+        //     visualizations: [
+        //       {
+        //         id: 'global-cases-chart',
+        //         title: 'Global COVID-19 Cases Timeline',
+        //         description: 'Visualization of global case counts from January 2020 through December 2023',
+        //         imageUrl: '/assets/images/datastories/covid-cases-timeline.jpg'
+        //       }
+        //     ]
+        //   },
+  
     ]
   },
-  'weather-patterns': {
-    title: 'Climate Change Patterns',
-    description: 'Analysis of 100 years of weather data to identify climate change patterns and predict future trends.',
-    coverImage: '/assets/datastories_assets/images/analysis1.jpg',
-    date: 'January 15, 2024',
-    readTime: '15 min read',
-    tags: ['Climate Data', 'Time Series', 'Forecasting', 'Matplotlib'],
-    summary: 'By analyzing historical weather data spanning the last century, this project aims to visualize climate change patterns and develop predictive models for future climate scenarios.',
-    notebookUrl: '/assets/datastories_assets/notebooks/storytime.ipynb',
-    featured: false,
-    sections: [
-      // Sections remain the same as in your original code
-    ]
-  },
-  // Other stories remain the same
+  // 'weather-patterns': {
+  //   title: 'Climate Change Patterns',
+  //   description: 'Analysis of 100 years of weather data to identify climate change patterns and predict future trends.',
+  //   coverImage: '/assets/datastories_assets/images/analysis1.jpg',
+  //   date: 'January 15, 2024',
+  //   readTime: '15 min read',
+  //   tags: ['Climate Data', 'Time Series', 'Forecasting', 'Matplotlib'],
+  //   summary: 'By analyzing historical weather data spanning the last century, this project aims to visualize climate change patterns and develop predictive models for future climate scenarios.',
+  //   notebookUrl: '/assets/datastories_assets/notebooks/storytime.ipynb',
+  //   featured: false,
+  //   sections: [
+  //     // Sections remain the same as in your original code
+  //   ]
+  // },
+  // // Other stories remain the same
 };
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
 
@@ -648,7 +592,6 @@ const DataStoryDetailPage = () => {
                     </div>
                     <h2 className="text-lg md:text-xl font-bold text-white">Key Insights</h2>
                   </div>
-                  <p className="text-gray-300 text-sm md:text-base italic">"{story.summary}"</p>
                 </div>
               </FadeInSection>
               
@@ -697,8 +640,7 @@ const DataStoryDetailPage = () => {
               <div>
                 <NotebookViewer notebookUrl={story.notebookUrl} />
               </div>
-              
-              {/* Key code snippets section - maintained from your original code */}
+            
               <div className="mt-12">
                 <h3 className="text-xl md:text-2xl font-bold mb-6 text-[rgba(252,225,192,0.95)]">Key Code Snippets</h3>
                 <p className="text-gray-300 mb-6 text-sm md:text-base">

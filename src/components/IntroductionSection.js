@@ -75,18 +75,18 @@ const IntroductionSection = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // Staggered animation sequence
-          setTimeout(() => setAnimationPhase(1), 100);
-          setTimeout(() => setStartTyping(true), 500);
-          setTimeout(() => setAnimationPhase(2), 800);
-          setTimeout(() => setAnimationPhase(3), 1100);
+          // Reduced delay times for faster appearance
+          setTimeout(() => setAnimationPhase(1), 70);  // Reduced from 100ms
+          setTimeout(() => setStartTyping(true), 250); // Reduced from 500ms
+          setTimeout(() => setAnimationPhase(2), 400); // Reduced from 800ms
+          setTimeout(() => setAnimationPhase(3), 500); // Reduced from 1100ms
         } else {
           setIsVisible(false);
           setStartTyping(false);
           setAnimationPhase(0);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 } // Reduced threshold for earlier detection
     );
 
     if (currentRef) {
@@ -105,12 +105,12 @@ const IntroductionSection = () => {
       className={`
         group relative flex flex-col p-2 sm:p-2.5 
         bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800 
-        hover:border-pink-500/50 transition-all duration-500 ease-in-out
+        hover:border-pink-500/50 transition-all duration-300 ease-in-out
         ${activeIndex === index ? 'border-pink-500/50' : ''}
         ${animationPhase >= 3 ? 'opacity-100' : 'opacity-0'}
       `}
       style={{
-        transitionDelay: `${800 + index * 120}ms`
+        transitionDelay: `${400 + index * 80}ms` // Reduced from 800 + index * 120ms
       }}
       onMouseEnter={() => setActiveIndex(index)}
       onMouseLeave={() => setActiveIndex(null)}
@@ -135,14 +135,14 @@ const IntroductionSection = () => {
       <section
         ref={sectionRef}
         className={`
-          relative transition-all duration-1000 ease-out transform max-w-5xl mx-auto p-4 sm:p-6 md:p-8
+          relative transition-all duration-500 ease-out transform max-w-5xl mx-auto p-4 sm:p-6 md:p-8
           ${isVisible ? 'opacity-100' : 'opacity-0'}
         `}
       >
       <div className="relative z-10 overflow-hidden">
         {/* Title Section with floating animation */}
         <div className={`
-          text-center mb-8 sm:mb-12 transition-all duration-1000 ease-in-out
+          text-center mb-8 sm:mb-12 transition-all duration-300 ease-in-out
           ${animationPhase >= 1 ? 'opacity-100' : 'opacity-0'}
           animate-float
         `}>
@@ -151,7 +151,7 @@ const IntroductionSection = () => {
               <ReactTypingEffect 
                 text={["Welcome"]}
                 typingDelay={200}
-                speed={30} 
+                speed={30}    
                 eraseDelay={10000000}
                 cursor="_"
               />
@@ -164,7 +164,7 @@ const IntroductionSection = () => {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Left Column with fade animation */}
           <div className={`
-            lg:w-1/2 transition-all duration-1000 ease-in-out
+            lg:w-1/2 transition-all duration-300 ease-in-out
             ${animationPhase >= 2 ? 'opacity-100' : 'opacity-0'}
           `}>
             <div className="prose prose-invert max-w-none mb-6 sm:mb-8 relative">
@@ -193,7 +193,7 @@ const IntroductionSection = () => {
 
           {/* Right Column with fade animation */}
           <div className={`
-            lg:w-1/2 transition-all duration-1000 ease-in-out
+            lg:w-1/2 transition-all duration-300 ease-in-out
             ${animationPhase >= 2 ? 'opacity-100' : 'opacity-0'}
           `}>
             <h3 className="text-lg sm:text-xl font-medium text-[rgba(252,225,192,0.95)] border-b border-neutral-800 pb-2 mb-4 sm:mb-6">

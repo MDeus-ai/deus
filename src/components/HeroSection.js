@@ -90,8 +90,8 @@ const NAME_CONFIG = {
   FONT: {
     SIZE: {
       MOBILE: {
-        FIRST_NAME: '2.5rem',  // Smaller size for MUHUMUZA on mobile
-        LAST_NAME: '5.5rem'    // Bigger size for DEUS on mobile
+        FIRST_NAME: '3.5rem',  // Smaller size for MUHUMUZA on mobile
+        LAST_NAME: '6.5rem'    // Bigger size for DEUS on mobile
       },
       SM: {
         FIRST_NAME: '5rem',
