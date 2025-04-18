@@ -211,6 +211,16 @@ const FeaturedStory = ({ story }) => {
 const DataStoriesPage = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'Data Stories | Muhumuza Deus';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
   
   // Get featured stories and shuffle them
   const featuredStories = dataStories.filter(story => story.featured);

@@ -387,6 +387,16 @@ const DataStoryDetailPage = () => {
   const [activeTab, setActiveTab] = useState('story'); // 'story' or 'notebook'
   const [story, setStory] = useState(null);
   const [randomFeaturedStories, setRandomFeaturedStories] = useState([]);
+
+  useEffect(() => {
+    // Set page title when component mounts
+    document.title = 'Data Story';
+    
+    // Restore original title when component unmounts
+    return () => {
+      document.title = 'Muhumuza Deus';
+    };
+  }, []);
   
   // Function to shuffle and select random featured stories
   const getRandomFeaturedStories = () => {
