@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaGithub, FaKaggle, FaMedal, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaKaggle, FaSearch, FaFilter } from 'react-icons/fa';
 import { SiJupyter } from 'react-icons/si';
 import NotebookModal from '../components/NotebookModal';
 
@@ -37,7 +37,6 @@ const KagglePortfolio = () => {
       competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e10",
       githubRepo: "https://github.com/MDeus-ai/My_KAGGLE_Work/tree/main/S4Ep10(Loan%20Approval%20Prediction)",
       tags: ["Classification", "Feature Engineering", "Ensemble Learning", "LightGBM", "CatBoost", "CUDA", "Optuna", "XGBoost"],
-      medal: "silver"
     },
     {
       id: 2,
@@ -120,33 +119,16 @@ const KagglePortfolio = () => {
       comp.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-  const getMedalColor = (medal) => {
-    switch(medal) {
-      case 'gold': return 'text-yellow-400';
-      case 'silver': return 'text-gray-400';
-      case 'bronze': return 'text-amber-600';
-      default: return 'text-gray-500';
-    }
-  };
-
   const handleNotebookClick = (notebook, e) => {
     e.preventDefault();
     setSelectedNotebook(notebook);
   };
 
   return (
-    <div className="min-h-screen bg-black text-gray-100" style={{ fontFamily: 'Roboto Slab, serif' }}>
-      {/* Hero Section */}
-      <header className="relative h-[40vh] bg-cover bg-center flex items-center justify-center">
-        <div className="absolute inset-0 overflow-hidden">
-          <img 
-            src="/assets/images/structdata/kaggle.jpg" 
-            alt="Projects header"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/60"></div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-[#1a1b3c] text-gray-100" style={{ fontFamily: 'Roboto Slab, serif' }}>
+      {/* Header Section (simplified, no image) */}
+      <header className="bg-[#1a1b3c] py-20 flex items-center justify-center">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold" style={{ fontFamily: 'Roboto Slab, serif' }}>
               Kaggle Portfolio
@@ -175,7 +157,7 @@ const KagglePortfolio = () => {
             <select 
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="bg-indigo-900/20 border border-indigo-500/30 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
+              className="bg-indigo-900/20 border border-indigo-500/30 rounded-lg px-8 py-2 focus:outline-none focus:border-indigo-500"
               style={{ fontFamily: 'Roboto Slab, serif' }}
             >
               <option value="all">All Competitions</option>
@@ -197,96 +179,76 @@ const KagglePortfolio = () => {
           </div>
         </div>
 
-        {/* Competition Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Competition Cards - Reduced size */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCompetitions.map((competition) => (
             <div 
               key={competition.id}
-              className="bg-[#1a1a2e] rounded-xl border border-indigo-500/30 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
+              className="bg-[#1a1a2e] rounded-lg border border-indigo-500/30 hover:border-indigo-400 transition-all duration-300 overflow-hidden"
               style={{ fontFamily: 'Roboto Slab, serif' }}
             >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-indigo-400">
-                    {competition.title}
-                  </h3>
-                  <FaMedal className={`text-2xl ${getMedalColor(competition.medal)}`} />
-                </div>
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-indigo-400 mb-2">
+                  {competition.title}
+                </h3>
                 
-                <p className="text-indigo-200 mb-4">
+                <p className="text-indigo-200 text-sm mb-3">
                   {competition.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {competition.tags.map((tag, index) => (
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {competition.tags.slice(0, 3).map((tag, index) => (
                     <span 
                       key={index}
-                      className="px-3 py-1 text-sm bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20"
+                      className="px-2 py-0.5 text-xs bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20"
                     >
                       {tag}
                     </span>
                   ))}
+                  {competition.tags.length > 3 && (
+                    <span className="px-2 py-0.5 text-xs bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20">
+                      +{competition.tags.length - 3} more
+                    </span>
+                  )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-indigo-900/30 rounded-lg p-3">
-                    <div className="text-sm text-indigo-300">Rank</div>
-                    <div className="text-lg font-bold">
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <div className="bg-indigo-900/30 rounded-lg p-2">
+                    <div className="text-xs text-indigo-300">Rank</div>
+                    <div className="text-sm font-bold">
                       {competition.rank} / {competition.totalParticipants}
                     </div>
                   </div>
-                  <div className="bg-indigo-900/30 rounded-lg p-3">
-                    <div className="text-sm text-indigo-300">Score</div>
-                    <div className="text-lg font-bold">{competition.score}</div>
-                  </div>
-                  <div className="bg-indigo-900/30 rounded-lg p-3">
-                    <div className="text-sm text-indigo-300">Percentile</div>
-                    <div className="text-lg font-bold">Top {competition.percentile}%</div>
-                  </div>
-                  <div className="bg-indigo-900/30 rounded-lg p-3">
-                    <div className="text-sm text-indigo-300">Status</div>
-                    <div className="text-lg font-bold capitalize">{competition.status}</div>
+                  <div className="bg-indigo-900/30 rounded-lg p-2">
+                    <div className="text-xs text-indigo-300">Percentile</div>
+                    <div className="text-sm font-bold">Top {competition.percentile}%</div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-indigo-300 mb-2">Notebooks</h4>
+                <div className="space-y-2">
                   {competition.notebooks.map((notebook, index) => (
                     <button
                       key={index}
                       onClick={(e) => handleNotebookClick(notebook, e)}
-                      className="w-full flex items-center justify-between p-3 bg-indigo-900/20 rounded-lg hover:bg-indigo-900/30 transition-colors"
+                      className="w-full flex items-center justify-between p-2 bg-indigo-900/20 rounded-lg hover:bg-indigo-900/30 transition-colors"
                     >
                       <div className="flex items-center gap-2">
                         <SiJupyter className="text-orange-400" />
-                        <span>{notebook.title}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-yellow-400">
-                        <span>★</span>
-                        <span>{notebook.stars}</span>
+                        <span className="text-sm">{notebook.title}</span>
                       </div>
                     </button>
                   ))}
                 </div>
 
-                <div className="flex justify-between mt-6 pt-4 border-t border-indigo-500/30">
+                <div className="mt-3 pt-3 border-t border-indigo-500/30">
                   <a 
                     href={competition.competitionLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-indigo-300 hover:text-indigo-400 transition-colors"
+                    className="flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-400 transition-colors"
                   >
                     <FaKaggle />
                     <span>Competition</span>
-                  </a>
-                  <a 
-                    href={competition.githubRepo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-indigo-300 hover:text-indigo-400 transition-colors"
-                  >
-                    <FaGithub />
-                    <span>Repository</span>
                   </a>
                 </div>
               </div>
@@ -303,25 +265,25 @@ const KagglePortfolio = () => {
       />
 
       {/* Analytics Section */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 p-6">
-          <h2 className="text-2xl font-bold text-indigo-300 mb-6" style={{ fontFamily: 'Roboto Slab, serif' }}>
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="bg-indigo-900/10 rounded-xl border border-indigo-500/30 p-4">
+          <h2 className="text-xl font-bold text-indigo-300 mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
             Portfolio Statistics
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-indigo-900/30 rounded-lg p-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-indigo-900/30 rounded-lg p-3">
               <div className="text-sm text-indigo-300">Total Competitions</div>
-              <div className="text-2xl font-bold">{competitions.length}</div>
+              <div className="text-xl font-bold">{competitions.length}</div>
             </div>
-            <div className="bg-indigo-900/30 rounded-lg p-4">
+            <div className="bg-indigo-900/30 rounded-lg p-3">
               <div className="text-sm text-indigo-300">Completed</div>
-              <div className="text-2xl font-bold">
+              <div className="text-xl font-bold">
                 {competitions.filter(comp => comp.status === 'completed').length}
               </div>
             </div>
-            <div className="bg-indigo-900/30 rounded-lg p-4">
+            <div className="bg-indigo-900/30 rounded-lg p-3">
               <div className="text-sm text-indigo-300">In Progress</div>
-              <div className="text-2xl font-bold">
+              <div className="text-xl font-bold">
                 {competitions.filter(comp => comp.status === 'in-progress').length}
               </div>
             </div>
@@ -330,8 +292,8 @@ const KagglePortfolio = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-indigo-900/20 mt-16">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <footer className="bg-indigo-900/20 mt-12">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="text-center text-indigo-300" style={{ fontFamily: 'Roboto Slab, serif' }}>
             <p>Portfolio last updated: December 2024</p>
           </div>
