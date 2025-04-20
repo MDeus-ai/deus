@@ -153,7 +153,7 @@ const ProjectCard = ({ project, index, isEven }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-70 group-hover:opacity-80 transition-opacity duration-500"></div>
         
         {/* Content Overlay - On top of the image */}
-        <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 z-10">
+        <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-2 z-10">
           {/* Reduced padding on mobile */}
           <div className="backdrop-blur-sm bg-black/30 rounded-xl p-10 sm:p-10 border border-white/10 transform transition-all duration-500 group-hover:bg-black/40 group-hover:border-purple-500/20">
             {/* Smaller font size for mobile */}
