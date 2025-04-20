@@ -16,7 +16,7 @@ const allProjects = [
   },
   {
     title: 'Data Stories...',
-    description: 'Uncovering interesting patterns and information in fictional and real world datasets through various data analysis and statistical modelling techniques , leveraging my insights to tell a story',
+    description: 'My machine learning and data science projects, including data analysis, data visualization, statistical modeling and machine learning. I also share my insights and findings from these projects',
     link: '/datastory',
     coverImage: '/assets/images/datastories/ds-cover.jpg',
     technologies: [],
