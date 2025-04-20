@@ -135,7 +135,7 @@ const ProjectCard = ({ project, index, isEven }) => {
   const renderCardContent = (isVisible) => (
     <div className="transform transition-all duration-500 hover:scale-[1.02] will-change-transform">
       {/* Reduced height for mobile */}
-      <div className="h-[350px] md:h-[400px] relative rounded-xl overflow-hidden group shadow-xl border border-neutral-800/60 transition-colors">
+      <div className="h-[325px] md:h-[400px] relative rounded-xl overflow-hidden group shadow-xl border border-neutral-800/60 transition-colors">
         {/* Cover Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
@@ -155,9 +155,9 @@ const ProjectCard = ({ project, index, isEven }) => {
         {/* Content Overlay - On top of the image */}
         <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 z-10">
           {/* Reduced padding on mobile */}
-          <div className="backdrop-blur-sm bg-black/30 rounded-xl p-4 sm:p-6 border border-white/10 transform transition-all duration-500 group-hover:bg-black/40 group-hover:border-purple-500/20">
+          <div className="backdrop-blur-sm bg-black/30 rounded-xl p-10 sm:p-10 border border-white/10 transform transition-all duration-500 group-hover:bg-black/40 group-hover:border-purple-500/20">
             {/* Smaller font size for mobile */}
-            <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-2 sm:mb-3">
+            <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-4 sm:mb-5">
               {isVisible ? (
                 <ReactTypingEffect 
                   text={[project.title]}
@@ -216,23 +216,24 @@ const HomePage = () => {
       <HeroSection />
 
       {/* Main Content */}
-      <main className="py-16 space-y-36">
+      <main className="py-12 space-y-24 sm:space-y-36">
         {/* Introduction Section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <IntroductionSection />
         </div>
 
         {/* Projects Section - Integrated with scroll */}
-        <section className="py-12 relative overflow-hidden">
+        <section className="py-8 sm:py-12 relative overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#1a1b3c] via-[#151530] to-[#1a1b3c] -z-10"></div>
           <div className="absolute inset-0 opacity-10 -z-10 bg-[radial-gradient(circle,rgba(120,50,255,0.1)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
           
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Narrow container for all screen sizes */}
+          <div className="container mx-auto px-4 sm:px-8 lg:px-2 max-w-3xl">
             <FadeInSection>
               {(isVisible) => (
-                <div className="text-center mb-20">
-                  <h2 className="text-4xl font-bold mb-4 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                <div className="text-center mb-10 sm:mb-16">
+                  <h2 className="text-3xl sm:text-4xl font-bold mb-2 sm:mb-4 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
                     {isVisible ? (
                       <ReactTypingEffect 
                         text={["My Activities"]}
@@ -244,14 +245,15 @@ const HomePage = () => {
                       <span>My Activities</span>
                     )}
                   </h2>
-                  <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+                  <p className="text-gray-300 text-base sm:text-lg max-w-xl mx-auto">
                     Explore my activities in the world of data science and machine learning :)
                   </p>
                 </div>
               )}
             </FadeInSection>
 
-            <div className="max-w-4xl mx-auto space-y-20">
+            {/* No additional max-width here, inherits from parent container */}
+            <div className="space-y-8 sm:space-y-16">
               {allProjects.map((project, index) => (
                 <ProjectCard 
                   key={index}
@@ -269,8 +271,8 @@ const HomePage = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <FadeInSection>
               {(isVisible) => (
-                <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold mb-4 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
+                <div className="text-center mb-12 sm:mb-16">
+                  <h2 className="text-3xl sm:text-4xl font-bold mb-2 sm:mb-4 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
                     {isVisible ? (
                       <ReactTypingEffect 
                         text={["Certifications"]}
@@ -282,12 +284,12 @@ const HomePage = () => {
                       <span>Certifications</span>
                     )}
                   </h2>
-                  <p className="text-gray-300 text-lg mb-8">Certifications and achievements in machine learning and data science</p>
+                  <p className="text-gray-300 text-base sm:text-lg mb-6 sm:mb-8">Certifications and achievements in machine learning and data science</p>
                 </div>
               )}
             </FadeInSection>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
               {certifications.map((cert, index) => (
                 <CertificationCard key={index} cert={cert} index={index} />
               ))}
@@ -301,5 +303,4 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;

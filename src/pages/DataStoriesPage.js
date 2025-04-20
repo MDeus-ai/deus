@@ -275,8 +275,9 @@ const DataStoriesPage = () => {
                   )}
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-10 px-2">
-                Uncovering interesting patterns and information in fictional and real world datasets through various data analysis 
-                and statistical modelling techniques , leveraging my insights to tell a story
+                My machine learning and data science projects, including data analysis, 
+                data visualization, statistical modeling and machine learning. 
+                I also share my insights and findings from these projects
                 </p>
                 
                 {/* Search and filter controls - Mobile friendly */}
