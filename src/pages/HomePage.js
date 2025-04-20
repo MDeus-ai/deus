@@ -110,8 +110,8 @@ const CertificationCard = ({ cert, index }) => (
   </FadeInSection>
 );
 
-const ProjectCard = ({ project, index, isEven }) => {
 
+const ProjectCard = ({ project, index, isEven }) => {
   const cardRef = useRef(null);
   
   useEffect(() => {
@@ -132,10 +132,10 @@ const ProjectCard = ({ project, index, isEven }) => {
     };
   }, []);
 
-
   const renderCardContent = (isVisible) => (
     <div className="transform transition-all duration-500 hover:scale-[1.02] will-change-transform">
-      <div className="h-[450px] md:h-[400px] relative rounded-xl overflow-hidden group shadow-xl border border-neutral-800/60 transition-colors">
+      {/* Reduced height for mobile */}
+      <div className="h-[350px] md:h-[400px] relative rounded-xl overflow-hidden group shadow-xl border border-neutral-800/60 transition-colors">
         {/* Cover Image */}
         <div className="absolute inset-0 w-full h-full">
           <img
@@ -153,9 +153,11 @@ const ProjectCard = ({ project, index, isEven }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-70 group-hover:opacity-80 transition-opacity duration-500"></div>
         
         {/* Content Overlay - On top of the image */}
-        <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
-          <div className="backdrop-blur-sm bg-black/30 rounded-xl p-6 border border-white/10 transform transition-all duration-500 group-hover:bg-black/40 group-hover:border-purple-500/20">
-            <h3 className="text-2xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-3">
+        <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 z-10">
+          {/* Reduced padding on mobile */}
+          <div className="backdrop-blur-sm bg-black/30 rounded-xl p-4 sm:p-6 border border-white/10 transform transition-all duration-500 group-hover:bg-black/40 group-hover:border-purple-500/20">
+            {/* Smaller font size for mobile */}
+            <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-2 sm:mb-3">
               {isVisible ? (
                 <ReactTypingEffect 
                   text={[project.title]}
@@ -167,21 +169,22 @@ const ProjectCard = ({ project, index, isEven }) => {
                 <span className="opacity-0">{project.title}</span>
               )}
             </h3>
-            <p className="text-neutral-300 text-base leading-relaxed whitespace-pre-line mb-4 line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
+            {/* Smaller text and more limited line clamp on mobile */}
+            <p className="text-neutral-300 text-sm sm:text-base leading-relaxed whitespace-pre-line mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
               {project.description}
             </p>
-            <div className="pt-2 flex flex-wrap gap-2">
+            <div className="pt-1 sm:pt-2 flex flex-wrap gap-1 sm:gap-2">
               {project.technologies?.map((tech, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1 text-xs font-medium bg-neutral-800/80 text-neutral-300 rounded-full"
+                  className="px-2 sm:px-3 py-1 text-xs font-medium bg-neutral-800/80 text-neutral-300 rounded-full"
                 >
                   {tech}
                 </span>
               ))}
             </div>
-            <div className="pt-4">
-              <span className="inline-block text-purple-400 group-hover:text-purple-300 font-medium transition-colors duration-300 group-hover:translate-x-1">
+            <div className="pt-2 sm:pt-4">
+              <span className="inline-block text-purple-400 group-hover:text-purple-300 text-sm sm:text-base font-medium transition-colors duration-300 group-hover:translate-x-1">
                 Explore →
               </span>
             </div>
@@ -192,7 +195,7 @@ const ProjectCard = ({ project, index, isEven }) => {
   );
 
   return (
-    <FadeInSection delay={index * 300} className="mb-16">
+    <FadeInSection delay={index * 300} className="mb-8 sm:mb-16">
       {(isVisible) => (
         project.link ? (
           <Link to={project.link} className="block">
