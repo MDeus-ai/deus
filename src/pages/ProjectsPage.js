@@ -134,8 +134,7 @@ const ProjectsPage = () => {
                   )}
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-10 px-2" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                  Explore my portfolio of projects showcasing my skills in machine learning, web development, 
-                  and data science. Each project represents a unique challenge and solution.
+                  Explore my portfolio of end-to-end projects showcasing my skills in machine learning, deeplearning and datascience.
                 </p>
                 
                 {/* Search control - Mobile friendly */}
