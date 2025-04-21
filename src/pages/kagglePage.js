@@ -110,6 +110,23 @@ const KagglePortfolio = () => {
       competitionLink: "https://www.kaggle.com/competitions/playground-series-s4e1/overview",
       tags: ["RandomForest Classifier", "SGD Classifier", "Ensemble Learning"],
     },
+    {
+      id: 6,
+      title: "Predict Podcast Listening Time",
+      description: "Predicting listening time of a podcast episode.",
+      status: "In Progress",
+      rank: 0,
+      totalParticipants: 0,
+      percentile: 0,
+      notebooks: [
+        {
+          title: "Podcast Listening Time🎙️",
+          link: "https://www.kaggle.com/code/muhumuzadeusai/podcast-listening-time",
+        }
+      ],
+      competitionLink: "https://www.kaggle.com/competitions/playground-series-s5e4/overview",
+      tags: ["Pandas", "Regression", "Ensemble Learning"],
+    },
   ];
 
   const filteredCompetitions = competitions
