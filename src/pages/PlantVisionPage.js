@@ -327,8 +327,7 @@ const ProjectDetailPage = () => {
     code: ({ node, inline, className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className || '');
       return !inline && match ? (
-        // **MODIFICATION:** Removed the wrapper div and its border/shadow.
-        // Let SyntaxHighlighter handle the background and rounding directly.
+
         <div className="my-4 md:my-5"> {/* Simple margin wrapper */}
             <SyntaxHighlighter
                 style={codeHighlightTheme}
@@ -631,7 +630,7 @@ const ProjectDetailPage = () => {
       `}</style>
 
       {/* Hero Section */}
-      <header className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] flex items-end pb-8 md:pb-12 justify-center">
+      <header className="relative h-[30vh] sm:h-[35vh] md:h-[45vh] lg:h-[50vh] flex items-end pb-4 sm:pb-6 md:pb-10 justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={project.image || "/api/placeholder/1200/600"}
@@ -642,41 +641,39 @@ const ProjectDetailPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/80 to-transparent"></div>
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full">
-          {/* Back Button - **MODIFICATION:** Adjusted padding and hidden text on small screens */}
-          <div className="absolute top-4 left-4 z-20">
-             <Link
-                to="/projects"
-                className="inline-flex items-center gap-1.5 bg-neutral-800/70 text-white rounded-md hover:bg-neutral-700/90 transition-all font-roboto-slab backdrop-blur-sm
-                           px-2 py-1 text-xs  /* Mobile first: smaller padding, smaller text */
-                           sm:px-3 sm:py-1.5 sm:text-sm sm:gap-2 /* Small screens and up: restore original size */
-                          "
-                title="Back to Projects" // Add title attribute for accessibility on icon-only
-             >
-                <FaArrowLeft />
-                <span className="hidden sm:inline">Back to Projects</span> {/* Hide text on mobile */}
-             </Link>
+        <div className="relative z-10 text-center px-3 sm:px-4 max-w-5xl mx-auto w-full">
+          {/* Back Button */}
+          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-1.5 bg-neutral-800/70 text-white rounded-md hover:bg-neutral-700/90 transition-all font-roboto-slab backdrop-blur-sm
+                      px-2 py-1 text-xs
+                      sm:px-3 sm:py-1.5 sm:text-sm sm:gap-2"
+              title="Back to Projects"
+            >
+              <FaArrowLeft />
+              <span className="hidden sm:inline">Back to Projects</span>
+            </Link>
           </div>
 
-          {/* Rest of Hero content remains the same */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 font-roboto-slab drop-shadow-lg">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 md:mb-4 font-roboto-slab drop-shadow-lg">
             {project.title}
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl mx-auto mb-4 md:mb-6 font-roboto-slab drop-shadow">
-             {project.description}
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 max-w-3xl mx-auto mb-3 sm:mb-4 md:mb-5 px-2 font-roboto-slab drop-shadow">
+            {project.description}
           </p>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-2.5">
+          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
             {sections.map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
                 onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  e.preventDefault();
+                  document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-neutral-800/80 text-gray-300 rounded-full text-[11px] sm:text-xs font-medium hover:bg-neutral-700/90 transition-colors font-roboto-slab backdrop-blur-sm"
+                className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-neutral-800/80 text-gray-300 rounded-full text-[10px] sm:text-xs font-medium hover:bg-neutral-700/90 transition-colors font-roboto-slab backdrop-blur-sm"
               >
-                <span className="text-[10px] sm:text-xs">{section.icon}</span>
+                <span className="text-[9px] sm:text-xs">{section.icon}</span>
                 {section.title}
               </a>
             ))}
