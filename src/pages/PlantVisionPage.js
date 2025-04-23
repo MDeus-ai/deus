@@ -80,59 +80,59 @@ The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
         title: "Data Transformation (Pytorch data_loader.py)",
         language: "python",
         code: `import torch
-from torchvision import datasets
-from torchvision.transforms import v2 # Using updated transforms
-from torch.utils.data import DataLoader
+            from torchvision import datasets
+            from torchvision.transforms import v2 # Using updated transforms
+            from torch.utils.data import DataLoader
 
-# Define image transformations for training and validation
-train_transforms = v2.Compose([
-    v2.Resize((240, 240)), # Slightly larger resize before random crop
-    v2.RandomCrop((224, 224)),
-    v2.RandomHorizontalFlip(p=0.5),
-    v2.RandomRotation(degrees=10),
-    v2.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
-    # v2.ToImage(), # Convert PIL image to torch.Image
-    v2.ToDtype(torch.float32, scale=True), # Convert to float and scale to [0, 1]
-    v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+            # Define image transformations for training and validation
+            train_transforms = v2.Compose([
+                v2.Resize((240, 240)), # Slightly larger resize before random crop
+                v2.RandomCrop((224, 224)),
+                v2.RandomHorizontalFlip(p=0.5),
+                v2.RandomRotation(degrees=10),
+                v2.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
+                # v2.ToImage(), # Convert PIL image to torch.Image
+                v2.ToDtype(torch.float32, scale=True), # Convert to float and scale to [0, 1]
+                v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            ])
 
-val_transforms = v2.Compose([
-    v2.Resize((224, 224)),
-    # v2.ToImage(),
-    v2.ToDtype(torch.float32, scale=True),
-    v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+            val_transforms = v2.Compose([
+                v2.Resize((224, 224)),
+                # v2.ToImage(),
+                v2.ToDtype(torch.float32, scale=True),
+                v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            ])
 
 
-# CREATING DATASETS
-# Ensure paths are correct
-train_dataset = datasets.ImageFolder(
-    root='/path/to/train/data',
-    transform=train_transforms
-)
-val_dataset = datasets.ImageFolder(
-    root='/path/to/validation/data',
-    transform=val_transforms
-)
+            # CREATING DATASETS
+            # Ensure paths are correct
+            train_dataset = datasets.ImageFolder(
+                root='/path/to/train/data',
+                transform=train_transforms
+            )
+            val_dataset = datasets.ImageFolder(
+                root='/path/to/validation/data',
+                transform=val_transforms
+            )
 
-# DATASET LOADERS
-BATCH_SIZE = 64
-NUM_WORKERS = 4 # Adjust based on system capabilities
+            # DATASET LOADERS
+            BATCH_SIZE = 64
+            NUM_WORKERS = 4 # Adjust based on system capabilities
 
-train_loader = DataLoader(
-    train_dataset,
-    batch_size=BATCH_SIZE,
-    shuffle=True,
-    num_workers=NUM_WORKERS,
-    pin_memory=True # Speeds up data transfer to GPU if using CUDA
-)
-val_loader = DataLoader(
-    val_dataset,
-    batch_size=BATCH_SIZE,
-    shuffle=False, # No need to shuffle validation data
-    num_workers=NUM_WORKERS,
-    pin_memory=True
-)`
+            train_loader = DataLoader(
+                train_dataset,
+                batch_size=BATCH_SIZE,
+                shuffle=True,
+                num_workers=NUM_WORKERS,
+                pin_memory=True # Speeds up data transfer to GPU if using CUDA
+            )
+            val_loader = DataLoader(
+                val_dataset,
+                batch_size=BATCH_SIZE,
+                shuffle=False, # No need to shuffle validation data
+                num_workers=NUM_WORKERS,
+                pin_memory=True
+            )`
       }
     ],
     challenges: [
@@ -630,43 +630,82 @@ const ProjectDetailPage = () => {
       `}</style>
 
       {/* Hero Section */}
-      <header className="relative h-[30vh] sm:h-[35vh] md:h-[45vh] lg:h-[50vh] flex items-end pb-2 sm:pb-6 md:pb-10 justify-center">
-        <div className="absolute inset-0 overflow-hidden">
-          <img
-            src={project.image || "/api/placeholder/1200/600"}
-            alt={`${project.title} banner`}
-            className="w-full h-full object-cover object-center"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/80 to-transparent"></div>
-        </div>
+{/* --- New Header Section (Option 2: Image Thumbnail) --- */}
+<div className="bg-neutral-900 pt-20 sm:pt-20 pb-8 md:pb-12"> {/* Added top padding */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="relative z-10 text-center px-3 sm:px-4 max-w-5xl mx-auto w-full">
+            <div className="lg:flex lg:gap-8 lg:items-start">
+                {/* Left Column: Text Info */}
+                <div className="flex-1 mb-6 lg:mb-0">
+                    {/* Project Title */}
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 font-roboto-slab">
+                        {project.title}
+                    </h1>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 md:mb-4 font-roboto-slab drop-shadow-lg">
-            {project.title}
-          </h1>
-          <p className="text-xs sm:text-sm md:text-base text-gray-300 max-w-3xl mx-auto mb-3 sm:mb-4 md:mb-5 px-2 font-roboto-slab drop-shadow">
-            {project.description}
-          </p>
-          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
-            {sections.map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-                className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-neutral-800/80 text-gray-300 rounded-full text-[10px] sm:text-xs font-medium hover:bg-neutral-700/90 transition-colors font-roboto-slab backdrop-blur-sm"
-              >
-                <span className="text-[9px] sm:text-xs">{section.icon}</span>
-                {section.title}
-              </a>
-            ))}
-          </div>
+                    {/* Project Description */}
+                    <p className="text-base md:text-lg text-gray-300 mb-4 md:mb-6 font-roboto-slab">
+                        {project.description}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
+                        {project.tags.map((tag) => (
+                        <span
+                            key={tag}
+                            className="px-2.5 py-1 bg-neutral-700 text-neutral-200 rounded-full text-xs sm:text-sm font-medium font-roboto-slab"
+                        >
+                            {tag}
+                        </span>
+                        ))}
+                    </div>
+
+                     {/* GitHub Link */}
+                    <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition-colors text-sm font-medium font-roboto-slab border border-neutral-600"
+                        title="View Project on GitHub"
+                    >
+                        <FaGithub />
+                        <span>GitHub Repository</span>
+                    </a>
+                </div>
+
+                {/* Right Column: Image Thumbnail */}
+                <div className="lg:w-1/3 lg:max-w-xs xl:max-w-sm flex-shrink-0">
+                    <img
+                        src={project.image || "/api/placeholder/400/300"} // Use a smaller placeholder if needed
+                        alt={`${project.title} preview`}
+                        className="w-full h-auto object-cover rounded-lg shadow-lg border border-neutral-700"
+                        loading="lazy" // Can be lazy loaded now
+                    />
+                </div>
+            </div>
+
+             {/* Section Jump Links (Optional but recommended here) */}
+           <div className="mt-6 md:mt-8 pt-4 border-t border-neutral-700">
+              <p className="text-sm text-neutral-400 mb-2 font-roboto-slab">Jump to section:</p>
+              <div className="flex flex-wrap justify-start gap-1.5 sm:gap-2">
+                  {sections.map((section) => (
+                  <a
+                      key={section.id}
+                      href={`#${section.id}`}
+                      onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-neutral-800/80 text-gray-300 rounded-full text-[10px] sm:text-xs font-medium hover:bg-neutral-700/90 transition-colors font-roboto-slab backdrop-blur-sm"
+                  >
+                      <span className="text-[8px] sm:text-xs">{section.icon}</span>
+                      {section.title}
+                  </a>
+                  ))}
+              </div>
+           </div>
         </div>
-      </header>
+      </div>
+      {/* --- End New Header Section (Option 2) --- */}
 
       {/* Main Content */}
         <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
