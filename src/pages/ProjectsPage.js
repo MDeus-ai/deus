@@ -62,7 +62,7 @@ const ProjectsPage = () => {
     {
       id: 1,
       slug: "plantvision-cv001dd",
-      title: "PlantVision(cv001dd)",
+      title: "PlantVision cv001dd (Currently under development...)",
       description: "A Vision model based on the Convolutional Neural Network Architecture(CNN) for detecting and classifying plant diseases based on plant leaves",
       image: "/assets/images/project/plantvision.jpg",
       github: "https://github.com/MDeus-ai/PlantVision-cv001dd",

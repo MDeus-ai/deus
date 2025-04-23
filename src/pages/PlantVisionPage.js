@@ -630,7 +630,7 @@ const ProjectDetailPage = () => {
       `}</style>
 
       {/* Hero Section */}
-      <header className="relative h-[30vh] sm:h-[35vh] md:h-[45vh] lg:h-[50vh] flex items-end pb-4 sm:pb-6 md:pb-10 justify-center">
+      <header className="relative h-[30vh] sm:h-[35vh] md:h-[45vh] lg:h-[50vh] flex items-end pb-2 sm:pb-6 md:pb-10 justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={project.image || "/api/placeholder/1200/600"}
@@ -642,19 +642,6 @@ const ProjectDetailPage = () => {
         </div>
 
         <div className="relative z-10 text-center px-3 sm:px-4 max-w-5xl mx-auto w-full">
-          {/* Back Button */}
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-1.5 bg-neutral-800/70 text-white rounded-md hover:bg-neutral-700/90 transition-all font-roboto-slab backdrop-blur-sm
-                      px-2 py-1 text-xs
-                      sm:px-3 sm:py-1.5 sm:text-sm sm:gap-2"
-              title="Back to Projects"
-            >
-              <FaArrowLeft />
-              <span className="hidden sm:inline">Back to Projects</span>
-            </Link>
-          </div>
 
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 md:mb-4 font-roboto-slab drop-shadow-lg">
             {project.title}
