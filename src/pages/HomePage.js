@@ -18,7 +18,7 @@ const allProjects = [
     title: 'Data Stories...',
     description: 'My machine learning and data science projects, including data analysis, data visualization, statistical modeling and machine learning. I also share my insights and findings from these projects',
     link: '/datastory',
-    coverImage: '/assets/images/datastories/ds-cover.jpg',
+    coverImage: '/assets/images/datastories/ds-cover.png',
     technologies: [],
   },
   {
