@@ -22,12 +22,12 @@ const projectsData = {
     github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
     tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
     metrics: [
-      { name: "Model Accuracy", value: 92 }, // Example: Updated values
-      { name: "Precision", value: 88 },
-      { name: "Recall", value: 85 },
-      { name: "F1 Score", value: 86 },
-      { name: "Top 1% Acc", value: 95 }, // Shortened names for chart
-      { name: "Top 5% Acc", value: 98 }
+      { name: "Model Accuracy", value: 0 }, // Example: Updated values
+      { name: "Precision", value: 0 },
+      { name: "Recall", value: 0 },
+      { name: "F1 Score", value: 0 },
+      { name: "Top 1% Acc", value: 0 }, // Shortened names for chart
+      { name: "Top 5% Acc", value: 0 }
     ],
     documentation: `
 # Architecture Overview
@@ -46,29 +46,6 @@ The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
 
 \`\`\`
 
-### Technical Specifications
-
--   **Input Size**: 224x224x3 (RGB)
--   **Backbone**: EfficientNetB2 (Note: Example uses B2, text says modified ResNet50 - clarify consistency if needed)
--   **Dataset**: 50,000+ images across 38 disease classes
--   **Validation**: 5-fold cross-validation
-
-## Deployment Guide
-
-1.  Clone the repository: \`git clone <repo_url>\`
-2.  Install dependencies: \`pip install -r requirements.txt\`
-3.  Download pre-trained weights (link provided in repo)
-4.  Configure environment variables (\`.env\` file)
-5.  Run the application: \`python main.py\` or similar
-
-## API Reference
-
-| Endpoint         | Method | Description                          |
-|------------------|--------|--------------------------------------|
-| \`/api/analyze\`   | POST   | Submit an image for analysis         |
-| \`/api/diseases\`  | GET    | Retrieve supported diseases         |
-| \`/api/treatments\`| GET    | Get treatment recommendations        |
-
     `,
     codeSnippets: [
       {
@@ -79,60 +56,7 @@ The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
       {
         title: "Data Transformation (Pytorch data_loader.py)",
         language: "python",
-        code: `import torch
-            from torchvision import datasets
-            from torchvision.transforms import v2 # Using updated transforms
-            from torch.utils.data import DataLoader
-
-            # Define image transformations for training and validation
-            train_transforms = v2.Compose([
-                v2.Resize((240, 240)), # Slightly larger resize before random crop
-                v2.RandomCrop((224, 224)),
-                v2.RandomHorizontalFlip(p=0.5),
-                v2.RandomRotation(degrees=10),
-                v2.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
-                # v2.ToImage(), # Convert PIL image to torch.Image
-                v2.ToDtype(torch.float32, scale=True), # Convert to float and scale to [0, 1]
-                v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-            ])
-
-            val_transforms = v2.Compose([
-                v2.Resize((224, 224)),
-                # v2.ToImage(),
-                v2.ToDtype(torch.float32, scale=True),
-                v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-            ])
-
-
-            # CREATING DATASETS
-            # Ensure paths are correct
-            train_dataset = datasets.ImageFolder(
-                root='/path/to/train/data',
-                transform=train_transforms
-            )
-            val_dataset = datasets.ImageFolder(
-                root='/path/to/validation/data',
-                transform=val_transforms
-            )
-
-            # DATASET LOADERS
-            BATCH_SIZE = 64
-            NUM_WORKERS = 4 # Adjust based on system capabilities
-
-            train_loader = DataLoader(
-                train_dataset,
-                batch_size=BATCH_SIZE,
-                shuffle=True,
-                num_workers=NUM_WORKERS,
-                pin_memory=True # Speeds up data transfer to GPU if using CUDA
-            )
-            val_loader = DataLoader(
-                val_dataset,
-                batch_size=BATCH_SIZE,
-                shuffle=False, # No need to shuffle validation data
-                num_workers=NUM_WORKERS,
-                pin_memory=True
-            )`
+        code: ``
       }
     ],
     challenges: [
