@@ -60,17 +60,17 @@ The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
       }
     ],
     challenges: [
-      "Dealing with imbalanced classes in the dataset (e.g., using weighted loss, over/under-sampling).",
-      "Optimizing model size for mobile deployment (quantization, pruning) without sacrificing accuracy.",
-      "Handling varying lighting conditions and backgrounds in field photos (robust data augmentation).",
-      "Ensuring model generalization to unseen plant varieties or growth stages."
+      // "Dealing with imbalanced classes in the dataset (e.g., using weighted loss, over/under-sampling).",
+      // "Optimizing model size for mobile deployment (quantization, pruning) without sacrificing accuracy.",
+      // "Handling varying lighting conditions and backgrounds in field photos (robust data augmentation).",
+      // "Ensuring model generalization to unseen plant varieties or growth stages."
     ],
     futurePlans: [
-      "Expand the model to cover more plant species and diseases.",
-      "Implement real-time detection capabilities using optimized models (e.g., TensorFlow Lite, ONNX Runtime).",
-      "Integrate with agricultural IoT systems for automated monitoring and alerts.",
-      "Develop a system for tracking disease progression over time.",
-      "Add severity estimation alongside classification."
+      // "Expand the model to cover more plant species and diseases.",
+      // "Implement real-time detection capabilities using optimized models (e.g., TensorFlow Lite, ONNX Runtime).",
+      // "Integrate with agricultural IoT systems for automated monitoring and alerts.",
+      // "Develop a system for tracking disease progression over time.",
+      // "Add severity estimation alongside classification."
     ]
   }
   // Add more project entries as needed
