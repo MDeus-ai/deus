@@ -1,266 +1,213 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/BlogPage.js
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Calendar, Clock, Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
+import BlogCard from '../components/BlogCard';
+
+const POSTS_PER_PAGE = 6;
 
 const BlogPage = () => {
-  const [posts, setPosts] = useState([]);
-  const [selectedTag, setSelectedTag] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('Most recent');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+  const [activeFeaturedIndex, setActiveFeaturedIndex] = useState(0);
 
   useEffect(() => {
-    // Set page title when component mounts
     document.title = 'Blog | Muhumuza Deus';
-
-    // Restore original title when component unmounts
-    return () => {
-      document.title = 'Muhumuza Deus';
-    };
-  }, []);
-
-  useEffect(() => {
     const fetchPosts = async () => {
-      setIsLoading(true); // Ensure loading state is true at the start
+      setIsLoading(true);
       try {
         const response = await fetch('/blog/metadata.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         const postsData = await response.json();
-
-        const sortedPosts = postsData.sort((a, b) =>
-          new Date(b.date) - new Date(a.date)
-        );
-
-        setPosts(sortedPosts);
-      } catch (error) {
-        console.error('Error fetching blog posts:', error);
-        // Consider setting an error state here to display to the user
-      } finally {
-        setIsLoading(false); // Set loading state to false regardless of success/error
-      }
+        setAllPosts(postsData.sort((a, b) => new Date(b.date) - new Date(a.date)));
+      } catch (error) { console.error('Error fetching blog posts:', error); }
+      finally { setIsLoading(false); }
     };
-
     fetchPosts();
+    return () => { document.title = 'Muhumuza Deus'; };
   }, []);
 
-  const allTags = [...new Set(posts.flatMap(post => post.tags))];
+  const allTags = useMemo(() => ['Most recent', 'Announcements', 'Engineering', 'Research', 'Tutorials', 'Community', 'TFHE-rs', 'Concrete', 'Concrete ML', 'FhEVM'], []);
+  const featuredPosts = useMemo(() => allPosts.filter(p => p.featured === true), [allPosts]);
+  
+  const filteredPosts = useMemo(() => {
+    let posts = [...allPosts];
+    if (activeCategory !== 'Most recent') {
+      posts = posts.filter(post => post.tags?.includes(activeCategory));
+    }
+    if (searchTerm) {
+      posts = posts.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()) || p.excerpt.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+    return posts;
+  }, [allPosts, activeCategory, searchTerm]);
 
-  const filteredPosts = posts.filter(post => {
-    const matchesTag = !selectedTag || post.tags.includes(selectedTag);
-    const matchesSearch = !searchQuery ||
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTag && matchesSearch;
-  });
+  useEffect(() => setVisibleCount(POSTS_PER_PAGE), [activeCategory, searchTerm]);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const heroPost = useMemo(() => {
+    return allPosts.find(post => post.isHero === true) || allPosts[0];
+  }, [allPosts]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
-        {/* Improved loading spinner */}
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
       </div>
     );
   }
 
+  const recentPostsToDisplay = filteredPosts.slice(0, visibleCount);
+
   return (
-    <div className="min-h-screen bg-neutral-950 pt-16 md:pt-24 pb-16 px-4 sm:px-6 lg:px-8" style={{ fontFamily: 'Roboto Slab, serif' }}>
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 md:mb-16">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Blog
-          </h1>
-          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Roboto Slab, serif' }}>
-            Machine learning, Deep learning, Artificial Intelligence, My Learning Experiences And Everything Else.
-          </p>
-        </div>
-
-        {/* Search and Filter Section */}
-        <div className="mb-8 md:mb-12 space-y-4 md:space-y-6">
-           {/* --- Search Input (Now always visible on md+) --- */}
-           <div className="relative max-w-xl mx-auto">
-             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-               <Search className="h-5 w-5 text-neutral-500" />
-             </div>
-             <input
-               type="text"
-               placeholder="Search posts..."
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-               className="w-full pl-10 pr-4 py-3 bg-neutral-900 border border-neutral-800 rounded-lg
-                 text-white placeholder-neutral-500 focus:outline-none focus:ring-2
-                 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
-               style={{ fontFamily: 'Roboto Slab, serif' }}
-             />
-           </div>
-
-          {/* Mobile Dropdown */}
-          <div className="md:hidden relative max-w-xl mx-auto"> {/* Added max-w-xl */}
-            <button
-              onClick={() => setIsTagDropdownOpen(!isTagDropdownOpen)}
-              className="w-full px-4 py-2 bg-neutral-800 text-neutral-300 rounded-lg flex items-center justify-between"
-              style={{ fontFamily: 'Roboto Slab, serif' }}
-            >
-              <span>{selectedTag || 'Filter by Tag'}</span> {/* Changed default text */}
-              <ChevronDown className={`w-4 h-4 transform transition-transform ${isTagDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {isTagDropdownOpen && (
-              <div className="absolute z-50 mt-1 w-full bg-neutral-800 rounded-lg shadow-lg max-h-60 overflow-y-auto"> {/* Added max-height and overflow */}
-                <button
-                  onClick={() => {
-                    setSelectedTag(null);
-                    setIsTagDropdownOpen(false);
-                  }}
-                  className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${!selectedTag ? 'text-pink-500 font-semibold' : 'text-neutral-300'}`} // Highlight active
-                  style={{ fontFamily: 'Roboto Slab, serif' }}
+    <div className="bg-white text-black font-sans">
+      
+      {/* --- HERO SECTION --- */}
+      {heroPost && (
+        <section className="bg-yellow-400 border-b-4 border-black">
+          {/* FIX 2: Added more top padding for mobile, adjusted all paddings */}
+          <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20 grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* IMAGE SIDE - Styled with BlogCard effects */}
+            <div className="hidden lg:block">
+              {heroPost.coverImage && (
+                <Link
+                  to={`/blog/${heroPost.slug}`}
+                  className="group block bg-gray-50 border-2 border-black
+                             transition-all duration-300 ease-in-out
+                             hover:shadow-[8px_8px_0px_#000] hover:-translate-x-1 hover:-translate-y-1"
                 >
-                  All Posts
-                </button>
-                {allTags.map((tag) => (
+                  <div className="overflow-hidden">
+                    <img
+                      src={heroPost.coverImage}
+                      alt={`Cover for ${heroPost.title}`}
+                      className="w-full h-full max-h-[400px] object-cover"
+                    />
+                  </div>
+                </Link>
+              )}
+            </div>
+            
+            {/* TEXT SIDE - Original layout preserved */}
+            <div>
+              <p className="text-sm font-bold mb-2">
+                {new Date(heroPost.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} – {heroPost.author}
+              </p>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4">{heroPost.title}</h1>
+              <p className="text-lg text-black/80 mb-8 max-w-lg">{heroPost.excerpt}</p>
+              <Link to={`/blog/${heroPost.slug}`} className="inline-block bg-white text-black px-6 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200">
+                Read More
+              </Link>
+            </div>
+          </div>
+          
+          <div className="text-center pb-12">
+            <a href="#main-content" className="inline-flex flex-col items-center font-bold text-sm group">
+              Read more blog posts
+              <ChevronDown className="mt-1 animate-bounce group-hover:animate-none" size={24} />
+            </a>
+          </div>
+        </section>
+      )}
+
+      <main id="main-content" className="py-20 lg:py-28">
+        <div className="container mx-auto px-4">
+          
+          {/* --- FEATURED BLOG POSTS SECTION --- */}
+          {featuredPosts.length > 0 && (
+            <div className="mb-20">
+              <h2 className="text-4xl font-extrabold tracking-tighter mb-8 text-left">Featured Blog Posts</h2>
+              <div className="w-full min-h-[200px] overflow-hidden">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${activeFeaturedIndex * 100}%)` }}
+                >
+                  {featuredPosts.map((post) => (
+                    <div key={post.slug} className="w-full flex-shrink-0">
+                      <BlogCard
+                        {...post}
+                        layout="horizontal"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {featuredPosts.length > 1 && (
+                <div className="flex justify-center space-x-3 mt-8">
+                  {featuredPosts.map((_, index) => (
+                    // FIX 3: Changed indicator from circle to larger rectangle
+                    <button
+                      key={index}
+                      onClick={() => setActiveFeaturedIndex(index)}
+                      aria-label={`Go to featured post ${index + 1}`}
+                      className={`w-8 h-2 transition-all duration-300 ease-in-out ${
+                        activeFeaturedIndex === index 
+                          ? 'bg-black' 
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                    ></button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* --- BROWSE & SEARCH SECTION --- */}
+          <div className="mb-20">
+            <div className="mb-16">
+              <h2 className="text-4xl font-extrabold tracking-tighter mb-8 text-left">Browse By Topics</h2>
+              <div className="flex flex-wrap justify-start gap-4">
+                {allTags.map(tag => (
                   <button
                     key={tag}
-                    onClick={() => {
-                      setSelectedTag(tag);
-                      setIsTagDropdownOpen(false);
-                    }}
-                    className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${
-                      selectedTag === tag ? 'text-pink-500 font-semibold' : 'text-neutral-300' // Highlight active
+                    onClick={() => setActiveCategory(tag)}
+                    // FIX 1: Added active: state for a click effect
+                    className={`px-5 py-2 border-2 border-black font-bold text-sm shadow-[4px_4px_0px_#000] transition-all duration-150 hover:-translate-y-0.5 active:shadow-none active:translate-x-0 active:translate-y-0 ${
+                      activeCategory === tag ? 'bg-yellow-400' : 'bg-white'
                     }`}
-                    style={{ fontFamily: 'Roboto Slab, serif' }}
                   >
                     {tag}
                   </button>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Desktop Tags */}
-          <div className="hidden md:block">
-            <div className="flex flex-wrap gap-2 justify-center">
-              <button
-                onClick={() => setSelectedTag(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
-                  ${!selectedTag ? 'bg-pink-500 text-white' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
-                style={{ fontFamily: 'Roboto Slab, serif' }}
-              >
-                All Posts
-              </button>
-              {allTags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => setSelectedTag(tag)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap
-                    ${selectedTag === tag ? 'bg-pink-500 text-white' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}`}
-                  style={{ fontFamily: 'Roboto Slab, serif' }}
-                >
-                  {tag}
-                </button>
-              ))}
+            </div>
+            <div className="bg-gray-100 p-8">
+              <div className="relative max-w-xl mx-auto">
+                <input
+                  type="text"
+                  placeholder="SEARCH FOR CONTENT"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-transparent border-b-2 border-black py-3 pl-2 pr-10 text-black placeholder:text-gray-500 placeholder:font-bold placeholder:tracking-widest focus:outline-none focus:border-yellow-400"
+                />
+                <Search className="absolute right-2 top-1/2 -translate-y-1/2 text-black" size={24} />
+              </div>
             </div>
           </div>
-        </div>
-
-
-        {/* Blog Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {filteredPosts.map((post) => (
-            <Link
-              key={post.slug}
-              to={`/blog/${post.slug}`}
-              // The main container styling remains largely the same
-              className="group bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800
-                hover:border-pink-500/50 transition-all duration-300 transform hover:-translate-y-1 flex flex-col" // Added flex flex-col
-            >
-              {/* Image container */}
-              <div className="relative h-48 sm:h-56 overflow-hidden flex-shrink-0"> {/* Added flex-shrink-0 */}
-                <img
-                  src={post.coverImage}
-                  alt={post.title}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  // Add onError handler for robustness
-                   onError={(e) => {
-                     e.target.onerror = null; // Prevent infinite loop if placeholder fails
-                     e.target.src = '/assets/placeholder.jpg'; // Path relative to public folder
-                   }}
-                />
-                 {/* Optional: subtle gradient overlay on image if needed for text contrast, but not strictly required by prompt */}
-                 {/* <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/20 to-transparent" /> */}
-              </div>
-
-              {/* Content Area - Apply background/blur here */}
-              <div className="p-4 sm:p-6 bg-black/40 backdrop-blur-md border-t border-neutral-700/50 flex-grow flex flex-col"> {/* MODIFIED: Added bg, blur, border, flex-grow, flex, flex-col */}
-
-                {/* Tags Section */}
-                <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 mb-3"> {/* Added mb-3 */}
-                  <div className="flex flex-nowrap sm:flex-wrap gap-2 min-w-min">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="flex-none px-3 py-1 bg-neutral-800/80 text-neutral-300 backdrop-blur-sm  /* Slightly different bg for tags */
-                          rounded-full text-xs font-medium whitespace-nowrap"
-                        style={{ fontFamily: 'Roboto Slab, serif' }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h2 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-pink-400 /* Adjusted hover color slightly */
-                  transition-colors duration-300 line-clamp-2" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                  {post.title}
-                </h2>
-
-                {/* Excerpt */}
-                <p className="text-neutral-300 text-sm mb-4 line-clamp-3 flex-grow" style={{ fontFamily: 'Roboto Slab, serif' }}> {/* Increased line-clamp, added flex-grow */}
-                  {post.excerpt}
-                </p>
-
-                {/* Metadata & Read More */}
-                <div className="mt-auto pt-2"> {/* Pushes items below to bottom */}
-                    <div className="flex items-center text-xs sm:text-sm text-neutral-400 space-x-4 mb-3" style={{ fontFamily: 'Roboto Slab, serif' }}> {/* Adjusted color, added mb */}
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1.5" /> {/* Slightly more spacing */}
-                        {formatDate(post.date)}
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1.5" /> {/* Slightly more spacing */}
-                        {post.readingTime} min read
-                      </div>
-                    </div>
-
-                    <div className="flex items-center text-pink-500 hover:text-pink-400 text-sm font-medium transition-colors duration-300" style={{ fontFamily: 'Roboto Slab, serif' }}> {/* Added hover effect */}
-                      Read More
-                      <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
-                    </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredPosts.length === 0 && !isLoading && ( // Added !isLoading condition
-          <div className="text-center py-16 col-span-1 md:col-span-2"> {/* Ensure it spans columns if grid is active */}
-            <h3 className="text-xl text-neutral-400 mb-2" style={{ fontFamily: 'Roboto Slab, serif' }}>No posts found</h3>
-            <p className="text-neutral-500" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              Try adjusting your search or filter criteria.
-            </p>
+          
+          {/* --- MOST RECENT POSTS SECTION --- */}
+          <h2 className="text-4xl font-extrabold tracking-tighter mb-8 text-left">Most Recent Blog Posts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            {recentPostsToDisplay.map(post => <BlogCard key={post.slug} {...post} layout="vertical" />)}
           </div>
-        )}
-      </div>
+
+          {/* --- EMPTY STATE & LOAD MORE --- */}
+          {filteredPosts.length === 0 && !isLoading && (
+            <div className="text-center py-16 col-span-full">
+              <h3 className="text-xl text-gray-700">No posts found.</h3>
+              <p className="text-gray-500">Try adjusting your search or filter.</p>
+            </div>
+          )}
+          {visibleCount < filteredPosts.length && (
+            <div className="text-center mt-20">
+              <button onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)} className="bg-white text-black px-8 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200">
+                Load More
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 };

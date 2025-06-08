@@ -1,351 +1,225 @@
-import React, { useState, useEffect } from 'react';
+// src/components/Navbar.js
+
+import React, { useState, useEffect, useRef } from 'react';
+// Import useLocation to detect the current page route
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-// Navbar dimensions and positioning
-const NAV_CONFIG = {
-  maxWidth: 500,
-  desktopPaddingX: 12,
-  desktopPaddingY: 10,
-  desktopGap: 4,
-  capsuleTransitionDuration: 200,
-  capsuleTransitionEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  mobileMenuDuration: 400,
-  scrollThreshold: 60,
-  showThreshold: 50,
-  maxBlur: 8,
-  maxBorderRadius: 20,
-  maxOpacity: 0.3,
-  mobileBreakpoint: 768,
-  // Mobile menu specific configurations
-  mobile: {
-    headerHeight: '4rem',
-    footerHeight: '4rem',
-    menuPadding: '2rem',
-    fontSize: {
-      sm: '1.5rem',
-      base: '2rem',
-      lg: '2.5rem'
+const navItems = [
+    {
+      label: "Projects",
+      href: "#",
+      dropdown: [
+        { title: "PlantVision", description: "A deeplearning system for predicting plant diseases", href: "#", tag: "In development" },
+        // { title: "  ", description: "  ", href: "#" },
+        // { title: "  ", description: "  ", href: "#", tag: "New" }
+      ]
     },
-    spacing: {
-      menuItems: '2rem'
-    }
-  }
-};
+    {
+      label: "Blog Posts",
+      href: "/blog", // Corrected link to the blog index page
+      dropdown: [
+        { title: "Batch Normalization Crush Course", description: "Understanding how batch normalization helps NNs", href: "#" },
+        { title: "Understanding Neural Networks", description: "Quick tour into the math that powers simple MLPs", href: "#" },
+      ]
+    },
+    {
+      label: "About Me",
+      href: "/#about-section"
+    },
+    {
+      label: "Milestones",
+      href: "/#milestones-section"
+    },
+];
 
-// Robotic text animation configuration
-const ROBOTIC_TEXT_CONFIG = {
-  FONT: {
-    FAMILY: 'Space Mono, monospace',
-    LETTER_SPACING: '0.1em',
-    LINE_HEIGHT: '1.5',
-    COLOR: 'rgba(252, 225, 192, 0.8)'
-  },
-  ANIMATION: {
-    WORD_DURATION: 1500,
-    GLITCH_DURATION: 190,
-    CHAR_STAGGER_DELAY: 50,
-    TRANSITION_SPRING: {
-      STIFFNESS: 200,
-      DAMPING: 20
-    }
-  },
-  GLITCH: {
-    SHADOW_COLOR_1: '#ff0080',
-    SHADOW_COLOR_2: '#00ff80',
-    SHADOW_OFFSET: '2.5px'
-  },
-  UNDERLINE: {
-    HEIGHT: '2px',
-    COLOR: 'rgba(255, 255, 255, 0.5)',
-    MARGIN_TOP: '0.5rem'
-  }
-};
+const HardShadowButton = ({ href, children, className = '' }) => (
+    <a href={href} className={`group relative inline-block text-black ${className}`}>
+      <span className="relative z-10 block border-2 border-black bg-yellow-400 px-5 py-2 text-center font-bold transition-transform duration-150 ease-in-out group-hover:translate-x-0 group-hover:translate-y-0 -translate-x-1 -translate-y-1">
+        {children}
+      </span>
+      <span className="absolute inset-0 border-2 border-black bg-black"></span>
+    </a>
+);
 
-const RoboticMenuItem = ({ to, label, isActive, onClick }) => {
-  const [isGlitching, setIsGlitching] = useState(false);
-
-  useEffect(() => {
-    const glitchInterval = setInterval(() => {
-      if (Math.random() < 0.3) {
-        setIsGlitching(true);
-        setTimeout(() => {
-          setIsGlitching(false);
-        }, ROBOTIC_TEXT_CONFIG.ANIMATION.GLITCH_DURATION);
-      }
-    }, ROBOTIC_TEXT_CONFIG.ANIMATION.WORD_DURATION);
-
-    return () => clearInterval(glitchInterval);
-  }, []);
-
+const DropdownMenu = ({ items }) => {
   return (
-    <Link
-      to={to}
-      onClick={onClick}
-      className="block w-full"
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="absolute top-full mt-4 left-0 z-20"
     >
-      <div className="flex flex-col items-start w-full">
-        <div 
-          className="font-mono relative overflow-hidden w-full"
-          style={{
-            fontFamily: ROBOTIC_TEXT_CONFIG.FONT.FAMILY,
-            letterSpacing: ROBOTIC_TEXT_CONFIG.FONT.LETTER_SPACING,
-            lineHeight: ROBOTIC_TEXT_CONFIG.FONT.LINE_HEIGHT,
-            color: isActive ? '#f97316' : ROBOTIC_TEXT_CONFIG.FONT.COLOR,
-            fontSize: NAV_CONFIG.mobile.fontSize.lg
-          }}
-        >
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{
-              type: "spring",
-              ...ROBOTIC_TEXT_CONFIG.ANIMATION.TRANSITION_SPRING
-            }}
-          >
-            {label.split('').map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0, y: Math.random() * 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.1,
-                  delay: index * (ROBOTIC_TEXT_CONFIG.ANIMATION.CHAR_STAGGER_DELAY / 1000),
-                  type: "spring"
-                }}
-                className="inline-block"
-                style={{
-                  textShadow: isGlitching 
-                    ? `${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_COLOR_1},
-                       -${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} -${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_OFFSET} ${ROBOTIC_TEXT_CONFIG.GLITCH.SHADOW_COLOR_2}`
-                    : 'none',
-                  transition: 'text-shadow 0.15s ease-in-out'
-                }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </motion.div>
-        </div>
-        <div 
-          style={{
-            width: '100%',
-            height: ROBOTIC_TEXT_CONFIG.UNDERLINE.HEIGHT,
-            background: `linear-gradient(to right, transparent, ${ROBOTIC_TEXT_CONFIG.UNDERLINE.COLOR}, transparent)`,
-            marginTop: ROBOTIC_TEXT_CONFIG.UNDERLINE.MARGIN_TOP,
-            clipPath: isGlitching ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
-            transition: 'clip-path 0.3s ease-in-out'
-          }}
-        />
+      <div className="bg-black text-white p-2 rounded-md shadow-2xl min-w-[380px]">
+        {items.map((item, index) => (
+          <React.Fragment key={index}>
+            <a href={item.href} className="block p-3 hover:bg-zinc-800 rounded-md transition-colors">
+              <div className="flex items-center justify-between gap-4">
+                <p className="font-bold text-white">{item.title}</p>
+                {item.tag && (
+                   <span className="whitespace-nowrap bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded">
+                      {item.tag}
+                   </span>
+                )}
+              </div>
+              <p className="text-sm text-zinc-400 mt-1">{item.description}</p>
+            </a>
+            {index < items.length - 1 && <hr className="border-zinc-700 mx-3" />}
+          </React.Fragment>
+        ))}
       </div>
-    </Link>
+    </motion.div>
   );
 };
 
-const Navbar = () => {
-  const [scrollPercentage, setScrollPercentage] = useState(0);
+export default function Navbar() {
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const [isFading, setIsFading] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState('up');
+  const navRef = useRef(null);
   
-  const location = useLocation();
+  // --- START: Scroll-based visibility logic ---
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const { pathname } = useLocation();
 
-  const navLinks = [
-    { to: "/", label: "INDEX" },
-    { to: "/projects", label: "PROJECTS" },
-    { to: "/about", label: "ABOUT" },
-    { to: "/blog", label: "BLOG" }
-  ];
+  // Check if the current page is a blog post page (e.g., /blog/my-post)
+  // This is true if the path starts with /blog/ and has more characters after it.
+  const isBlogPostPage = pathname.startsWith('/blog/') && pathname.length > 6;
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollRange = 100;
-      const newScrollPercentage = Math.min(currentScrollY / scrollRange, 1);
-      setScrollPercentage(newScrollPercentage);
-
-      if (currentScrollY < NAV_CONFIG.showThreshold) {
-        setIsVisible(true);
-        setScrollDirection('up');
-      } else {
-        const deltaY = currentScrollY - lastScrollY;
-        if (Math.abs(deltaY) > NAV_CONFIG.scrollThreshold) {
-          const newDirection = deltaY > 0 ? 'down' : 'up';
-          if (newDirection !== scrollDirection) {
-            setScrollDirection(newDirection);
-            setIsVisible(newDirection === 'up');
-          }
-        }
+      // Only apply the hide/show logic on blog post pages.
+      if (!isBlogPostPage) {
+        setIsNavVisible(true);
+        return;
       }
-      setLastScrollY(currentScrollY);
+      
+      const currentScrollY = window.scrollY;
+
+      // Always show navbar at the very top of the page.
+      if (currentScrollY < 100) {
+        setIsNavVisible(true);
+      } 
+      // Hide navbar when scrolling down.
+      else if (currentScrollY > lastScrollY.current) {
+        setIsNavVisible(false);
+      } 
+      // Show navbar when scrolling up.
+      else {
+        setIsNavVisible(true);
+      }
+      
+      // Update the last scroll position.
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, scrollDirection]);
+
+    // Clean up the event listener when the component unmounts.
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isBlogPostPage]); // Re-run this effect if we navigate to/from a blog page.
+
+  // Immediately make navbar visible if we navigate away from a blog post page.
+  useEffect(() => {
+    if (!isBlogPostPage) {
+      setIsNavVisible(true);
+    }
+  }, [pathname, isBlogPostPage]);
+  // --- END: Scroll-based visibility logic ---
+
 
   useEffect(() => {
-    let timeoutId;
-    if (isMenuOpen) {
-      setIsMenuVisible(true);
-      setIsFading(false);
-      document.body.style.overflow = 'hidden';
-    } else {
-      setIsFading(true);
-      document.body.style.overflow = '';
-      timeoutId = setTimeout(() => {
-        setIsMenuVisible(false);
-        setIsFading(false);
-      }, NAV_CONFIG.mobileMenuDuration);
-    }
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      document.body.style.overflow = '';
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
     };
-  }, [isMenuOpen]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const isActive = (path) => location.pathname === path;
-  const handleMenuToggle = (isOpen) => setIsMenuOpen(isOpen);
-  const handleCloseMenu = () => handleMenuToggle(false);
-
-  const navStyles = {
-    maxWidth: `${NAV_CONFIG.maxWidth}px`,
-    background: `rgba(0, 0, 0, ${NAV_CONFIG.maxOpacity * scrollPercentage})`,
-    backdropFilter: `blur(${NAV_CONFIG.maxBlur * scrollPercentage}px)`,
-    borderRadius: `${NAV_CONFIG.maxBorderRadius * scrollPercentage}px`,
-    borderColor: `rgba(255, 255, 255, ${0.1 * scrollPercentage})`,
-    borderWidth: `${scrollPercentage}px`,
-    padding: `${NAV_CONFIG.desktopPaddingY + (scrollPercentage * 2)}px ${NAV_CONFIG.desktopPaddingX + (scrollPercentage * 4)}px`,
-    transition: `all ${NAV_CONFIG.capsuleTransitionDuration}ms ${NAV_CONFIG.capsuleTransitionEasing}`,
-    margin: '0 auto'
+  const handleNavClick = (label) => {
+    setOpenDropdown(openDropdown === label ? null : label);
   };
-
+  
   return (
-    <>
-      {/* Main Navbar */}
-      <div 
-        className={`fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full px-4 py-4 
-          transform transition-transform duration-300 ease-in-out
-          ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
-      >
-        <div style={navStyles}>
-          <div className="flex items-center justify-between md:justify-center">
-            <Link 
-              to="/" 
-              className="md:hidden text-white text-xl font-bold hover:text-orange-400 transition-colors duration-300"
-            >
-              <img src="/favicon.png" alt="Logo" className="w-6 h-6 inline-block align-middle" />
-            </Link>
-
-            <div className={`hidden md:flex items-center gap-${NAV_CONFIG.desktopGap}`}>
-              {navLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  to={link.to}
-                  className={`text-sm font-medium tracking-wider transition-colors duration-300
-                    ${isActive(link.to) ? 'text-orange-400' : 'text-neutral-200 hover:text-orange-400'}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <button
-              className="md:hidden text-white hover:text-orange-400 transition-colors duration-300"
-              onClick={() => handleMenuToggle(true)}
-              aria-label="Toggle menu"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
+    // --- MODIFIED: Added transition and conditional transform classes ---
+    <header 
+      className={`fixed top-0 left-0 w-full bg-yellow-400 text-black border-b-4 border-black z-50 font-sans transition-transform duration-300 ease-in-out ${isNavVisible ? 'translate-y-0' : '-translate-y-full'}`}
+    >
+      <div ref={navRef} className="container mx-auto flex justify-between items-center p-4">
+        <Link to="/" className="text-4xl font-extrabold tracking-tighter">DEUS.</Link>
+        
+        <div className="hidden md:flex items-center gap-10">
+          <nav className="flex items-center gap-8">
+            {navItems.map((item) => (
+              <div key={item.label} className="relative">
+                {item.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => handleNavClick(item.label)}
+                      className="flex items-center gap-1.5 text-base font-bold transition-colors hover:text-zinc-600"
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown 
+                        size={20} 
+                        className={`transition-transform duration-200 ${openDropdown === item.label ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {openDropdown === item.label && <DropdownMenu items={item.dropdown} />}
+                    </AnimatePresence>
+                  </>
+                ) : (
+                  <a href={item.href} className="flex items-center gap-1.5 text-base font-bold transition-colors hover:text-zinc-600">
+                    <span>{item.label}</span>
+                  </a>
+                )}
+              </div>
+            ))}
+          </nav>
+          
+          <HardShadowButton href="/#footer">Contact me</HardShadowButton>
         </div>
+
+        <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMenuVisible && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className={`fixed inset-0 bg-black/30 z-50 transition-opacity duration-${NAV_CONFIG.mobileMenuDuration}
-              ${isMenuOpen && !isFading ? 'opacity-100' : 'opacity-0'}`}
-            onClick={handleCloseMenu}
-          >
-            <div 
-              className={`absolute inset-0 transition-opacity duration-${NAV_CONFIG.mobileMenuDuration} delay-150
-                ${isMenuOpen && !isFading ? 'opacity-100 backdrop-blur-sm' : 'opacity-0'}`} 
-            />
-          </div>
-
-          {/* Off-canvas Menu */}
-          <div 
-            className={`fixed inset-0 z-50 bg-[#1a1a2e] backdrop-blur-xl
-              transform transition-transform duration-${NAV_CONFIG.mobileMenuDuration}
-              ${isMenuOpen && !isFading ? 'translate-x-0' : 'translate-x-full'}`}
-          >
-            <div className="flex flex-col h-full">
-              {/* Header */}
-              <header 
-                className="flex items-center justify-between px-6"
-                style={{ height: NAV_CONFIG.mobile.headerHeight }}
-              >
-                <Link 
-                  to="/" 
-                  className="text-white hover:text-orange-400 transition-colors duration-300"
-                  onClick={handleCloseMenu}
-                >
-                  <img src="/favicon.png" alt="Logo" className="w-6 h-6" />
-                </Link>
-                <button
-                  className="w-8 h-8 flex items-center justify-center text-white hover:text-orange-400 
-                    hover:bg-white/10 rounded-full transition-all duration-300 hover:rotate-90"
-                  onClick={handleCloseMenu}
-                  aria-label="Close menu"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </header>
-
-              {/* Navigation Content */}
-              <div className="flex-1 overflow-hidden">
-                <nav className="h-full flex flex-col justify-center overflow-y-auto px-6">
-                  <div 
-                    className="space-y-8 py-8"
-                    style={{ padding: NAV_CONFIG.mobile.menuPadding }}
-                  >
-                    {navLinks.map((link, index) => (
-                      <RoboticMenuItem
-                        key={index}
-                        to={link.to}
-                        label={link.label}
-                        isActive={isActive(link.to)}
-                        onClick={handleCloseMenu}
-                      />
-                    ))}
-                  </div>
-                </nav>
-              </div>
-
-              {/* Footer */}
-              <footer 
-                className="text-center text-sm text-neutral-400 border-t border-white/5 flex items-center justify-center"
-                style={{ 
-                  height: NAV_CONFIG.mobile.footerHeight,
-                  fontFamily: 'Roboto Slab, serif' 
-                }}
-              >
-                © {new Date().getFullYear()} Muhumuza Deus. All rights reserved.
-              </footer>
-            </div>
-          </div>
-        </>
-      )}
-    </>
+       {isMenuOpen && (
+         <div className="md:hidden bg-yellow-400 border-t border-black">
+           <nav className="flex flex-col items-center p-6 space-y-4">
+             {navItems.map((item) => (
+               item.dropdown ? (
+                 <div key={item.label} className="text-center w-full pb-4 border-b border-black/10">
+                   <h3 className="text-lg font-bold mb-2">{item.label}</h3>
+                   <div className="space-y-2">
+                     {item.dropdown.map(subItem => (
+                       <Link key={subItem.title} to={subItem.href} className="block text-sm text-gray-800 hover:text-black" onClick={() => setIsMenuOpen(false)}>
+                         {subItem.title}
+                       </Link>
+                     ))}
+                   </div>
+                 </div>
+               ) : (
+                 <a key={item.label} href={item.href} className="text-lg font-bold" onClick={() => setIsMenuOpen(false)}>
+                   {item.label}
+                 </a>
+               )
+             ))}
+             <div className="mt-4 pt-4 w-full flex justify-center">
+               <HardShadowButton href="/#footer">Contact me</HardShadowButton>
+             </div>
+           </nav>
+         </div>
+       )}
+    </header>
   );
-};
-
-export default Navbar;
+}

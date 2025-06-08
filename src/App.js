@@ -1,11 +1,9 @@
 import React from 'react';
 import ScrollToTop from './components/ScrollToTop';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import KagglePage from './pages/kagglePage';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/PlantVisionPage';
 import './App.css';
@@ -25,10 +23,8 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} /> 
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-          <Route path="/kaggle-competitions" element={<KagglePage />} />
           <Route path="/youtube" element={<YouTubePage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPost />} />

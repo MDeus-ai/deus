@@ -3,10 +3,14 @@
       "slug": "BatchNormalization",
       "title": "Batch Normalization Crush Course",
       "date": "2024-12-29",
-      "excerpt": "Understanding the batch normalization alogrithm, and its impact on model performance",
+      "excerpt": "Understanding the batch normalization alogrithm, and its impact on model performance.",
       "coverImage": "/assets/blog_assets/batch_norm.jpg",
-      "tags": ["Deep Learning", "Mathematics", "Neural Networks", "Algorithms", "Statistics"],
-      "readingTime": 10
+      "author": "Muhumuza Deus",
+      "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
+      "readingTime": 10,
+      "featured": true,
+      "preview": true,
+      "isHero": false 
     },
     {
       "slug": "advanced-ml-post",
@@ -14,7 +18,11 @@
       "date": "2024-03-25",
       "excerpt": "A comprehensive guide to neural networks, including math equations, code examples, and visualizations.",
       "coverImage": "/assets/blog_assets/7.jpg",
+      "author": "Muhumuza Deus",
       "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
-      "readingTime": 12
+      "readingTime": 12,
+      "featured": true,
+      "preview": true,
+      "isHero": true
     }
 ]
