@@ -28,7 +28,7 @@ const BlogPage = () => {
     return () => { document.title = 'Muhumuza Deus'; };
   }, []);
 
-  const allTags = useMemo(() => ['Most recent', 'Announcements', 'Engineering', 'Research', 'Tutorials', 'Community', 'TFHE-rs', 'Concrete', 'Concrete ML', 'FhEVM'], []);
+  const allTags = useMemo(() => ['Most recent', 'Deeplearning', 'Mathematics', 'Research', 'Tutorials', 'Papers'], []);
   const featuredPosts = useMemo(() => allPosts.filter(p => p.featured === true), [allPosts]);
   
   const filteredPosts = useMemo(() => {
