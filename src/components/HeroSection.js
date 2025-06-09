@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { FaGithub, FaCube, FaFeatherAlt } from 'react-icons/fa';
-import { SiGitlab } from 'react-icons/si';
+import { FaGithub } from 'react-icons/fa';
+import { SiPytorch, SiPython, SiPandas, SiDocker} from 'react-icons/si';
 
 // This is a helper component for the graphic. It's only used here.
 const PlaceholderGraphic = () => (
@@ -64,7 +64,7 @@ export default function HeroSection() {
               </Link>
             </div>
             <a
-              href="/about"
+              href="/#about-section"
               className="mt-6 inline-block text-sm font-semibold underline hover:text-gray-700"
             >
               or read a 2 minute introduction about me
@@ -82,20 +82,21 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center max-w-4xl mx-auto">
           {/* GitHub Stars Box */}
           <div className="border border-black p-8 text-center">
-            <p className="text-5xl lg:text-6xl font-extrabold tracking-tighter">
-              4,000+
-            </p>
             <p className="mt-2 text-base font-semibold">
-              Stars on Github
+              Major project
+            </p>
+            <p className="text-5xl lg:text-6xl font-extrabold tracking-tighter">
+              PLANTVISION
             </p>
           </div>
           {/* Trusted By Section */}
           <div className="text-center md:text-left">
-            <p className="text-lg font-semibold">Trusted by tier-1 teams</p>
+            <p className="text-lg font-semibold">Top tech stack</p>
             <div className="flex justify-center md:justify-start gap-6 mt-4">
-              <SiGitlab size={32} className="text-black" />
-              <FaCube size={32} className="text-black" />
-              <FaFeatherAlt size={32} className="text-black" />
+              <SiPython size={32} className="text-black" />
+              <SiPytorch size={32} className="text-black" />
+              <SiPandas size={32} className="text-black" />
+              <SiDocker size={32} className="text-black" />
             </div>
           </div>
         </div>
