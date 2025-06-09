@@ -1,11 +1,9 @@
-// This file should be named BlogPreview.js
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import BlogCard from '../components/BlogCard'; 
 
-// This BlogBanner component is fine as is.
+
 const BlogBanner = () => {
   const tickerText = "BLOG POSTS AND ARTICLES • ";
   return (
@@ -20,9 +18,8 @@ const BlogBanner = () => {
   );
 };
 
-// The component name is kept as you provided.
+
 const BlogPreview = () => { 
-  // State is unchanged
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,7 +49,7 @@ const BlogPreview = () => {
     fetchPosts();
   }, []);
 
-  // The rest of the component is IDENTICAL to what you provided.
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -92,7 +89,7 @@ const BlogPreview = () => {
             />
           ))}
 
-          {/* This unique card remains exactly where it was */}
+
           <Link
             to="/blog"
             className="group block bg-yellow-400 border-2 border-black 

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTrophy, FaVideo, FaCode } from 'react-icons/fa';
 
-// --- Reusable Banner Component for this Section ---
+
 const TimelineBanner = () => {
   const tickerText = "CAREER AND LEARNING MILESTONES • ";
   return (
     <div>
-      {/* CHANGE: Banner text is now yellow for better theme integration */}
       <div className="bg-black text-yellow-400 py-3 w-full overflow-hidden">
         <div className="flex animate-marquee whitespace-nowrap">
           <span className="text-base font-semibold mx-4">{tickerText.repeat(20)}</span>
@@ -17,7 +16,7 @@ const TimelineBanner = () => {
   );
 };
 
-// --- Milestone Data (Unchanged) ---
+
 const milestones = [
   {
     date: "Jan 2024",
@@ -90,14 +89,12 @@ const MilestoneTimeline = () => {
   return (
     <section 
       ref={timelineRef}
-      // CHANGE: Main background is now yellow
       className="relative w-full bg-yellow-400 text-black font-sans overflow-hidden"
     >
       <TimelineBanner />
 
       <div className="relative py-24 md:py-32">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Central Line (unchanged, black looks great on yellow) */}
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:transform md:-translate-x-1/2">
             <div 
               className="h-full bg-black"
@@ -121,7 +118,6 @@ const MilestoneTimeline = () => {
                 className={`relative flex items-center mb-12`}
                 style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.6s ease-out', transitionDelay: `${index * 150}ms` }}
               >
-                {/* CHANGE: Timeline Node is now black with a yellow icon for contrast */}
                 <div 
                   className={`absolute left-4 md:left-1/2 w-8 h-8 bg-black border-2 border-yellow-400
                             flex items-center justify-center z-10 
@@ -131,7 +127,6 @@ const MilestoneTimeline = () => {
                   <Icon className="w-4 h-4 text-yellow-400" />
                 </div>
 
-                {/* Milestone Card (bg-white is kept for readability and pop) */}
                 <div
                   className={`w-full pl-10 md:pl-0 md:w-5/12 ${isLeft ? 'md:mr-auto md:pr-12' : 'md:ml-auto md:pl-12'}`}
                   style={{
@@ -150,7 +145,6 @@ const MilestoneTimeline = () => {
                     <p className="text-sm font-bold text-gray-700 mb-1">{milestone.date}</p>
                     <h3 className="text-xl font-extrabold text-black mb-2">{milestone.title}</h3>
                     <p className="text-gray-600 mb-4">{milestone.description}</p>
-                    {/* CHANGE: Category tag is now black with yellow text for contrast */}
                     <span className="inline-block px-3 py-1 text-xs font-bold bg-black text-yellow-400 border border-yellow-400">
                       {milestone.category}
                     </span>

@@ -1,372 +1,182 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import ReactTypingEffect from 'react-typing-effect';
+import { Search } from 'lucide-react';
 
-// Fade-in section component (reused from HomePage)
-const FadeInSection = ({ children, delay = 0, className = '' }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const domRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    const currentElement = domRef.current;
-    if (currentElement) {
-      observer.observe(currentElement);
-    }
-
-    return () => {
-      if (currentElement) {
-        observer.unobserve(currentElement);
-      }
-    };
-  }, []);
-
-  return (
-    <div
-      ref={domRef}
-      className={`transition-all duration-700 ${className}
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {typeof children === 'function' ? children(isVisible) : children}
-    </div>
-  );
-};
-
-
-
-
-
-// DATA STORIES
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-const dataStories = [
+// ===================================================================================
+//
+//  DATA STORIES CONTENT
+//  This is the central source of truth for all your data stories.
+//  To add, remove, or edit a story, just modify this array.
+//
+// ===================================================================================
+export const dataStories = [
   {
     id: 'titanic-data-analysis',
-    title: 'Titanic',
-    description: 'Using the titanic dataset from kaggle to dig deep and understand the titanic disaster of 1912',
+    title: 'Titanic: A Deep Dive into the Data',
+    description: 'Using the famous Kaggle dataset to uncover the patterns of survival and tragedy aboard the Titanic in 1912.',
     coverImage: '/assets/datastories_assets/images/titanic.jpg',
     date: 'March 2024',
-    tags: ['Pandas', 'Seaborn', 'Matplotlib', 'Logistic Regression', 'Classification', 'Pandas'],
+    tags: ['Pandas', 'Seaborn', 'Classification', 'EDA'],
     notebookUrl: '/assets/datastories_assets/notebooks/titanic_story_nb.ipynb',
     featured: true,
+    summary: "This analysis goes beyond surface-level statistics, exploring correlations between passenger class, gender, age, and survival rates through detailed visualizations and statistical modeling.",
+    sections: [
+        {
+            // type: 'writeup',
+            // title: 'Introduction: The Unsinkable Story',
+            // content: 'The sinking of the Titanic is one of the most infamous shipwrecks in history. This data story uses passenger data to explore the human element behind the numbers. We will analyze what sorts of people were likely to survive and apply basic machine learning to predict survival.',
+        },
+        {
+            // type: 'visualization',
+            // title: 'Survival Rates by Passenger Class',
+            // description: 'A stark visualization showing the survival disparity between first, second, and third-class passengers.',
+            // imageUrl: '/assets/images/datastories/placeholder-viz-1.png'
+        },
+        {
+            // type: 'writeup',
+            // title: 'Code Highlights & Key Findings',
+            // content: 'The core of the analysis was performed using Pandas for data manipulation and Seaborn for plotting. A key finding was the significant role of gender in survival, where female passengers had a much higher survival rate across all classes. The code snippet below shows how we cleaned the age data by filling in missing values.',
+        },
+        // {
+        //     type: 'code',
+        //     code: `
+        //           # Fill missing age values with the median
+        //           titanic_df['Age'].fillna(titanic_df['Age'].median(), inplace=True)
+
+        //           # Convert 'Sex' column to numerical values
+        //           titanic_df['Sex'] = titanic_df['Sex'].map({'male': 0, 'female': 1}).astype(int)
+
+        //           print("Data cleaning complete. No missing values remain in key columns.")
+        //           `
+        // }
+    ]
   },
-
+  // To add a new story, copy the object above and paste it here, changing the details.
 ];
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+// ===================================================================================
+//  END OF CONTENT AREA
+// ===================================================================================
 
 
-
-
-
-
-// Component for story cards - optimized for mobile
-const StoryCard = ({ story, index }) => {
+const StoryCard = ({ story }) => {
   return (
-    <FadeInSection delay={index * 200} className="mb-8">
-      {(isVisible) => (
-        <Link to={`/datastory/${story.id}`} className="block">
-          <div className="bg-transparent rounded-xl overflow-hidden border border-purple-500/10 transition-all duration-500 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 group">
-            <div className="relative h-40 sm:h-48 overflow-hidden">
-              <img 
-                src={story.coverImage} 
-                alt={story.title} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/assets/images/placeholder-data-story.jpg";
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-4">
-                <span className="bg-purple-600/80 text-white text-xs font-medium px-2 py-1 rounded-full">
-                  {story.date}
-                </span>
-                {story.featured && (
-                  <span className="ml-2 bg-amber-500/80 text-white text-xs font-medium px-2 py-1 rounded-full">
-                    Featured
-                  </span>
-                )}
-              </div>
-            </div>
-            
-            <div className="p-4 bg-[#1a1a2e]/60 backdrop-blur-sm">
-              <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-2">
-                {story.title}
-              </h3>
-              
-              <p className="text-gray-300 mb-3 text-sm sm:text-base line-clamp-2">
-                {story.description}
-              </p>
-              
-              <div className="flex flex-wrap gap-1 mb-3">
-                {story.tags.slice(0, 3).map((tag, i) => (
-                  <span 
-                    key={i} 
-                    className="px-2 py-1 text-xs font-medium bg-neutral-800/50 text-neutral-300 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {story.tags.length > 3 && (
-                  <span className="px-2 py-1 text-xs font-medium bg-neutral-800/50 text-neutral-300 rounded-full">
-                    +{story.tags.length - 3}
-                  </span>
-                )}
-              </div>
-              
-              <div className="pt-1">
-                <span className="inline-block text-sm text-purple-400 group-hover:text-purple-300 font-medium transition-colors duration-300 group-hover:translate-x-1">
-                  Read Story →
-                </span>
-              </div>
-            </div>
+    <Link
+      to={`/datastory/${story.id}`}
+      className="group block bg-gray-50 border-2 border-black h-full
+                 transition-all duration-300 ease-in-out
+                 hover:shadow-[8px_8px_0px_#000] hover:-translate-x-1 hover:-translate-y-1"
+    >
+      <div className="flex flex-col h-full">
+        <div className="flex-shrink-0 h-56 border-b-2 border-black">
+          <img
+            src={story.coverImage}
+            alt={story.title}
+            className="w-full h-full object-cover"
+            onError={(e) => { e.target.src = '/assets/images/placeholder-data-story.jpg'; }}
+          />
+        </div>
+        <div className="p-6 flex flex-col justify-between flex-grow">
+          <div>
+            <p className="text-xs text-gray-500 mb-2">{story.date}</p>
+            <h3 className="text-xl font-bold mb-3 line-clamp-2">{story.title}</h3>
+            <p className="text-gray-600 line-clamp-3 mb-4">{story.description}</p>
           </div>
-        </Link>
-      )}
-    </FadeInSection>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {story.tags.slice(0, 3).map(tag => (
+              <span key={tag} className="px-2 py-1 text-xs font-bold bg-yellow-100 text-yellow-800 border border-yellow-300">
+                {tag}
+              </span>
+            ))}
+            {story.tags.length > 3 && (
+              <span className="px-2 py-1 text-xs font-bold bg-gray-200 text-gray-700 border border-gray-300">
+                +{story.tags.length - 3} more
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 };
 
-// Component for featured story (larger display) - optimized for mobile
-const FeaturedStory = ({ story }) => {
-  return (
-    <FadeInSection className="mb-12">
-      {(isVisible) => (
-        <Link to={`/datastory/${story.id}`} className="block">
-          <div className="bg-transparent rounded-xl overflow-hidden border border-purple-500/20 transition-all duration-500 hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-500/30 group">
-            <div className="flex flex-col lg:flex-row">
-              <div className="w-full lg:w-1/2 relative h-56 sm:h-64 lg:h-auto overflow-hidden">
-                <img 
-                  src={story.coverImage} 
-                  alt={story.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/assets/images/placeholder-featured-story.jpg";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black/80 to-transparent"></div>
-              </div>
-              
-              <div className="lg:w-1/2 p-5 sm:p-6 lg:p-8 flex flex-col justify-center bg-[#1a1a2e]/60 backdrop-blur-sm">
-                <div className="mb-3 flex flex-wrap gap-2">
-                  <span className="bg-purple-600/80 text-white text-xs font-medium px-2 py-1 rounded-full">
-                    {story.date}
-                  </span>
-                  <span className="bg-amber-500/80 text-white text-xs font-medium px-2 py-1 rounded-full">
-                    Featured
-                  </span>
-                </div>
-                
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white group-hover:text-[rgba(252,225,192,0.95)] transition-colors duration-300 mb-3">
-                  {story.title}
-                </h3>
-                
-                <p className="text-gray-300 mb-4 text-sm sm:text-base">
-                  {story.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {story.tags.map((tag, i) => (
-                    <span 
-                      key={i} 
-                      className="px-2 py-1 text-xs font-medium bg-neutral-800/50 text-neutral-300 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                
-                <p className="text-gray-400 mb-4 italic hidden md:block text-sm">
-                  "{story.summary}"
-                </p>
-                
-                <div className="pt-1">
-                  <span className="inline-block text-purple-400 group-hover:text-purple-300 font-medium transition-colors duration-300 group-hover:translate-x-1">
-                    Read Full Story →
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-      )}
-    </FadeInSection>
-  );
-};
 
 const DataStoriesPage = () => {
-  const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    // Set page title when component mounts
-    document.title = 'Data Stories | Muhumuza Deus';
-    
-    // Restore original title when component unmounts
-    return () => {
-      document.title = 'Muhumuza Deus';
-    };
-  }, []);
-  
-  // Get featured stories and shuffle them
-  const featuredStories = dataStories.filter(story => story.featured);
-  
-  // Fisher-Yates shuffle algorithm for random order
-  const shuffleFeaturedStories = () => {
-    const shuffled = [...featuredStories];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-  
-  // Get one random featured story
-  const randomFeaturedStory = shuffleFeaturedStories()[0];
-  
-  // Filter stories based on current filter and search term
-  const filteredStories = dataStories.filter(story => {
-    const matchesFilter = filter === 'all' || 
-                          (filter === 'featured' && story.featured);
-    
-    const matchesSearch = story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         story.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         story.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    return matchesFilter && matchesSearch;
-  });
+  const filteredStories = useMemo(() => {
+    if (!searchTerm) return dataStories;
+    const lowercasedFilter = searchTerm.toLowerCase();
+    return dataStories.filter(story =>
+      story.title.toLowerCase().includes(lowercasedFilter) ||
+      story.description.toLowerCase().includes(lowercasedFilter) ||
+      story.tags.some(tag => tag.toLowerCase().includes(lowercasedFilter))
+    );
+  }, [searchTerm]);
+
+  const featuredStory = useMemo(() => dataStories.find(s => s.featured === true) || dataStories[0], []);
 
   return (
-    <div className="bg-[#1a1b3c] text-white min-h-screen" style={{ fontFamily: 'Roboto Slab, serif' }}>
-      {/* Header Section - Mobile optimized */}
-      <header className="pt-20 md:pt-28 lg:pt-32 pb-8 md:pb-16 relative overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#151530] to-[#1a1b3c] -z-10"></div>
-        <div className="absolute inset-0 opacity-10 -z-10 bg-[radial-gradient(circle,rgba(120,50,255,0.1)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection>
-            {(isVisible) => (
-              <div className="text-center max-w-4xl mx-auto">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-[rgba(252,225,192,0.95)]" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                  {isVisible ? (
-                    <ReactTypingEffect 
-                      text={["Data Stories"]}
-                      typingDelay={200}
-                      speed={30} 
-                      eraseDelay={10000000}
-                    />
-                  ) : (
-                    <span>Data Stories</span>
-                  )}
-                </h1>
-                <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-10 px-2">
-                My machine learning and data science projects, including data analysis, 
-                data visualization, statistical modeling and machine learning. 
-                I also share my insights and findings from these projects
-                </p>
-                
-                {/* Search and filter controls - Mobile friendly */}
-                <div className="flex flex-col gap-3 justify-center items-center mb-6 sm:mb-8">
-                  <div className="relative w-full md:w-2/3">
-                    <input
-                      type="text"
-                      placeholder="Search stories..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full bg-[#1a1a2e]/60 backdrop-blur-md border border-purple-500/20 rounded-full py-2 sm:py-3 px-5 sm:px-6 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/40 transition-all duration-300 text-sm sm:text-base"
-                    />
-                    <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </button>
+    <div className="bg-white text-black font-sans">
+      <section className="bg-yellow-400 border-b-4 border-black">
+        <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4 text-center">Data Stories</h1>
+          <p className="text-lg text-black/80 max-w-2xl mx-auto text-center">
+            A collection of my data science projects, from analysis and visualization to statistical modeling and machine learning.
+          </p>
+        </div>
+      </section>
+
+      <main className="py-20 lg:py-28">
+        <div className="container mx-auto px-4">
+          {featuredStory && (
+            <div className="mb-20">
+              <h2 className="text-4xl font-extrabold tracking-tighter mb-8 text-left">Featured Story</h2>
+              <Link
+                to={`/datastory/${featuredStory.id}`}
+                className="group block bg-gray-50 border-2 border-black
+                            transition-all duration-300 ease-in-out
+                            hover:shadow-[8px_8px_0px_#000] hover:-translate-x-1 hover:-translate-y-1"
+              >
+                <div className="flex flex-col md:flex-row h-full">
+                  <div className="flex-shrink-0 md:w-5/12 lg:w-1/2 border-b-2 md:border-b-0 md:border-r-2 border-black">
+                    <img src={featuredStory.coverImage} alt={featuredStory.title} className="w-full h-full object-cover min-h-[250px]" />
                   </div>
-                  <div className="flex gap-2 w-full md:w-auto justify-center">
-                    <button 
-                      onClick={() => setFilter('all')}
-                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                        filter === 'all' 
-                          ? 'bg-purple-600 text-white' 
-                          : 'bg-[#1a1a2e]/60 text-gray-300 hover:bg-purple-600/20'
-                      }`}
-                    >
-                      All Stories
-                    </button>
-                    <button 
-                      onClick={() => setFilter('featured')}
-                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                        filter === 'featured' 
-                          ? 'bg-amber-500 text-white' 
-                          : 'bg-[#1a1a2e]/60 text-gray-300 hover:bg-amber-500/20'
-                      }`}
-                    >
-                      Featured
-                    </button>
+                  <div className="p-8 flex flex-col justify-center flex-grow md:w-7/12 lg:w-1/2">
+                    <p className="text-sm text-gray-500 mb-2">{featuredStory.date}</p>
+                    <h3 className="text-2xl lg:text-3xl font-bold mb-4">{featuredStory.title}</h3>
+                    <p className="text-gray-600 line-clamp-3 mb-6">{featuredStory.description}</p>
+                    <p className="text-black font-bold group-hover:underline">Read Full Story →</p>
                   </div>
                 </div>
-              </div>
-            )}
-          </FadeInSection>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-        {/* Featured Stories Section - Only show if filter is 'all' */}
-        {filter === 'all' && featuredStories.length > 0 && (
-          <section className="mb-10 md:mb-16">
-            <FadeInSection>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-[rgba(252,225,192,0.95)] text-center" style={{ fontFamily: 'Roboto Slab, serif' }}>
-                Featured Stories
-              </h2>
-            </FadeInSection>
-            
-            {/* Display one random featured story */}
-            {randomFeaturedStory && <FeaturedStory story={randomFeaturedStory} />}
-          </section>
-        )}
-        
-        {/* All Stories Grid - Responsive grid with smaller cards */}
-        <section>
-          <FadeInSection>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-[rgba(252,225,192,0.95)] text-center" style={{ fontFamily: 'Roboto Slab, serif' }}>
-              {filter === 'all' ? "All Stories" : "Featured Stories"}
-            </h2>
-          </FadeInSection>
-          
-          {filteredStories.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-              {filteredStories.map((story, index) => (
-                <StoryCard key={story.id} story={story} index={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-10 md:py-16">
-              <p className="text-lg text-gray-400">No stories match your search criteria.</p>
-              <button 
-                onClick={() => {setSearchTerm(''); setFilter('all');}}
-                className="mt-4 px-5 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-colors duration-300 text-sm"
-              >
-                Clear Filters
-              </button>
+              </Link>
             </div>
           )}
-        </section>
+
+          <div className="bg-gray-100 p-8 mb-16">
+            <div className="relative max-w-xl mx-auto">
+              <input
+                type="text"
+                placeholder="SEARCH FOR A STORY"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent border-b-2 border-black py-3 pl-2 pr-10 text-black placeholder:text-gray-500 placeholder:font-bold placeholder:tracking-widest focus:outline-none focus:border-yellow-400"
+              />
+              <Search className="absolute right-2 top-1/2 -translate-y-1/2 text-black" size={24} />
+            </div>
+          </div>
+
+          <h2 className="text-4xl font-extrabold tracking-tighter mb-8 text-left">All Stories</h2>
+          {filteredStories.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+              {filteredStories.map(story => <StoryCard key={story.id} story={story} />)}
+            </div>
+          ) : (
+             <div className="text-center py-16 col-span-full">
+                <h3 className="text-xl text-gray-700">No stories match your search.</h3>
+                <p className="text-gray-500">Try a different keyword or check back later!</p>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

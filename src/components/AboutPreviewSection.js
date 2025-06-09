@@ -63,13 +63,15 @@ const AboutPreviewSection = () => {
         {/* Intro Section with Image */}
         <div className="grid md:grid-cols-3 gap-8 items-center max-w-5xl mx-auto mb-16 lg:mb-20">
           <div className="hidden md:flex md:col-span-1 justify-center">
-             <div className="relative w-48 h-48 md:w-56 md:h-56">
+             <div className="w-48 h-48 md:w-56 md:h-56 cursor-pointer group">
                 <img 
                   src={`${process.env.PUBLIC_URL}/assets/images/about/me.jpg`} 
                   alt="Muhumuza Deus" 
-                  className="relative w-full h-full object-cover border-2 border-black z-10"
+                  className="w-full h-full object-cover border-2 border-black
+                           shadow-[8px_8px_0px_#000] group-hover:shadow-none 
+                           group-hover:translate-x-2 group-hover:translate-y-2 
+                           transition-all duration-200 ease-in-out"
                 />
-                <div className="absolute inset-0 bg-black translate-x-3 translate-y-3"></div>
             </div>
           </div>
           <div className="md:col-span-2 text-center md:text-left">

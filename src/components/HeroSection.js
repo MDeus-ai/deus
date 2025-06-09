@@ -1,6 +1,4 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-// Icons for the entire section
 import { FaGithub, FaCube, FaFeatherAlt } from 'react-icons/fa';
 import { SiGitlab } from 'react-icons/si';
 
@@ -32,7 +30,7 @@ const PlaceholderGraphic = () => (
 // The final, unified HeroSection component
 export default function HeroSection() {
   return (
-    // A single section tag now wraps everything
+
     <section className="bg-yellow-400 text-black font-sans flex flex-col justify-center">
       
       {/* PART 1: Main Hero Content */}

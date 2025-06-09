@@ -1,5 +1,3 @@
-// src/components/BlogCard.js
-
 import { Link } from 'react-router-dom';
 
 const BlogCard = ({ slug, title, excerpt, coverImage, date, author, tags = [], layout = 'vertical', className = '' }) => {

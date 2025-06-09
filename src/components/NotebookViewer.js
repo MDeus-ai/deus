@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCode, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
-// Import the syntax highlighter and a style
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Choose a style (e.g., vscDarkPlus, okaidia, atomDark, materialDark, etc.)
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Using ESM import
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const NotebookViewer = ({ notebookUrl }) => {
     const [notebookData, setNotebookData] = useState(null);
@@ -14,26 +14,16 @@ const NotebookViewer = ({ notebookUrl }) => {
     useEffect(() => {
         setIsLoading(true);
         setError(null);
-
         fetch(notebookUrl)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load notebook (${response.status})`);
-                }
+                if (!response.ok) throw new Error(`Failed to load notebook (${response.status})`);
                 return response.json();
             })
             .then(data => {
-                console.log("Loaded notebook data:", {
-                    hasMetadata: !!data.metadata,
-                    cellsCount: data.cells?.length || 0,
-                    nbformat: data.nbformat,
-                    language: data.metadata?.language_info?.name // Log language if available
-                });
                 setNotebookData(data);
                 setIsLoading(false);
             })
             .catch(err => {
-                console.error("Failed to load notebook:", err);
                 setError(err.message);
                 setIsLoading(false);
             });
@@ -42,14 +32,9 @@ const NotebookViewer = ({ notebookUrl }) => {
     // --- Loading State ---
     if (isLoading) {
         return (
-            <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-purple-500/10 flex flex-col items-center justify-center h-96">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-purple-500/30 mb-4 flex items-center justify-center">
-                        <FaCode className="text-2xl text-purple-300 animate-spin" />
-                    </div>
-                    <div className="h-5 w-64 bg-purple-500/30 rounded-full mb-4"></div>
-                    <div className="h-3 w-48 bg-purple-500/20 rounded-full"></div>
-                </div>
+            <div className="flex flex-col items-center justify-center p-8 min-h-[300px]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black mb-4"></div>
+                <p className="text-lg font-bold">Loading Notebook...</p>
             </div>
         );
     }
@@ -57,25 +42,10 @@ const NotebookViewer = ({ notebookUrl }) => {
     // --- Error State ---
     if (error) {
         return (
-            <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-red-500/20 flex flex-col items-center justify-center h-96">
-                <FaExclamationTriangle className="text-4xl text-red-400 mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Failed to load notebook</h3>
-                <p className="text-gray-400 text-center">{error}</p>
-                <div className="flex gap-4 mt-6">
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                    >
-                        Try Again
-                    </button>
-                    <a
-                        href={notebookUrl}
-                        download
-                        className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
-                    >
-                        <FaDownload className="mr-1" /> Download Raw
-                    </a>
-                </div>
+            <div className="p-8 flex flex-col items-center justify-center min-h-[300px] text-center">
+                <FaExclamationTriangle className="text-4xl text-red-500 mb-4" />
+                <h3 className="text-xl font-bold text-black mb-2">Failed to load notebook</h3>
+                <p className="text-gray-600">{error}</p>
             </div>
         );
     }
@@ -83,387 +53,386 @@ const NotebookViewer = ({ notebookUrl }) => {
     // --- Invalid Format State ---
     if (!notebookData || !notebookData.cells || !Array.isArray(notebookData.cells)) {
         return (
-            <div className="bg-[#1a1a2e]/60 backdrop-blur-md rounded-xl p-8 border border-yellow-500/20 flex flex-col items-center justify-center h-96">
-                <FaExclamationTriangle className="text-4xl text-yellow-400 mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Invalid Notebook Format</h3>
-                <p className="text-gray-400 text-center">The notebook doesn't have the expected structure.</p>
-                <a
-                    href={notebookUrl}
-                    download
-                    className="mt-6 px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg flex items-center transition-colors"
-                >
-                    <FaDownload className="mr-1" /> Download Raw
-                </a>
+            <div className="p-8 flex flex-col items-center justify-center min-h-[300px] text-center">
+                <FaExclamationTriangle className="text-4xl text-yellow-500 mb-4" />
+                <h3 className="text-xl font-bold text-black mb-2">Invalid Notebook Format</h3>
+                <p className="text-gray-600">The file does not appear to be a valid Jupyter Notebook.</p>
             </div>
         );
     }
 
-    // Determine the language for syntax highlighting
-    // Default to 'python' if not specified or unknown
     const codeLanguage = notebookData?.metadata?.language_info?.name?.toLowerCase() || 'python';
-    console.log("Using language for highlighting:", codeLanguage);
 
-    // Enhanced markdown to HTML conversion (no changes needed here)
-    const convertMarkdown = (markdown) => {
-        // ... (keep the existing markdown conversion logic) ...
-         // Handle array of markdown lines
-         if (Array.isArray(markdown)) {
-             markdown = markdown.join('');
-         }
-
-         // Process code blocks first to avoid conflicts with other formatting
-         markdown = markdown.replace(/```([^`]*?)```/gs, (match, code) => {
-             // Simple pre block for markdown code blocks (no syntax highlighting here)
-             return `<pre class="bg-gray-800 p-2 rounded-lg my-3 overflow-x-auto font-mono text-sm">${code.trim()}</pre>`;
-         });
-
-         // Process headers
-         markdown = markdown.replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold text-purple-300 my-3">$1</h3>');
-         markdown = markdown.replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-purple-200 my-4">$1</h2>');
-         markdown = markdown.replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-purple-100 my-5">$1</h1>');
-
-         // Process bold and italic text
-         markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold">$1</strong>');
-         markdown = markdown.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
-         markdown = markdown.replace(/__(.*?)__/g, '<strong class="font-bold">$1</strong>');
-         markdown = markdown.replace(/_(.*?)_/g, '<em class="italic">$1</em>');
-
-         // Process inline code
-         markdown = markdown.replace(/`([^`]+)`/g, '<code class="bg-gray-800 px-1 rounded text-purple-300 font-mono text-sm">$1</code>');
-
-         // Process links
-         markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-purple-400 hover:text-purple-300 underline" target="_blank" rel="noopener noreferrer">$1</a>');
-
-         // Process images
-         markdown = markdown.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto my-4 rounded-lg" loading="lazy" />');
-
-         // Process horizontal rules
-         markdown = markdown.replace(/^---$/gm, '<hr class="my-4 border-t border-purple-500/20" />');
-
-         // Process unordered lists
-         let inList = false;
-         const processLists = (text) => {
-             const lines = text.split('\n');
-             let result = [];
-             let listType = null; // 'ul' or 'ol'
-
-             for (let i = 0; i < lines.length; i++) {
-                 const line = lines[i];
-
-                 // Check for unordered list items
-                 if (line.match(/^\s*[-*+]\s/)) {
-                     if (!inList || listType !== 'ul') {
-                         if (inList) result.push(listType === 'ol' ? '</ol>' : '</ul>');
-                         inList = true;
-                         listType = 'ul';
-                         result.push('<ul class="list-disc pl-5 my-3 space-y-1">');
-                     }
-                     const listContent = line.replace(/^\s*[-*+]\s/, '');
-                     result.push(`<li>${listContent}</li>`);
-                 }
-                 // Check for ordered list items
-                 else if (line.match(/^\s*\d+\.\s/)) {
-                     if (!inList || listType !== 'ol') {
-                         if (inList) result.push(listType === 'ol' ? '</ol>' : '</ul>');
-                         inList = true;
-                         listType = 'ol';
-                         result.push('<ol class="list-decimal pl-5 my-3 space-y-1">');
-                     }
-                     const listContent = line.replace(/^\s*\d+\.\s/, '');
-                     result.push(`<li>${listContent}</li>`);
-                 }
-                 // Not a list item
-                 else {
-                     if (inList) {
-                         inList = false;
-                         result.push(listType === 'ol' ? '</ol>' : '</ul>');
-                         listType = null;
-                     }
-                     result.push(line);
-                 }
-             }
-
-             if (inList) {
-                 result.push(listType === 'ol' ? '</ol>' : '</ul>');
-             }
-
-             return result.join('\n');
-         };
-
-         markdown = processLists(markdown);
-
-         // Process blockquotes
-         markdown = markdown.replace(/^>\s*(.*$)/gm, '<blockquote class="border-l-4 border-purple-500 pl-4 py-1 italic text-gray-300 my-3">$1</blockquote>');
-
-         // Process tables
-         const processTables = (text) => {
-             const tableRegex = /^\|(.+)\|\s*\n\|(\s*[-:]+[-:|\s]*)\|\s*\n((?:\|.+\|\s*\n?)+)/gm;
-
-             return text.replace(tableRegex, (match, headerContent, separators, bodyContent) => {
-                 const headers = headerContent.split('|').map(cell => cell.trim()).filter(cell => cell !== '');
-                 const headerRow = headers.map(header => `<th class="border border-purple-500/20 px-4 py-2 bg-purple-900/20">${header}</th>`).join('');
-
-                 const rows = bodyContent.trim().split('\n');
-                 const bodyRows = rows.map(row => {
-                     const cells = row.split('|').map(cell => cell.trim()).filter(cell => cell !== '');
-                     return `<tr>${cells.map(cell => `<td class="border border-purple-500/20 px-4 py-2">${cell}</td>`).join('')}</tr>`;
-                 }).join('');
-
-                 return `<div class="overflow-x-auto my-4">
-             <table class="min-w-full border-collapse">
-               <thead>
-                 <tr>${headerRow}</tr>
-               </thead>
-               <tbody>${bodyRows}</tbody>
-             </table>
-           </div>`;
-             });
-         };
-
-         markdown = processTables(markdown);
-
-         // Process paragraphs
-         const paragraphs = markdown.split(/\n\n+/);
-         markdown = paragraphs.map(p => {
-             p = p.trim();
-             if (p.startsWith('<h') ||
-                 p.startsWith('<pre') ||
-                 p.startsWith('<ul') ||
-                 p.startsWith('<ol') ||
-                 p.startsWith('<table') ||
-                 p.startsWith('<blockquote') ||
-                 p.startsWith('<div') ||
-                 !p) { // Skip empty paragraphs too
-                 return p;
-             }
-             // Convert remaining line breaks within a paragraph to <br>
-             p = p.replace(/\n/g, '<br />');
-             return `<p class="my-2 text-gray-300">${p}</p>`;
-         }).join('\n\n'); // Keep separation for structure, though browser collapses whitespace
-
-
-         // Support for subscript and superscript
-         markdown = markdown.replace(/~([^~]+)~/g, '<sub>$1</sub>');
-         markdown = markdown.replace(/\^([^^]+)\^/g, '<sup>$1</sup>');
-
-         // Handle checkboxes
-         markdown = markdown.replace(/\[ \]/g, '<input type="checkbox" disabled class="mr-1" />');
-         markdown = markdown.replace(/\[x\]/gi, '<input type="checkbox" checked disabled class="mr-1" />');
-
-         // Handle math expressions (basic rendering)
-         markdown = markdown.replace(/\$\$(.*?)\$\$/gs, '<div class="my-2 p-2 bg-gray-800/50 rounded text-center font-mono text-sm">$$ $1 $$</div>'); // Display math
-         markdown = markdown.replace(/\$(.*?)\$/g, '<span class="bg-gray-800/50 px-1 rounded font-mono text-sm">$ $1 $</span>'); // Inline math
-
-         return markdown;
+    // Helper function to detect if content contains HTML
+    const containsHTML = (content) => {
+        return /<[^>]*>/g.test(content);
     };
 
-    // Helper function to render cell content based on cell type
+    // --- Cell Rendering Logic ---
     const renderCell = (cell, index) => {
-        // Markdown cell
+        const separator = index > 0 ? <hr className="my-8 border-t-2 border-dashed border-gray-300" /> : null;
+        
         if (cell.cell_type === 'markdown') {
+            const markdownSource = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
+            
+            // If the markdown contains HTML, render it as HTML with full styling support
+            if (containsHTML(markdownSource)) {
+                return (
+                    <div key={index}>
+                        {separator}
+                        <div className="py-6 bg-white border-2 border-gray-200 rounded-lg p-6 shadow-sm">
+                            <div 
+                                dangerouslySetInnerHTML={{ __html: markdownSource }}
+                                className="html-markdown-content"
+                            />
+                            <style jsx>{`
+                                .html-markdown-content {
+                                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                    line-height: 1.6;
+                                    color: #374151;
+                                }
+                                
+                                /* Preserve all inline styles */
+                                .html-markdown-content [style] {
+                                    all: revert !important;
+                                }
+                                
+                                /* Typography with conditional styling */
+                                .html-markdown-content h1 { 
+                                    font-size: 2.5rem; 
+                                    font-weight: 900; 
+                                    margin: 1.5rem 0; 
+                                    color: black; 
+                                    border-bottom: 4px solid black; 
+                                    padding-bottom: 0.75rem; 
+                                }
+                                .html-markdown-content h2 { 
+                                    font-size: 2rem; 
+                                    font-weight: 800; 
+                                    margin: 1.25rem 0; 
+                                    color: black; 
+                                    border-bottom: 2px solid #9ca3af; 
+                                    padding-bottom: 0.5rem; 
+                                }
+                                .html-markdown-content h3 { 
+                                    font-size: 1.5rem; 
+                                    font-weight: 700; 
+                                    margin: 1rem 0; 
+                                    color: #1f2937; 
+                                }
+                                .html-markdown-content h4 { 
+                                    font-size: 1.25rem; 
+                                    font-weight: 600; 
+                                    margin: 0.75rem 0; 
+                                    color: #1f2937; 
+                                }
+                                .html-markdown-content p { 
+                                    margin: 1rem 0; 
+                                    font-size: 1.125rem; 
+                                    line-height: 1.7; 
+                                    color: #1f2937; 
+                                }
+                                .html-markdown-content div { 
+                                    margin: 0.5rem 0; 
+                                }
+                                
+                                /* Tables */
+                                .html-markdown-content table {
+                                    border-collapse: collapse;
+                                    border: 2px solid #d1d5db;
+                                    width: 100%;
+                                    background: white;
+                                    margin: 1.5rem 0;
+                                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                                }
+                                .html-markdown-content th {
+                                    background: #f3f4f6;
+                                    border: 1px solid #d1d5db;
+                                    padding: 0.75rem;
+                                    font-weight: bold;
+                                    text-align: left;
+                                    font-size: 0.95rem;
+                                }
+                                .html-markdown-content td {
+                                    border: 1px solid #d1d5db;
+                                    padding: 0.75rem;
+                                    font-size: 0.9rem;
+                                }
+                                
+                                /* Links and text formatting */
+                                .html-markdown-content a { 
+                                    color: #2563eb; 
+                                    text-decoration: underline; 
+                                    font-weight: 600; 
+                                }
+                                .html-markdown-content a:hover { 
+                                    color: #1d4ed8; 
+                                }
+                                .html-markdown-content strong { 
+                                    font-weight: bold; 
+                                    color: black; 
+                                }
+                                .html-markdown-content em { 
+                                    font-style: italic; 
+                                    color: #4b5563; 
+                                }
+                                .html-markdown-content code { 
+                                    background: #f3f4f6; 
+                                    padding: 0.25rem 0.5rem; 
+                                    border-radius: 0.25rem; 
+                                    font-family: ui-monospace, monospace; 
+                                    font-size: 0.875rem; 
+                                    color: #dc2626; 
+                                }
+                                .html-markdown-content pre { 
+                                    background: #f9fafb; 
+                                    padding: 1rem; 
+                                    border-radius: 0.5rem; 
+                                    border: 1px solid #e5e7eb; 
+                                    overflow-x: auto; 
+                                    font-family: ui-monospace, monospace; 
+                                    margin: 1rem 0; 
+                                }
+                                
+                                /* Lists */
+                                .html-markdown-content ul, .html-markdown-content ol { 
+                                    margin: 1rem 0; 
+                                    padding-left: 2rem; 
+                                }
+                                .html-markdown-content li { 
+                                    margin: 0.5rem 0; 
+                                    font-size: 1.125rem; 
+                                    color: #1f2937; 
+                                }
+                                
+                                /* Blockquotes */
+                                .html-markdown-content blockquote {
+                                    border-left: 4px solid #3b82f6;
+                                    background: #eff6ff;
+                                    padding: 1rem;
+                                    margin: 1.5rem 0;
+                                    font-style: italic;
+                                    color: #1e40af;
+                                }
+                            `}</style>
+                        </div>
+                    </div>
+                );
+            }
+            
+            // Regular markdown rendering for non-HTML content
             return (
-                <div key={index} className="notebook-cell markdown-cell py-3 px-4 border-b border-purple-500/10">
-                    {/* Apply Tailwind prose styles for better markdown rendering */}
-                    <div className="markdown-content prose prose-sm sm:prose-base prose-invert max-w-none text-gray-300"
-                         dangerouslySetInnerHTML={{ __html: convertMarkdown(cell.source) }}>
+                <div key={index}>
+                    {separator}
+                    <div className="py-6 bg-white border-2 border-gray-200 rounded-lg p-6 shadow-sm">
+                        <div className="prose prose-xl max-w-none 
+                            prose-headings:text-black prose-headings:font-black prose-headings:mb-4 prose-headings:mt-6
+                            prose-h1:text-4xl prose-h1:border-b-4 prose-h1:border-black prose-h1:pb-3
+                            prose-h2:text-3xl prose-h2:border-b-2 prose-h2:border-gray-400 prose-h2:pb-2
+                            prose-h3:text-2xl prose-h3:text-gray-800
+                            prose-p:text-gray-900 prose-p:text-lg prose-p:leading-relaxed prose-p:mb-4
+                            prose-a:text-blue-600 prose-a:font-semibold prose-a:underline hover:prose-a:text-blue-800
+                            prose-strong:text-black prose-strong:font-bold
+                            prose-em:text-gray-700 prose-em:italic
+                            prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:text-red-600
+                            prose-ul:mb-4 prose-ol:mb-4 prose-li:text-gray-900 prose-li:mb-2
+                            prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:p-4 prose-blockquote:italic prose-blockquote:text-gray-800
+                            prose-table:border-collapse prose-table:border-2 prose-table:border-gray-300
+                            prose-th:bg-gray-100 prose-th:border prose-th:border-gray-300 prose-th:p-3 prose-th:font-bold prose-th:text-left
+                            prose-td:border prose-td:border-gray-300 prose-td:p-3">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownSource}</ReactMarkdown>
+                        </div>
                     </div>
                 </div>
             );
         }
 
-        // Code cell
-        else if (cell.cell_type === 'code') {
+        if (cell.cell_type === 'code') {
             const codeString = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
-
             return (
-                <div key={index} className="notebook-cell code-cell py-3 border-b border-purple-500/10">
-                    {/* Input */}
-                    {showCode && (
-                        <div className="flex">
-                            {/* Execution count prompt */}
-                            <div className="hidden md:block cell-prompt py-1 text-purple-400 font-mono text-xs w-16 flex-shrink-0 select-none text-center">
-                                {cell.execution_count ? `[${cell.execution_count}]` : '[ ]'}
+                <div key={index}>
+                    {separator}
+                    <div className="py-6">
+                        {showCode && (
+                            <div className="mb-4">
+                                <p className="text-sm font-mono text-gray-600 mb-2 font-bold">In [{cell.execution_count || ' '}]:</p>
+                                <div className="border-2 border-black overflow-hidden rounded-lg shadow-sm">
+                                    <SyntaxHighlighter 
+                                        language={codeLanguage} 
+                                        style={oneLight} 
+                                        customStyle={{ 
+                                            margin: 0, 
+                                            padding: '1.5rem', 
+                                            backgroundColor: '#fafafa',
+                                            fontSize: '14px',
+                                            lineHeight: '1.5'
+                                        }}>
+                                        {codeString}
+                                    </SyntaxHighlighter>
+                                </div>
                             </div>
-                             {/* Code Input with Syntax Highlighting */}
-                            <div className="cell-input flex-1 my-1 overflow-hidden rounded-lg"> {/* Remove bg, padding, let highlighter handle it */}
-                                <SyntaxHighlighter
-                                    language={codeLanguage} // Use detected language
-                                    style={vscDarkPlus} // Apply the chosen theme
-                                    customStyle={{ // Override default styles if needed
-                                        margin: 0, // Remove default margin from highlighter
-                                        padding: '0.5rem', // Add padding inside
-                                        fontSize: '0.8rem', // Adjust font size if needed (sm:text-sm equivalent)
-                                        borderRadius: '0.5rem', // Match rounding
-                                        backgroundColor: '#111827' // Match original bg
-                                    }}
-                                    codeTagProps={{ // Style the inner code tag if needed
-                                        style: { fontFamily: 'inherit' } // Ensure mono font is inherited or set explicitly
-                                    }}
-                                    showLineNumbers={false} // Optional: set to true to show line numbers
-                                    wrapLines={true}      // Optional: wrap long lines
-                                    wrapLongLines={true}  // Optional: helps with wrapping very long lines without spaces
-                                >
-                                    {codeString}
-                                </SyntaxHighlighter>
+                        )}
+                        {cell.outputs && cell.outputs.length > 0 && (
+                            <div>
+                                <p className="text-sm font-mono text-gray-600 mb-2 font-bold">Out [{cell.execution_count || ' '}]:</p>
+                                <div className="bg-white border-2 border-dashed border-gray-400 rounded-lg p-6 shadow-sm">
+                                    {cell.outputs.map((output, i) => renderOutput(output, i))}
+                                </div>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Output */}
-                    {cell.outputs && cell.outputs.length > 0 && (
-                        <div className="flex mt-1">
-                            {/* Output prompt area (aligned with input prompt) */}
-                            <div className="hidden md:block cell-prompt py-2 text-purple-400 font-mono text-sm w-16 flex-shrink-0 select-none text-center">
-                                {/* No output number here usually, keep for alignment */}
-                            </div>
-                            {/* Output Area */}
-                            <div className="cell-output bg-[#111827]/50 flex-1 p-2 rounded-lg my-1 overflow-x-auto">
-                                {cell.outputs.map((output, i) => renderOutput(output, i))}
-                            </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             );
         }
-
-        // Unknown cell type
-        return (
-            <div key={index} className="notebook-cell unknown-cell py-2 px-4 border-b border-purple-500/10 text-gray-400 italic">
-                Unsupported cell type: {cell.cell_type}
-            </div>
-        );
+        return null;
     };
 
-    // Helper function to render cell outputs (no changes needed here)
     const renderOutput = (output, index) => {
-        // Text/plain output
         if (output.output_type === 'stream' || (output.output_type === 'execute_result' && output.data && output.data['text/plain'])) {
             const text = output.text || output.data['text/plain'];
             return (
-                <pre key={index} className="font-mono text-xs sm:text-sm text-gray-300 whitespace-pre-wrap">
+                <pre key={index} className="font-mono text-sm text-gray-800 whitespace-pre-wrap bg-gray-50 p-3 rounded border border-gray-200 mb-3 last:mb-0">
                     {Array.isArray(text) ? text.join('') : text}
                 </pre>
             );
         }
-
-        // Display data (images, HTML, etc.)
-        else if (output.output_type === 'display_data' || output.output_type === 'execute_result') {
-            // Handle HTML (ensure it's properly sanitized if coming from untrusted sources)
-            if (output.data && output.data['text/html']) {
-                const html = Array.isArray(output.data['text/html'])
-                    ? output.data['text/html'].join('')
-                    : output.data['text/html'];
-                // WARNING: Rendering raw HTML can be risky if the notebook source is not trusted.
-                // Consider using a sanitization library like DOMPurify if necessary.
+        if (output.output_type === 'display_data' || output.output_type === 'execute_result') {
+            if (output.data && output.data['image/png']) {
                 return (
-                    <div key={index} className="output-html text-gray-300" dangerouslySetInnerHTML={{ __html: html }}></div>
+                    <div key={index} className="mb-3 last:mb-0">
+                        <img 
+                            src={`data:image/png;base64,${output.data['image/png']}`} 
+                            alt="Notebook output" 
+                            className="max-w-full h-auto mx-auto border border-gray-200 rounded shadow-sm" 
+                        />
+                    </div>
                 );
             }
-
-            // Handle images (PNG, JPEG, GIF)
-            else if (output.data) {
-               const imgType = Object.keys(output.data).find(key => key.startsWith('image/'));
-               if (imgType) {
-                   const imgData = output.data[imgType];
-                   return (
-                       <div key={index} className="flex justify-start py-2"> {/* Align left */}
-                           <img
-                               src={`data:${imgType};base64,${imgData}`}
-                               alt="Output visualization"
-                               className="max-w-full h-auto rounded-lg"
-                               loading="lazy"
-                           />
-                       </div>
-                   );
-               }
-            }
-
-            // Handle LaTeX/Math (basic display, might need MathJax/KaTeX for proper rendering)
-             else if (output.data && output.data['text/latex']) {
-                 const latex = Array.isArray(output.data['text/latex'])
-                     ? output.data['text/latex'].join('')
-                     : output.data['text/latex'];
-                 // Basic rendering, consider a library like react-latex-next for full support
-                 return (
-                    <div key={index} className="my-2 p-2 bg-gray-800/50 rounded text-center font-mono text-sm text-purple-300">
-                        {latex}
+            if (output.data && output.data['text/html']) {
+                const html = Array.isArray(output.data['text/html']) ? output.data['text/html'].join('') : output.data['text/html'];
+                return (
+                    <div key={index} className="mb-3 last:mb-0">
+                        <div 
+                            dangerouslySetInnerHTML={{ __html: html }}
+                            className="html-output-content bg-white border border-gray-200 rounded p-4"
+                        />
+                        <style jsx>{`
+                            .html-output-content {
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                line-height: 1.5;
+                                color: #374151;
+                            }
+                            
+                            /* Preserve all inline styles */
+                            .html-output-content [style] {
+                                all: revert !important;
+                            }
+                            
+                            /* Tables (DataFrames) */
+                            .html-output-content table {
+                                border-collapse: collapse;
+                                border: 1px solid #d1d5db;
+                                width: 100%;
+                                background: white;
+                                margin: 1rem 0;
+                                font-size: 0.875rem;
+                            }
+                            .html-output-content th {
+                                background: #f3f4f6;
+                                border: 1px solid #d1d5db;
+                                padding: 0.5rem;
+                                font-weight: bold;
+                                text-align: left;
+                            }
+                            .html-output-content td {
+                                border: 1px solid #d1d5db;
+                                padding: 0.5rem;
+                            }
+                            
+                            /* Typography */
+                            .html-output-content h1 { font-size: 2rem; font-weight: bold; margin: 1rem 0; color: black; }
+                            .html-output-content h2 { font-size: 1.5rem; font-weight: bold; margin: 0.75rem 0; color: black; }
+                            .html-output-content h3 { font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0; color: black; }
+                            .html-output-content p { margin: 0.5rem 0; }
+                            .html-output-content div { margin: 0.25rem 0; }
+                            
+                            /* Links and formatting */
+                            .html-output-content a { color: #2563eb; text-decoration: underline; }
+                            .html-output-content a:hover { color: #1d4ed8; }
+                            .html-output-content strong { font-weight: bold; color: black; }
+                            .html-output-content em { font-style: italic; }
+                            .html-output-content code { 
+                                background: #f3f4f6; 
+                                padding: 0.125rem 0.25rem; 
+                                border-radius: 0.25rem; 
+                                font-family: ui-monospace, monospace; 
+                                font-size: 0.875rem; 
+                            }
+                            
+                            /* DataFrame specific */
+                            .html-output-content .dataframe { 
+                                max-width: 100%; 
+                                overflow-x: auto; 
+                                display: block; 
+                                white-space: nowrap; 
+                            }
+                        `}</style>
                     </div>
-                 );
-             }
+                );
+            }
+            if (output.data && output.data['text/plain']) {
+                const text = output.data['text/plain'];
+                return (
+                    <pre key={index} className="font-mono text-sm text-gray-800 whitespace-pre-wrap bg-gray-50 p-3 rounded border border-gray-200 mb-3 last:mb-0">
+                        {Array.isArray(text) ? text.join('') : text}
+                    </pre>
+                );
+            }
         }
-
-        // Error output
-        else if (output.output_type === 'error') {
+        if (output.output_type === 'error') {
             return (
-                <div key={index} className="error-output text-red-400 font-mono text-xs sm:text-sm">
-                    <div className="font-bold">{output.ename}: {output.evalue}</div>
-                    {output.traceback && (
-                        <pre className="mt-1 whitespace-pre-wrap text-xs">{output.traceback.join('\n')}</pre>
-                    )}
-                </div>
+                <pre key={index} className="font-mono text-sm text-red-700 whitespace-pre-wrap bg-red-50 p-3 rounded border border-red-200 mb-3 last:mb-0">
+                    {output.traceback.join('\n')}
+                </pre>
             );
         }
-
-        // Fallback for unknown output types
         return (
-            <div key={index} className="text-gray-400 italic text-xs sm:text-sm">
+            <p key={index} className="text-sm italic text-gray-500 bg-gray-100 p-2 rounded mb-3 last:mb-0">
                 [Unsupported output type: {output.output_type}]
-            </div>
+            </p>
         );
     };
 
-// --- Main Render ---
-return (
-  <div className="notebook-viewer w-full">
-      {/* Controls Section - No changes needed here */}
-      <div className="controls mb-4 flex flex-wrap justify-between items-center bg-[#1a1a2e] p-3 rounded-t-xl border border-purple-500/10">
-          <div className="flex items-center">
-              <button
-                  onClick={() => setShowCode(!showCode)}
-                  className={`px-3 py-1 text-sm rounded-md flex items-center mr-2 transition-colors ${
-                      showCode
-                          ? 'bg-purple-600 text-white hover:bg-purple-700'
-                          : 'bg-purple-600/30 text-purple-300 hover:bg-purple-600/50'
-                  }`}
-              >
-                  <FaCode className="mr-1.5" />
-                  {showCode ? 'Hide Code' : 'Show Code'}
-              </button>
-          </div>
-           <a
-               href={notebookUrl}
-               download
-               title="Download Raw Notebook (.ipynb)"
-               className="px-3 py-1 bg-purple-600/50 hover:bg-purple-600 text-white rounded-md flex items-center transition-colors text-sm"
-           >
-               <FaDownload className="mr-1.5" /> Download
-           </a>
-      </div>
+    const HardShadowButton = ({ children, onClick, className, ...props }) => (
+        <a {...props} onClick={onClick} className={`group relative inline-block text-black cursor-pointer ${className}`}>
+            <span className="relative z-10 block border-2 border-black bg-white px-4 py-2 text-center font-bold transition-transform duration-150 ease-in-out group-hover:translate-x-0 group-hover:translate-y-0 -translate-x-1 -translate-y-1">
+                {children}
+            </span>
+            <span className="absolute inset-0 border-2 border-black bg-black"></span>
+        </a>
+    );
 
-      {/* Main Notebook Content Area */}
-      <div
-          // REMOVED: overflow-hidden from this div
-          className="bg-[#1a1a2e]/80 backdrop-blur-md rounded-b-xl border border-purple-500/10 w-full"
-      >
-           {/* Content container - REMOVED max-h, overflow-y, and style */}
-           <div className="notebook-contents p-2 sm:p-4">
+    return (
+        <div className="w-full">
+            <div className="controls mb-8 flex flex-col sm:flex-row sm:justify-between items-stretch sm:items-center gap-4 p-4 bg-gray-100 border-2 border-black">
+                <p className="font-bold text-lg text-center sm:text-left">Notebook Controls</p>
+                <div className="flex items-center justify-center sm:justify-end gap-2 sm:gap-4">
+                    <HardShadowButton onClick={() => setShowCode(!showCode)}>
+                        <FaCode className="inline-block sm:mr-2" />
+                        <span className="hidden sm:inline">{showCode ? 'Hide Code' : 'Show Code'}</span>
+                    </HardShadowButton>
+                    <HardShadowButton href={notebookUrl} download>
+                        <FaDownload className="inline-block sm:mr-2" />
+                        <span className="hidden sm:inline">Download</span>
+                    </HardShadowButton>
+                </div>
+            </div>
 
-              {/* Notebook metadata */}
-              {notebookData.metadata && notebookData.metadata.kernelspec && (
-                  <div className="text-xs sm:text-sm text-gray-400 mb-4 px-4"> {/* Keep padding */}
-                      <span className="font-bold">Kernel:</span> {notebookData.metadata.kernelspec.display_name || notebookData.metadata.kernelspec.name}
-                      {notebookData.metadata.language_info && (
-                          <span className="ml-2">({notebookData.metadata.language_info.name}, v{notebookData.metadata.language_info.version})</span>
-                      )}
-                  </div>
-              )}
-
-              {/* Render all cells */}
-              {notebookData.cells.map((cell, index) => renderCell(cell, index))}
-          </div> {/* End notebook-contents */}
-      </div> {/* End main content wrapper */}
-  </div> // End notebook-viewer
-);
+            <div className="space-y-2">
+                {notebookData.cells.map((cell, index) => renderCell(cell, index))}
+            </div>
+        </div>
+    );
 };
 
 export default NotebookViewer;

@@ -1,6 +1,4 @@
-// src/pages/BlogPage.js
-
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ChevronDown } from 'lucide-react';
 import BlogCard from '../components/BlogCard';
@@ -66,10 +64,9 @@ const BlogPage = () => {
       {/* --- HERO SECTION --- */}
       {heroPost && (
         <section className="bg-yellow-400 border-b-4 border-black">
-          {/* FIX 2: Added more top padding for mobile, adjusted all paddings */}
           <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20 grid lg:grid-cols-2 gap-12 items-center">
             
-            {/* IMAGE SIDE - Styled with BlogCard effects */}
+            {/* Styled with BlogCard effects */}
             <div className="hidden lg:block">
               {heroPost.coverImage && (
                 <Link
@@ -89,7 +86,7 @@ const BlogPage = () => {
               )}
             </div>
             
-            {/* TEXT SIDE - Original layout preserved */}
+            {/* TEXT SIDE */}
             <div>
               <p className="text-sm font-bold mb-2">
                 {new Date(heroPost.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} – {heroPost.author}
@@ -136,7 +133,6 @@ const BlogPage = () => {
               {featuredPosts.length > 1 && (
                 <div className="flex justify-center space-x-3 mt-8">
                   {featuredPosts.map((_, index) => (
-                    // FIX 3: Changed indicator from circle to larger rectangle
                     <button
                       key={index}
                       onClick={() => setActiveFeaturedIndex(index)}
@@ -162,7 +158,6 @@ const BlogPage = () => {
                   <button
                     key={tag}
                     onClick={() => setActiveCategory(tag)}
-                    // FIX 1: Added active: state for a click effect
                     className={`px-5 py-2 border-2 border-black font-bold text-sm shadow-[4px_4px_0px_#000] transition-all duration-150 hover:-translate-y-0.5 active:shadow-none active:translate-x-0 active:translate-y-0 ${
                       activeCategory === tag ? 'bg-yellow-400' : 'bg-white'
                     }`}

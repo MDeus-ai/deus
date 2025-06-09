@@ -1,10 +1,8 @@
-/* In src/index.css */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Add these styles for the scrolling animation */
+/* Styles for the scrolling animation */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -18,19 +16,13 @@
   animation: marquee 5s linear infinite;
 }
 
-/* Add this to your main CSS file (e.g., src/index.css) */
+
 
 html {
-  /* This makes the jump a smooth animation instead of instant */
   scroll-behavior: smooth;
 }
 
-/* 
-  This is the magic fix. 
-  It tells the browser to leave 90px of space ABOVE these elements 
-  when they are the target of a scroll.
-*/
 #about-section,
-#milestones-section {
+#milestones-section { 
   scroll-margin-top: 75px;
 }

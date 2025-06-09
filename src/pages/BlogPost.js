@@ -1,6 +1,4 @@
-// src/pages/BlogPost.js
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -61,7 +59,7 @@ const BlogPost = () => {
     });
   };
 
-  // --- Markdown Component Overrides (mobile-optimized but design preserved) ---
+  // --- Markdown Component Overrides (mobile-optimized) ---
   const MarkdownComponents = {
     h1: ({ children }) => <h1 className="text-3xl sm:text-4xl font-extrabold text-black mt-12 sm:mt-16 mb-6">{children}</h1>,
     h2: ({ children }) => <h2 className="text-2xl sm:text-3xl font-extrabold text-black mt-10 sm:mt-14 mb-5">{children}</h2>,
@@ -192,7 +190,7 @@ const BlogPost = () => {
           </ReactMarkdown>
         </article>
 
-        {/* --- FIX: Bottom Navigation with Hard Shadow Button --- */}
+        {/* --- Bottom Navigation with Hard Shadow Button --- */}
         <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-gray-200 flex justify-center">
           <Link
             to="/blog"

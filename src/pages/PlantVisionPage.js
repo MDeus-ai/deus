@@ -1,677 +1,457 @@
-import React, { useEffect } from 'react';
-import { FaGithub, FaArrowLeft, FaChartLine, FaCode, FaFileAlt, FaExclamationTriangle, FaLightbulb, FaBook, FaFolder, FaLink, FaClipboard } from 'react-icons/fa';
+import { useState, useEffect, useMemo } from 'react';
+import { FaGithub, FaExclamationTriangle, FaLightbulb, FaFolder, FaArrowLeft, FaExternalLinkAlt } from 'react-icons/fa';
+import { Search, ChevronDown } from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Using the previously selected theme
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
-// --- Sample Data (projectsData) remains the same ---
-const projectsData = {
-  "plantvision-cv001dd": {
-    id: 1,
-    title: "PlantVision cv001dd (Currently under development...)",
-    description: "A Vision model based on the Convolutional Neural Network Architecture (CNN) for detecting and classifying plant diseases based on plant leaves",
-    fullDescription: "PlantVision is an innovative deep learning solution that leverages computer vision to help farmers and agricultural specialists identify plant diseases quickly and accurately. Built on a Convolutional Neural Network architecture, this model analyzes images of plant leaves to detect and classify diseases, providing early warning and treatment recommendations to prevent crop loss.",
-    image: "/assets/images/project/plantvision.jpg",
-    github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
-    tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
-    metrics: [
-      { name: "Model Accuracy", value: 0 }, // Example: Updated values
-      { name: "Precision", value: 0 },
-      { name: "Recall", value: 0 },
-      { name: "F1 Score", value: 0 },
-      { name: "Top 1% Acc", value: 0 }, // Shortened names for chart
-      { name: "Top 5% Acc", value: 0 }
-    ],
-    documentation: `
-# Architecture Overview
+// ===================================================================================
+//
+//  START OF CONFIGURATION & CONTENT AREA
+//  This is the primary section to edit for project content.
+//
+// ===================================================================================
 
-The system consists of three main components:
-
-1.  **CNN-based Image Classification Model based on an EfficientNet-2b**: Built with TensorFlow and PyTorch.
-2.  **Mobile Application**: Developed using Flutter.
-3.  **Backend API**: Handles image processing, model inference, and treatment recommendations.
-
-## Model Details
-
-The model used is an EfficientNet-2b originally trained on the ImageNet dataset.
-
-\`\`\`python
-
-\`\`\`
-
-    `,
-    codeSnippets: [
-      {
-        title: "Data Augmentation (Example using Albumentations)",
-        language: "python",
-        code: ``
-      },
-      {
-        title: "Data Transformation (Pytorch data_loader.py)",
-        language: "python",
-        code: ``
-      }
-    ],
-    challenges: [
-      // "Dealing with imbalanced classes in the dataset (e.g., using weighted loss, over/under-sampling).",
-      // "Optimizing model size for mobile deployment (quantization, pruning) without sacrificing accuracy.",
-      // "Handling varying lighting conditions and backgrounds in field photos (robust data augmentation).",
-      // "Ensuring model generalization to unseen plant varieties or growth stages."
-    ],
-    futurePlans: [
-      // "Expand the model to cover more plant species and diseases.",
-      // "Implement real-time detection capabilities using optimized models (e.g., TensorFlow Lite, ONNX Runtime).",
-      // "Integrate with agricultural IoT systems for automated monitoring and alerts.",
-      // "Develop a system for tracking disease progression over time.",
-      // "Add severity estimation alongside classification."
-    ]
-  }
-  // Add more project entries as needed
-};
-
-
+// --- 1. Section Type Definitions ---
 const SectionTypes = {
   OVERVIEW: 'overview',
   DOCUMENTATION: 'documentation',
   METRICS: 'metrics',
   PROJECT_STRUCTURE: 'project_structure',
   CODE: 'code',
-  DATA_LINKS: 'data_links',
-  APPENDICES: 'appendices',
-  CHALLENGES: 'challenges'
+  ROADMAP: 'roadmap',
 };
 
-// Define the chosen theme and common styles
-const codeHighlightTheme = vscDarkPlus;
+// --- 2. Project Content ---
+const projectData = {
+  "plantvision-cv001dd": {
+    id: "plantvision-cv001dd",
+    title: "PlantVision cv001dd",
+    description: "A Vision model for detecting and classifying plant diseases from leaf images.",
+    image: "/assets/images/project/plantvision.jpg",
+    github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
+    tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
 
-const commonCodeStyle = {
-  fontFamily: 'Consolas, "Courier New", monospace',
-  padding: '1rem',
-  margin: 0,
-  borderRadius: '0.375rem', // Tailwind's rounded-md
-  fontSize: '0.875rem',
-  lineHeight: '1.6',
-  overflowX: 'auto',
-  // Let the theme dictate the background color primarily
-  // Example: Set a specific background if the theme doesn't provide one or needs override
-  // backgroundColor: '#1e1e1e',
+    // --- 2a. Sidebar Navigation Structure ---
+    sidebar: [
+      {
+        category: 'Project Links',
+        links: [
+          { id: 'github-link', title: 'GitHub Repository', external: true, href: "https://github.com/MDeus-ai/PlantVision-cv001dd" }
+        ]
+      },
+      {
+        category: 'On this page',
+        links: [
+          { id: 'overview', title: 'Overview' },
+          { id: 'documentation', title: 'Documentation', subheadings: true },
+          { id: 'metrics', title: 'Performance' },
+          { id: 'structure', title: 'Structure' },
+          { id: 'code', title: 'Code' },
+          { id: 'roadmap', title: 'Roadmap' },
+        ]
+      },
+    ],
+
+    // --- 2b. Page Content Sections ---
+    sections: [
+      {
+        id: 'overview',
+        title: 'Overview',
+        type: SectionTypes.OVERVIEW,
+        content: "PlantVision is an innovative deep learning solution that leverages computer vision to help farmers and agricultural specialists identify plant diseases quickly and accurately. Built on a Convolutional Neural Network architecture, this model analyzes images of plant leaves to detect and classify diseases, providing early warning and treatment recommendations to prevent crop loss."
+      },
+      {
+        id: 'documentation',
+        title: 'Technical Documentation',
+        type: SectionTypes.DOCUMENTATION,
+        content: `
+## Architecture
+
+The system consists of three main components:
+
+1.  **CNN-based Image Classification Model**: Built with TensorFlow and PyTorch, using an EfficientNet-B2 backbone pre-trained on ImageNet.
+2.  **Mobile Application**: Developed using Flutter for cross-platform deployment.
+3.  **Backend API**: A Flask-based API to handle image processing, model inference, and deliver results.
+
+### The CNN Model
+The core of the project is the deep learning model. We chose EfficientNet due to its excellent balance of accuracy and computational efficiency, making it suitable for potential mobile deployment. This is a key architectural decision.
+
+### Data Preprocessing
+Data augmentation was critical. Techniques included random rotations, flips, and brightness adjustments to simulate real-world conditions.
+
+## Model Performance
+
+Below is a summary of the model's performance on the hold-out test set.
+
+| Metric          | Score   | Notes                                    |
+|:----------------|:--------|:-----------------------------------------|
+| **Accuracy**    | 98.7%   | Overall correctness                      |
+| **Precision**   | 97.2%   | Of positive predictions, how many are correct |
+| **Recall**      | 96.5%   | Of actual positives, how many were found |
+| **F1-Score**    | 96.8%   | Harmonic mean of Precision and Recall    |
+
+> **Note:** These metrics represent the weighted average across all disease classes, accounting for class imbalance.
+
+## Mathematical Formulation
+
+The loss function used is the cross-entropy loss, defined as:
+
+$$
+L_{CE} = - \\sum_{i=1}^{C} y_i \\log(\\hat{y}_i)
+$$
+
+Where $C$ is the number of classes, $y_i$ is the true label (one-hot encoded), and $\\hat{y}_i$ is the predicted probability for class $i$.
+`
+      },
+      {
+        id: 'metrics',
+        title: 'Performance Metrics',
+        type: SectionTypes.METRICS,
+        data: [
+          { name: "Accuracy", value: 98.7 },
+          { name: "Precision", value: 97.2 },
+          { name: "Recall", value: 96.5 },
+          { name: "F1 Score", value: 96.8 },
+          { name: "Top 1% Acc", value: 99.1 },
+          { name: "Top 5% Acc", value: 99.8 }
+        ]
+      },
+      {
+        id: 'structure',
+        title: 'Project Structure',
+        type: SectionTypes.PROJECT_STRUCTURE,
+        content: `
+├── data/
+├── outputs/
+├── src/
+│   ├── data_loader.py
+│   ├── model.py
+│   ├── train.py
+│   └── evaluate.py
+├── notebooks/
+├── requirements.txt
+└── README.md
+`
+      },
+      {
+        id: 'code',
+        title: 'Code Snippets',
+        type: SectionTypes.CODE,
+        snippets: [
+          { title: "Data Augmentation (Albumentations)", language: "python", code: `
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+def get_train_transforms():
+    return A.Compose([
+        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0)),
+        A.HorizontalFlip(p=0.5),
+        A.VerticalFlip(p=0.5),
+        A.Rotate(limit=45, p=0.5),
+    ])`
+          },
+          { title: "PyTorch Data Loader", language: "python", code: `
+import torch
+from torch.utils.data import DataLoader
+
+# Create data loaders
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=32,
+    shuffle=True,
+    num_workers=4
+)`
+          }
+        ]
+      },
+      {
+        id: 'roadmap',
+        title: 'Challenges & Future Plans',
+        type: SectionTypes.ROADMAP,
+        challenges: [
+          "Dealing with imbalanced classes in the dataset.",
+          "Optimizing model size for mobile deployment.",
+          "Handling varying lighting conditions.",
+          "Ensuring model generalization.",
+        ],
+        futurePlans: [
+          "Expand the model to cover more plant species.",
+          "Implement real-time detection capabilities.",
+          "Integrate with agricultural IoT systems.",
+          "Add severity estimation.",
+        ]
+      }
+    ]
+  }
+};
+
+// ===================================================================================
+//
+//  END OF CONFIGURATION & CONTENT AREA
+//  React component logic begins below.
+//
+// ===================================================================================
+
+
+// --- Reusable Markdown component configuration ---
+const MarkdownComponents = {
+  // FIXED: Added `children` to all components to resolve jsx-a11y warnings.
+  h2: ({ node, children, ...props }) => <h2 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-2xl sm:text-3xl font-extrabold text-black mt-10 sm:mt-14 mb-5 scroll-mt-24" {...props}>{children}</h2>,
+  h3: ({ node, children, ...props }) => <h3 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-xl sm:text-2xl font-extrabold text-black mt-8 sm:mt-12 mb-4 scroll-mt-24" {...props}>{children}</h3>,
+  p: ({ children, ...props }) => <p className="text-lg md:text-xl leading-relaxed text-gray-800 mb-6" {...props}>{children}</p>,
+  ul: ({ children, ...props }) => <ul className="list-disc list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800" {...props}>{children}</ul>,
+  ol: ({ children, ...props }) => <ol className="list-decimal list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800" {...props}>{children}</ol>,
+  li: ({ children, ...props }) => <li className="leading-relaxed" {...props}>{children}</li>,
+  blockquote: ({ children, ...props }) => <blockquote className="my-8 border-l-4 border-yellow-400 pl-4 sm:pl-6 italic text-gray-700 text-lg md:text-xl" {...props}>{children}</blockquote>,
+  a: ({ children, ...props }) => <a className="text-black font-medium underline hover:text-gray-700 transition-colors break-words" {...props}>{children}</a>,
+  code: ({ node, inline, className, children, ...props }) => {
+    const match = /language-(\w+)/.exec(className || '');
+    return !inline && match ? (<div className="my-6 sm:my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>) : (<code className="bg-yellow-200 text-yellow-900 font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>);
+  },
+  table: ({ children, ...props }) => <div className="my-8 w-full overflow-x-auto border-2 border-black"><table className="w-full min-w-full border-collapse text-base" {...props}>{children}</table></div>,
+  thead: ({ children, ...props }) => <thead className="bg-black text-white" {...props}>{children}</thead>,
+  th: ({ children, ...props }) => <th className="text-left font-bold p-3 border-r-2 border-white last:border-r-0" {...props}>{children}</th>,
+  tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
+  tr: ({ children, ...props }) => <tr className="border-b-2 border-black/10 last:border-b-0" {...props}>{children}</tr>,
+  td: ({ children, ...props }) => <td className="p-3 border-r-2 border-black/10 last:border-r-0" {...props}>{children}</td>,
 };
 
 
+// --- Individual Section Components ---
+const OverviewSection = ({ content }) => <p className="text-lg text-gray-800 leading-relaxed">{content}</p>;
+const DocumentationSection = ({ content }) => <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeRaw, rehypeKatex]}>{content}</ReactMarkdown>;
+const MetricsSection = ({ data }) => (
+  <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div className="lg:col-span-2"><div className="grid grid-cols-2 gap-4">
+      {data.map((metric) => (<div key={metric.name} className="bg-white border-2 border-black p-4 text-center shadow-[4px_4px_0px_#000]"><h4 className="text-sm font-bold text-black mb-1 leading-tight">{metric.name}</h4><p className="text-3xl font-extrabold text-black">{metric.value}%</p></div>))}
+    </div></div>
+    <div className="lg:col-span-3"><div className="h-80">
+      <ResponsiveContainer width="100%" height="100%"><BarChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}><CartesianGrid strokeDasharray="3 3" stroke="#ccc" /><XAxis dataKey="name" stroke="#333" tick={{ fontSize: 12 }} /><YAxis domain={[90, 100]} stroke="#333" tick={{ fontSize: 12 }} /><Tooltip contentStyle={{ backgroundColor: '#000', color: '#fff', border: 'none' }} cursor={{ fill: 'rgba(250, 204, 21, 0.3)' }} /><Bar dataKey="value" fill="#facc15" barSize={30} /></BarChart></ResponsiveContainer>
+    </div></div>
+  </div>
+);
+const StructureSection = ({ content }) => (
+  <div className="border-2 border-black overflow-hidden">
+    <div className="bg-black text-white p-3 border-b-2 border-black flex items-center gap-3"><FaFolder /><h3 className="font-bold">Project Root</h3></div>
+    <SyntaxHighlighter language="bash" style={vscDarkPlus} PreTag="div" customStyle={{ margin: 0 }}>{content}</SyntaxHighlighter>
+  </div>
+);
+const CodeSection = ({ snippets }) => (
+  <div className="space-y-8">
+    {snippets.map((snippet, index) => (
+      <div key={index} className="border-2 border-black overflow-hidden">
+        <div className="bg-black text-white p-3 border-b-2 border-black flex justify-between items-center"><h3 className="font-bold">{snippet.title}</h3><span className="text-xs font-mono uppercase bg-gray-700 px-2 py-0.5">{snippet.language}</span></div>
+        <SyntaxHighlighter language={snippet.language} style={vscDarkPlus} PreTag="div" customStyle={{ margin: 0 }}>{String(snippet.code).trim()}</SyntaxHighlighter>
+      </div>
+    ))}
+  </div>
+);
+const RoadmapSection = ({ challenges, futurePlans }) => (
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="bg-gray-50 border-2 border-black p-6 md:p-8"><h3 className="text-2xl font-extrabold text-black mb-4 flex items-center gap-2"><FaExclamationTriangle className="text-yellow-500" /> Challenges</h3><ul className="space-y-3 text-lg list-disc list-outside pl-5 text-gray-800">{challenges.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
+    <div className="bg-gray-50 border-2 border-black p-6 md:p-8"><h3 className="text-2xl font-extrabold text-black mb-4 flex items-center gap-2"><FaLightbulb className="text-blue-500" /> Future Work</h3><ul className="space-y-3 text-lg list-disc list-outside pl-5 text-gray-800">{futurePlans.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
+  </div>
+);
+
+
+// --- Smart Sidebar with Collapsible Sections ---
+const ProjectSidebar = ({ project, activeId }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [openSections, setOpenSections] = useState({});
+
+  const toggleSection = (id) => {
+    setOpenSections(prev => ({...prev, [id]: !prev[id]}));
+  };
+  
+  const handleNavClick = (e, hash) => {
+    e.preventDefault();
+    document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.history.pushState(null, null, `#${hash}`);
+  };
+
+  const enhancedSidebar = useMemo(() => {
+    return project.sidebar.map(category => ({
+      ...category,
+      links: category.links.map(link => {
+        if (!link.subheadings) return link;
+        const section = project.sections.find(s => s.id === link.id);
+        if (!section || section.type !== SectionTypes.DOCUMENTATION) return link;
+        
+        const subheadings = [...section.content.matchAll(/^(##|###)\s(.*)/gm)].map(match => ({
+          level: match[1].length,
+          title: match[2].trim(),
+          id: match[2].trim().toLowerCase().replace(/\s+/g, '-'),
+        }));
+        return { ...link, children: subheadings };
+      }),
+    }));
+  }, [project]);
+
+  // Effect to auto-open section if a child is active
+  useEffect(() => {
+    const newOpenSections = {};
+    enhancedSidebar.forEach(category => {
+      category.links.forEach(link => {
+        if (link.children && link.children.some(child => child.id === activeId)) {
+          newOpenSections[link.id] = true;
+        }
+      });
+    });
+    setOpenSections(prev => ({ ...prev, ...newOpenSections }));
+  }, [activeId, enhancedSidebar]);
+
+
+  const filteredNavItems = useMemo(() => {
+    if (!searchTerm) return enhancedSidebar;
+    const lowercasedFilter = searchTerm.toLowerCase();
+    return enhancedSidebar.map(category => {
+      const filteredLinks = category.links.filter(link => 
+        link.title.toLowerCase().includes(lowercasedFilter) ||
+        (link.children && link.children.some(child => child.title.toLowerCase().includes(lowercasedFilter)))
+      );
+      return { ...category, links: filteredLinks };
+    }).filter(category => category.links.length > 0);
+  }, [searchTerm, enhancedSidebar]);
+
+  return (
+    <aside className="sticky top-24 w-full">
+      <div className="relative mb-6">
+        <input type="text" placeholder="Search this page..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-white border-b-2 border-gray-300 focus:border-black focus:ring-0 text-sm py-2 pl-9 pr-3" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      </div>
+      <nav>
+        {filteredNavItems.map(item => (
+          <div key={item.category} className="mb-5">
+            <h3 className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-2">{item.category}</h3>
+            <ul>
+              {item.links.map(link => (
+                <li key={link.id}>
+                  <div className="flex items-center justify-between">
+                    <a href={link.external ? link.href : `#${link.id}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined} onClick={(e) => handleNavClick(e, link.id)}
+                      className={`text-sm py-1.5 transition-all duration-200 border-l-2 flex-grow ${activeId === link.id && !link.children ? 'text-black font-semibold border-yellow-400 pl-3' : 'text-gray-500 hover:text-black border-transparent hover:border-gray-300 pl-3'}`}>
+                      {link.title}{link.external && <FaExternalLinkAlt className="inline-block w-3 h-3 ml-1.5 opacity-60" />}
+                    </a>
+                    {link.children && (
+                      <button onClick={() => toggleSection(link.id)} className="p-1 text-gray-400 hover:text-black">
+                        <ChevronDown size={16} className={`transition-transform duration-200 ${openSections[link.id] ? 'rotate-180' : ''}`} />
+                      </button>
+                    )}
+                  </div>
+                  {link.children && (
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openSections[link.id] ? 'max-h-96' : 'max-h-0'}`}>
+                      <ul className="pl-4 mt-1">
+                        {link.children.map(child => (
+                          <li key={child.id}>
+                            <a href={`#${child.id}`} onClick={(e) => handleNavClick(e, child.id)} className={`flex items-center justify-between text-sm py-1 transition-all duration-200 border-l-2 ${activeId === child.id ? 'text-black font-semibold border-yellow-400 pl-3' : 'text-gray-500 hover:text-black border-transparent hover:border-gray-300 pl-3'}`}>
+                               <span className={child.level === 3 ? 'ml-3' : ''}>{child.title}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        {filteredNavItems.length === 0 && <p className="text-sm text-gray-500">No results found.</p>}
+      </nav>
+    </aside>
+  );
+};
+
+
+// --- Main Page Component ---
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
-  const project = projectsData[projectId];
+  const project = projectData[projectId];
+  
+  const [activeId, setActiveId] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      let currentId = '';
+      const allHeadings = document.querySelectorAll('main section[id], main h2[id], main h3[id]');
+      
+      allHeadings.forEach(heading => {
+        if (heading.offsetTop - 150 <= window.scrollY) {
+          currentId = heading.id;
+        }
+      });
+      setActiveId(currentId);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     document.title = `${project?.title || 'Project'} | Muhumuza Deus`;
-    window.scrollTo(0, 0);
-    return () => {
-      document.title = 'Muhumuza Deus';
-    };
   }, [project]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [projectId]);
+
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-neutral-900 text-gray-200 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4 font-roboto-slab">Project Not Found</h2>
-          <Link to="/projects" className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition-colors font-roboto-slab">
-            <FaArrowLeft /> Back to Projects
-          </Link>
-        </div>
+      <div className="min-h-screen bg-white flex items-center justify-center text-center px-4">
+        <div><h2 className="text-4xl font-extrabold mb-4">Project Not Found</h2><Link to="/projects" className="inline-block bg-yellow-400 text-black px-6 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200"><FaArrowLeft className="inline mr-2" /> Back to Projects</Link></div>
       </div>
     );
   }
-
-  const metricsData = project.metrics.map(metric => ({
-    name: metric.name,
-    value: metric.value
-  }));
-
-  // --- Configure Markdown Components ---
-  const MarkdownComponents = {
-    // --- Keep other Markdown components (img, h1, h2, etc.) as they were ---
-    img: ({ node, src, alt, ...props }) => {
-      const imgSrc = src.startsWith('/') ? src : `/${src}`;
-      return (
-        <div className="my-4 md:my-8 flex justify-center">
-          <figure>
-            <img
-              src={imgSrc}
-              alt={alt === "my_math" ? "Mathematical Formula" : alt}
-              className="rounded-lg max-w-full h-auto mx-auto shadow-md border border-neutral-700"
-              style={{ maxWidth: '700px' }}
-              loading="lazy"
-              {...props}
-            />
-            {alt && alt !== "my_math" && (
-              <figcaption className="text-center text-xs sm:text-sm text-neutral-400 mt-2 font-roboto-slab">
-                {alt}
-              </figcaption>
-            )}
-          </figure>
-        </div>
-      );
-    },
-    h1: ({ children, ...props }) => (
-      <h1 className="text-2xl sm:text-3xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 pb-1 border-b border-neutral-700 font-roboto-slab" {...props}>
-        {children}
-      </h1>
-    ),
-    h2: ({ children, ...props }) => (
-      <h2 className="text-xl sm:text-2xl font-bold mt-5 md:mt-6 mb-3 md:mb-4 pb-1 border-b border-neutral-800 font-roboto-slab" {...props}>
-        {children}
-      </h2>
-    ),
-    h3: ({ children, ...props }) => (
-      <h3 className="text-lg sm:text-xl font-semibold mt-4 mb-2 md:mb-3 font-roboto-slab" {...props}>
-        {children}
-      </h3>
-    ),
-    p: ({ children, ...props }) => (
-      <p className="mb-3 md:mb-4 leading-relaxed text-sm sm:text-base text-gray-300 font-roboto-slab" {...props}>
-        {children}
-      </p>
-    ),
-    ul: ({ children, ...props }) => (
-      <ul className="list-disc list-outside pl-5 mb-3 md:mb-4 space-y-1 md:space-y-2 text-sm sm:text-base font-roboto-slab" {...props}>
-        {children}
-      </ul>
-    ),
-    ol: ({ children, ...props }) => (
-      <ol className="list-decimal list-outside pl-5 mb-3 md:mb-4 space-y-1 md:space-y-2 text-sm sm:text-base font-roboto-slab" {...props}>
-        {children}
-      </ol>
-    ),
-    li: ({ children, ...props }) => (
-      <li className="mb-1 leading-relaxed text-sm sm:text-base text-gray-300 font-roboto-slab" {...props}>
-        {children}
-      </li>
-    ),
-    blockquote: ({ children, ...props }) => (
-      <blockquote
-        className="border-l-4 border-neutral-600 pl-4 py-2 my-3 md:my-4 bg-neutral-800/60 italic text-sm sm:text-base font-roboto-slab text-gray-400"
-        {...props}
-      >
-        {children}
-      </blockquote>
-    ),
-     a: ({ children, href, ...props }) => (
-      <a
-        href={href}
-        className="text-blue-400 hover:text-blue-300 transition-colors duration-200 underline font-roboto-slab text-sm sm:text-base"
-        target="_blank"
-        rel="noopener noreferrer"
-        {...props}
-      >
-        {children} <FaLink size="0.7em" className="inline ml-1" />
-      </a>
-    ),
-    table: ({ children, ...props }) => (
-      <div className="overflow-x-auto my-4 md:my-6 rounded-lg border border-neutral-700">
-        <table
-          className="min-w-full divide-y divide-neutral-700 text-xs sm:text-sm font-roboto-slab"
-          {...props}
-        >
-          {children}
-        </table>
-      </div>
-    ),
-    thead: ({ children, ...props }) => (
-        <thead className="bg-neutral-800" {...props}>{children}</thead>
-    ),
-    th: ({ children, ...props }) => (
-      <th
-        className="px-3 py-2 md:px-5 md:py-3 text-left text-xs md:text-sm font-medium text-neutral-300 uppercase tracking-wider font-roboto-slab"
-        {...props}
-      >
-        {children}
-      </th>
-    ),
-    tbody: ({ children, ...props }) => (
-        <tbody className="bg-neutral-800/50 divide-y divide-neutral-750" {...props}>{children}</tbody>
-    ),
-    td: ({ children, ...props }) => (
-      <td
-        className="px-3 py-2 md:px-5 md:py-4 text-neutral-300 text-xs sm:text-sm font-roboto-slab"
-        {...props}
-      >
-        {children}
-      </td>
-    ),
-
-    // --- UPDATED CODE COMPONENT within Markdown ---
-    code: ({ node, inline, className, children, ...props }) => {
-      const match = /language-(\w+)/.exec(className || '');
-      return !inline && match ? (
-
-        <div className="my-4 md:my-5"> {/* Simple margin wrapper */}
-            <SyntaxHighlighter
-                style={codeHighlightTheme}
-                language={match[1]}
-                PreTag="div"
-                customStyle={commonCodeStyle} // Uses common style with built-in rounding
-                wrapLongLines={false}
-                {...props}
-            >
-                {String(children).replace(/\n$/, '')}
-            </SyntaxHighlighter>
-        </div>
-      ) : (
-        // Keep inline code styling simple
-        <code className="bg-neutral-700 px-1.5 py-0.5 rounded text-neutral-300 font-mono text-[0.85em]" {...props}>
-          {children}
-        </code>
-      );
-    },
+  
+  const sectionComponentMap = {
+    [SectionTypes.OVERVIEW]: OverviewSection,
+    [SectionTypes.DOCUMENTATION]: DocumentationSection,
+    [SectionTypes.METRICS]: MetricsSection,
+    [SectionTypes.PROJECT_STRUCTURE]: StructureSection,
+    [SectionTypes.CODE]: CodeSection,
+    [SectionTypes.ROADMAP]: RoadmapSection,
   };
 
-
-  // --- Define Sections (structure remains the same) ---
-  const sections = [
-    // --- Overview Section ---
-    {
-      id: SectionTypes.OVERVIEW,
-      title: "Project Overview",
-      icon: <FaFileAlt />,
-      content: () => (
-         <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-          <p className="text-sm md:text-base leading-relaxed text-gray-300 font-roboto-slab">
-            {project.fullDescription}
-          </p>
-        </div>
-      )
-    },
-    // --- Documentation Section ---
-    {
-      id: SectionTypes.DOCUMENTATION,
-      title: "Documentation",
-      icon: <FaBook />,
-      content: () => (
-        // This ReactMarkdown instance will use the updated MarkdownComponents.code
-        // which now renders code blocks without the extra outer border.
-        <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-          <article className="prose prose-invert prose-sm sm:prose-base max-w-none">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm, remarkMath]}
-              rehypePlugins={[rehypeRaw, rehypeKatex]}
-              components={MarkdownComponents}
-            >
-              {project.documentation}
-            </ReactMarkdown>
-          </article>
-        </div>
-      )
-    },
-    // --- Metrics Section ---
-    {
-      id: SectionTypes.METRICS,
-      title: "Key Metrics",
-      icon: <FaChartLine />,
-       content: () => (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-          <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-200 mb-3 md:mb-4 font-roboto-slab">
-              Performance Metrics
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
-              {project.metrics.map((metric, index) => (
-                <div key={index} className="bg-neutral-700 rounded-lg p-3 md:p-4 border border-neutral-600 flex flex-col items-center justify-center text-center">
-                  <h4 className="text-xs md:text-sm font-medium text-gray-300 mb-1 font-roboto-slab leading-tight">
-                    {metric.name}
-                  </h4>
-                  <p className="text-xl md:text-2xl font-bold text-gray-100 font-roboto-slab">
-                    {metric.value}%
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-200 mb-3 md:mb-4 font-roboto-slab">
-              Metrics Visualization
-            </h3>
-            <div className="h-60 md:h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={metricsData} margin={{ top: 5, right: 5, left: -25, bottom: 45 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-                  <XAxis
-                      dataKey="name"
-                      angle={-60}
-                      textAnchor="end"
-                      interval={0}
-                      height={60}
-                      stroke="#BBB"
-                      tick={{ fontSize: 9, fontFamily: 'Roboto Slab' }}
-                    />
-                  <YAxis domain={[0, 100]} stroke="#BBB" tick={{ fontSize: 10, fontFamily: 'Roboto Slab' }} />
-                  <Tooltip
-                      contentStyle={{ backgroundColor: '#333', borderColor: '#555', color: '#EEE', fontSize: '12px', fontFamily: 'Roboto Slab' }}
-                      itemStyle={{ color: '#EEE' }}
-                      labelStyle={{ color: '#FFF', fontWeight: 'bold' }}
-                      formatter={(value, name) => [`${value}%`, name]}
-                    />
-                  <Bar dataKey="value" fill="#4ade80" radius={[3, 3, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    // --- Project Structure Section ---
-     {
-      id: SectionTypes.PROJECT_STRUCTURE,
-      title: "Project Structure",
-      icon: <FaFolder />,
-      content: () => (
-        // Keep this consistent, using SyntaxHighlighter directly for the structure
-        <div className="bg-neutral-800 rounded-lg shadow-md border border-neutral-700 overflow-hidden">
-          <SyntaxHighlighter
-            language="bash"
-            style={codeHighlightTheme}
-            PreTag="div"
-            customStyle={commonCodeStyle}
-          >
-{`cv001dd/ # Root directory
-├── data/                 # Raw and Processed Data
-│   ├── raw/              # Original untouched data
-│   └── processed/        # Cleaned, augmented, split data
-├── logs/                 # Training & experiment logs
-│   ├── train/
-│   └── validation/
-├── outputs/              # Model outputs
-│   ├── checkpoints/      # Saved model weights during training
-│   └── best_model.h5     # Final best performing model
-├── src/                  # Source code for the project
-│   ├── callbacks/        # Custom Keras/PyTorch callbacks
-│   │   ├── checkpoints.py
-│   │   └── tensorboard.py
-│   ├── data/             # Data loading and preprocessing scripts
-│   │   └── data_loader.py # (Example shown in snippets)
-│   ├── models/           # Model definitions
-│   │   └── model.py      # Defines the CNN architecture
-│   ├── train/            # Training scripts
-│   │   └── train.py      # Main training loop
-│   ├── evaluation/       # Model evaluation scripts
-│   │   └── evaluate.py   # Calculates metrics on test set
-│   ├── utils/            # Utility functions (logging, config, etc.)
-│   │   └── logger.py
-│   └── __init__.py
-├── notebooks/            # Jupyter notebooks for exploration, visualization
-├── tests/                # Unit and integration tests
-│   ├── test_models.py
-│   └── test_data.py
-├── scripts/              # Helper scripts (inference, deployment)
-│   ├── inference.py      # Run model on new data
-│   └── deploy.py         # Deployment related scripts (e.g., Docker build)
-├── requirements.txt      # Project dependencies
-├── README.md             # Project overview and setup instructions
-└── .gitignore            # Files/directories ignored by Git`}
-          </SyntaxHighlighter>
-        </div>
-      )
-    },
-    // --- Code Snippets Section ---
-    {
-      id: SectionTypes.CODE,
-      title: "Code Snippets",
-      icon: <FaCode />,
-      content: () => (
-        // This section remains structurally the same, inheriting the common code style
-        <div className="space-y-5 md:space-y-6">
-          {project.codeSnippets.map((snippet, index) => (
-            <div key={index} className="bg-neutral-800 rounded-lg overflow-hidden shadow-md border border-neutral-700">
-              <div className="bg-neutral-700 px-3 py-2 md:px-4 md:py-3 flex justify-between items-center border-b border-neutral-600">
-                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white font-roboto-slab">
-                  {snippet.title}
-                </h3>
-                <span className="px-2 py-0.5 text-[10px] sm:text-xs bg-neutral-600 text-gray-300 rounded-full font-roboto-slab uppercase">
-                  {snippet.language}
-                </span>
-              </div>
-              <SyntaxHighlighter
-                language={snippet.language}
-                style={codeHighlightTheme}
-                PreTag="div"
-                customStyle={commonCodeStyle}
-                wrapLongLines={false}
-              >
-                {String(snippet.code).trim()}
-              </SyntaxHighlighter>
-            </div>
-          ))}
-        </div>
-      )
-    },
-    // --- Other sections (DATA_LINKS, APPENDICES, CHALLENGES) remain the same ---
-     {
-      id: SectionTypes.DATA_LINKS,
-      title: "Relevant Links & Papers",
-      icon: <FaLink />,
-      content: () => (
-        <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-          <ul className="list-none space-y-3 text-sm md:text-base font-roboto-slab">
-            <li>
-              <FaGithub className="inline mr-2 text-gray-400" />
-              <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                Project GitHub Repository
-              </a>
-            </li>
-            <li>
-              <FaBook className="inline mr-2 text-gray-400" />
-              <a href="https://arxiv.org/abs/1905.11946" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                EfficientNet: Rethinking Model Scaling for CNNs (arXiv)
-              </a>
-              <p className="text-xs text-gray-400 pl-6">Paper detailing the EfficientNet architecture and scaling.</p>
-            </li>
-             <li>
-              <FaLink className="inline mr-2 text-gray-400" />
-              <a href="https://pytorch.org/vision/stable/transforms.html" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                Torchvision Transforms v2 Documentation
-              </a>
-              <p className="text-xs text-gray-400 pl-6">Details on the data transformations used.</p>
-            </li>
-          </ul>
-        </div>
-      )
-    },
-    {
-      id: SectionTypes.APPENDICES,
-      title: "Appendices",
-      icon: <FaClipboard />,
-       content: () => (
-        <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-          <p className="text-gray-300 text-sm md:text-base font-roboto-slab italic">
-             Currently empty. This section can include supplementary materials like detailed hyperparameter tuning results, confusion matrices, or specific setup guides for less common environments.
-          </p>
-        </div>
-      )
-    },
-    {
-      id: SectionTypes.CHALLENGES,
-      title: "Challenges & Future Plans",
-      icon: <FaExclamationTriangle />,
-      content: () => (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-          <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-100 mb-3 flex items-center gap-2 font-roboto-slab">
-              <FaExclamationTriangle className="text-yellow-500"/> Challenges Faced
-            </h3>
-            <ul className="space-y-2 text-sm md:text-base font-roboto-slab list-disc list-outside pl-5">
-              {project.challenges.map((challenge, index) => (
-                <li key={index} className="text-gray-300">
-                  {challenge}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-neutral-800 rounded-lg p-4 md:p-6 shadow-md border border-neutral-700">
-            <h3 className="text-lg md:text-xl font-semibold text-gray-100 mb-3 flex items-center gap-2 font-roboto-slab">
-              <FaLightbulb className="text-blue-400"/> Future Enhancements
-            </h3>
-            <ul className="space-y-2 text-sm md:text-base font-roboto-slab list-disc list-outside pl-5">
-              {project.futurePlans.map((plan, index) => (
-                <li key={index} className="text-gray-300">
-                  {plan}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )
-    }
-  ];
-
-
-  // --- Render Component ---
   return (
-    <div className="min-h-screen bg-neutral-900 text-gray-200">
-      {/* Global Styles */}
-       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&display=swap');
-        @import url('https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css');
-
-        body {
-          font-family: 'Roboto Slab', serif;
-          scroll-behavior: smooth;
-        }
-        .font-roboto-slab {
-          font-family: 'Roboto Slab', serif;
-        }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 4px; border: 2px solid #1f2937; }
-        ::-webkit-scrollbar-thumb:hover { background-color: #6b7280; }
-        .katex { font-size: 1.1em; }
-      `}</style>
-
-      {/* Hero Section */}
-{/* --- New Header Section (Option 2: Image Thumbnail) --- */}
-<div className="bg-neutral-900 pt-20 sm:pt-20 pb-8 md:pb-12"> {/* Added top padding */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div className="lg:flex lg:gap-8 lg:items-start">
-                {/* Left Column: Text Info */}
-                <div className="flex-1 mb-6 lg:mb-0">
-                    {/* Project Title */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 font-roboto-slab">
-                        {project.title}
-                    </h1>
-
-                    {/* Project Description */}
-                    <p className="text-base md:text-lg text-gray-300 mb-4 md:mb-6 font-roboto-slab">
-                        {project.description}
-                    </p>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
-                        {project.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="px-2.5 py-1 bg-neutral-700 text-neutral-200 rounded-full text-xs sm:text-sm font-medium font-roboto-slab"
-                        >
-                            {tag}
-                        </span>
-                        ))}
-                    </div>
-
-                     {/* GitHub Link */}
-                    <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition-colors text-sm font-medium font-roboto-slab border border-neutral-600"
-                        title="View Project on GitHub"
-                    >
-                        <FaGithub />
-                        <span>GitHub Repository</span>
-                    </a>
-                </div>
-
-                {/* Right Column: Image Thumbnail */}
-                <div className="lg:w-1/3 lg:max-w-xs xl:max-w-sm flex-shrink-0">
-                    <img
-                        src={project.image || "/api/placeholder/400/300"} // Use a smaller placeholder if needed
-                        alt={`${project.title} preview`}
-                        className="w-full h-auto object-cover rounded-lg shadow-lg border border-neutral-700"
-                        loading="lazy" // Can be lazy loaded now
-                    />
-                </div>
+    <div className="bg-white text-black font-sans">
+      <header className="bg-yellow-400 border-b-4 border-black">
+        <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div><h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-4">{project.title}</h1><p className="text-lg md:text-xl text-black/80 mb-6 max-w-lg">{project.description}</p><div className="flex flex-wrap gap-2 mb-8">{project.tags.map((tag) => ( <span key={tag} className="px-3 py-1 bg-black text-white rounded-full text-xs font-bold">{tag}</span> ))}</div><a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-black px-6 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200"><FaGithub className="inline-block mr-2" /> View on GitHub</a></div>
+              <div className="hidden lg:block"><div className="bg-gray-50 border-2 border-black transition-all duration-300 ease-in-out hover:shadow-[8px_8px_0px_#000] hover:-translate-x-1 hover:-translate-y-1"><img src={project.image} alt={`${project.title} preview`} className="w-full h-full object-cover"/></div></div>
+          </div>
+        </div>
+      </header>
+      
+      <div className="container mx-auto px-4 py-20 lg:py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
+          <div className="hidden lg:block lg:col-span-3">
+            <ProjectSidebar project={project} activeId={activeId} />
+          </div>
+          <main className="lg:col-span-9 mt-12 lg:mt-0">
+            <div className="space-y-16 lg:space-y-20">
+                {project.sections.map((section) => {
+                  const Component = sectionComponentMap[section.type];
+                  return Component ? (
+                    <section key={section.id} id={section.id} className="scroll-mt-24">
+                      <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-8 scroll-mt-24">{section.title}</h2>
+                      <Component {...section} />
+                    </section>
+                  ) : null;
+                })}
             </div>
-
-             {/* Section Jump Links (Optional but recommended here) */}
-           <div className="mt-6 md:mt-8 pt-4 border-t border-neutral-700">
-              <p className="text-sm text-neutral-400 mb-2 font-roboto-slab">Jump to section:</p>
-              <div className="flex flex-wrap justify-start gap-1.5 sm:gap-2">
-                  {sections.map((section) => (
-                  <a
-                      key={section.id}
-                      href={`#${section.id}`}
-                      onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }}
-                      className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-neutral-800/80 text-gray-300 rounded-full text-[10px] sm:text-xs font-medium hover:bg-neutral-700/90 transition-colors font-roboto-slab backdrop-blur-sm"
-                  >
-                      <span className="text-[8px] sm:text-xs">{section.icon}</span>
-                      {section.title}
-                  </a>
-                  ))}
-              </div>
-           </div>
+          </main>
         </div>
       </div>
-      {/* --- End New Header Section (Option 2) --- */}
-
-      {/* Main Content */}
-        <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="space-y-10 md:space-y-16">
-            {sections.map((section) => (
-              <section key={section.id} id={section.id} className="scroll-mt-20 md:scroll-mt-24">
-                <div className="flex items-center gap-3 mb-4 md:mb-6 pb-2 border-b border-neutral-700">
-                    <span className="text-blue-400 text-xl sm:text-2xl">{section.icon}</span>
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-100 font-roboto-slab">
-                     {section.title}
-                    </h2>
-                </div>
-                {section.content()}
-              </section>
-            ))}
-        </div>
-      </main>
-
-      {/* Footer (remains the same) */}
-       <footer className="bg-neutral-800 border-t border-neutral-700 py-6 md:py-8 mt-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
-          <p className="text-sm md:text-base font-roboto-slab mb-2">
-            © {new Date().getFullYear()} Muhumuza Deus. All rights reserved.
-          </p>
-          <div className="flex justify-center items-center gap-4">
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-gray-400 hover:text-gray-200 transition-colors text-xs sm:text-sm font-roboto-slab"
-              title="View Project on GitHub"
-            >
-              <FaGithub className="text-lg" />
-              <span>GitHub</span>
-            </a>
-             <span className="text-gray-600">|</span>
-             <Link to="/projects" className="text-gray-400 hover:text-gray-200 transition-colors text-xs sm:text-sm font-roboto-slab">
-                Back to Projects
-             </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

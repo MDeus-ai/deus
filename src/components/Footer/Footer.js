@@ -1,7 +1,3 @@
-// src/components/Footer.js
-
-import React from 'react';
-
 export default function Footer() {
   const scrollingText = "LET'S BUILD SOMETHING AMAZING TOGETHER • ";
 
@@ -18,36 +14,35 @@ export default function Footer() {
   ];
 
   return (
-    // --- FIX: Add the id="footer" attribute here ---
     <footer id="footer" className="bg-black text-white font-sans overflow-hidden">
-      <div className="bg-black text-white py-4 border-y-2 border-gray-800">
+      <div className="bg-black text-white py-3 border-y-2 border-gray-800">
         <div className="flex animate-marquee whitespace-nowrap">
           <span className="text-xl font-bold mx-4 uppercase">{scrollingText.repeat(5)}</span>
           <span className="text-xl font-bold mx-4 uppercase" aria-hidden="true">{scrollingText.repeat(5)}</span>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-20 lg:py-28">
-        <div className="text-center mb-20 lg:mb-24">
-          <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter text-white">
+      <div className="container mx-auto px-4 py-12 lg:py-16">
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-4xl lg:text-5xl font-extrabold tracking-tighter text-white">
             Have an idea?
           </h2>
-          <p className="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
+          <p className="mt-3 text-lg text-gray-400 max-w-xl mx-auto">
             I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
           </p>
           <a
             href="mailto:muhumuzadeus.ai@gmail.com"
-            className="inline-block mt-8 bg-yellow-400 text-black px-10 py-4 border-2 border-black 
+            className="inline-block mt-6 bg-yellow-400 text-black px-8 py-3 border-2 border-black 
                        font-bold text-lg
-                       shadow-[8px_8px_0px_#000] hover:shadow-none 
-                       hover:translate-x-2 hover:translate-y-2 
+                       shadow-[6px_6px_0px_#000] hover:shadow-none 
+                       hover:translate-x-1.5 hover:translate-y-1.5 
                        transition-all duration-200 ease-in-out"
           >
             Let's Collaborate
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl mx-auto">
           <div className="text-center md:text-left">
              <h3 className="text-2xl font-extrabold tracking-tighter">
                 MUHUMUZA DEUS M <span className="text-yellow-400">.</span>
@@ -58,8 +53,8 @@ export default function Footer() {
           </div>
 
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-bold mb-6 uppercase tracking-wider">Main Projects</h3>
-            <div className="space-y-4">
+            <h3 className="text-lg font-bold mb-4 uppercase tracking-wider">Main Projects</h3>
+            <div className="space-y-3">
               {projectLinks.map(link => (
                 <a
                   key={link.label}
@@ -76,8 +71,8 @@ export default function Footer() {
           </div>
 
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-bold mb-6 uppercase tracking-wider">Connect</h3>
-            <div className="space-y-4">
+            <h3 className="text-lg font-bold mb-4 uppercase tracking-wider">Connect</h3>
+            <div className="space-y-3">
               {connectLinks.map(link => (
                 <a
                   key={link.label}
@@ -95,7 +90,7 @@ export default function Footer() {
         </div>
       </div>
       
-      <div className="border-t border-gray-800 py-6">
+      <div className="border-t border-gray-800 py-4">
         <p className="text-center text-xs text-gray-500 uppercase tracking-wider">
             © {new Date().getFullYear()} Muhumuza Deus • All Rights Reserved
         </p>
