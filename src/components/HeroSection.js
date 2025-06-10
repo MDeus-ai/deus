@@ -42,7 +42,7 @@ export default function HeroSection() {
               Building Intelligent Systems with Data.
             </h1>
             <p className="mt-6 text-base sm:text-lg lg:text-xl max-w-xl mx-auto md:mx-0">
-              I am an open-source developer and self-taught data scientist building machine learning solutions for complex problems.
+              I am an open-source developer and self-taught data scientist building machine learning solutions.
             </p>
             {/* CTA Buttons */}
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
