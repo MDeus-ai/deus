@@ -1,5 +1,18 @@
 [
     {
+      "slug": "just_in_time_learning",
+      "title": "Just-In-Time Learning Framework (Project-Driven Learning)",
+      "date": "2025-06-10",
+      "excerpt": "My new framework for learning concepts and working on projects",
+      "coverImage": "/assets/blog_assets/just_in_time_learning.jpg",
+      "author": "Muhumuza Deus",
+      "tags": ["Articles", "Projects"],
+      "readingTime": 10,
+      "featured": true,
+      "preview": true,
+      "isHero": true 
+    },
+    {
       "slug": "BatchNormalization",
       "title": "Batch Normalization Crush Course",
       "date": "2024-12-29",
@@ -22,7 +35,7 @@
       "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
       "readingTime": 12,
       "featured": true,
-      "preview": true,
-      "isHero": true
+      "preview": false,
+      "isHero": false
     }
 ]

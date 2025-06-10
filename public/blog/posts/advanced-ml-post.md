@@ -7,7 +7,6 @@ tags: ["Deep Learning", "Mathematics", "Neural Networks"]
 readingTime: 12
 ---
 
-# Understanding Neural Networks: A Deep Dive 🧠
 
 ## Introduction
 Neural networks form the backbone of modern deep learning. Let's explore their inner workings through mathematics, code, and intuitive explanations.
