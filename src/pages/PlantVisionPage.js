@@ -36,7 +36,7 @@ const projectData = {
     title: "PlantVision cv001dd",
     description: "A Vision model for detecting and classifying plant diseases from leaf images.",
     image: "/assets/images/project/plantvision.jpg",
-    github: "https://github.com/MDeus-ai/PlantVision-cv001dd",
+    github: "https://github.com/MDeus-ai/PlantVision",
     tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
 
     // --- 2a. Sidebar Navigation Structure ---
@@ -129,49 +129,59 @@ Where $C$ is the number of classes, $y_i$ is the true label (one-hot encoded), a
         title: 'Project Structure',
         type: SectionTypes.PROJECT_STRUCTURE,
         content: `
-├── data/
-├── outputs/
-├── src/
-│   ├── data_loader.py
-│   ├── model.py
-│   ├── train.py
-│   └── evaluate.py
-├── notebooks/
-├── requirements.txt
-└── README.md
+plantvision/
+├── data/                    # ⛔ Not included in Git. Use DVC or git-lfs
+├── src/                     # ✅ Source code
+│   ├── configs/             # 📄 YAML configs (no hardcoded values)
+│   ├── data/                # 📦 Data loading, augmentations
+│   ├── models/              # 🧠 Model definitions: CNNs, EfficientNet
+│   ├── train.py             # 🚂 Launch training with config + MLflow
+│   ├── evaluate.py          # 📊 Validation + metrics
+│   ├── quantize.py          # 🔧 Convert to ONNX/TFLite/INT8
+│   ├── serve/               # 🌐 FastAPI or TorchServe entrypoint
+│   └── utils.py             # 🛠 Logging, reproducibility, etc.
+├── docker/                  # 🐳 Training + inference Dockerfiles
+├── mlruns/                  # 🧪 MLflow experiment tracking
+├── mlflow/                  # ⚙️ Config for MLflow server (optional)
+├── Dockerfile               # 🔧 Main container spec
+├── docker-compose.yml       # 🚀 Stack for local dev
+├── requirements.txt         # 📦 Python dependencies
+├── README.md                # 📘 Docs & instructions
+├── start.sh                 # 🏁 Easy entrypoint to run things
+└── experiment/              # 📁 Jupyter notebooks, exploration
 `
       },
-      {
-        id: 'code',
-        title: 'Code Snippets',
-        type: SectionTypes.CODE,
-        snippets: [
-          { title: "Data Augmentation (Albumentations)", language: "python", code: `
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
+//       {
+//         id: 'code',
+//         title: 'Code Snippets',
+//         type: SectionTypes.CODE,
+//         snippets: [
+//           { title: "Data Augmentation (Albumentations)", language: "python", code: `
+// import albumentations as A
+// from albumentations.pytorch import ToTensorV2
 
-def get_train_transforms():
-    return A.Compose([
-        A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0)),
-        A.HorizontalFlip(p=0.5),
-        A.VerticalFlip(p=0.5),
-        A.Rotate(limit=45, p=0.5),
-    ])`
-          },
-          { title: "PyTorch Data Loader", language: "python", code: `
-import torch
-from torch.utils.data import DataLoader
+// def get_train_transforms():
+//     return A.Compose([
+//         A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0)),
+//         A.HorizontalFlip(p=0.5),
+//         A.VerticalFlip(p=0.5),
+//         A.Rotate(limit=45, p=0.5),
+//     ])`
+//           },
+//           { title: "PyTorch Data Loader", language: "python", code: `
+// import torch
+// from torch.utils.data import DataLoader
 
-# Create data loaders
-train_loader = DataLoader(
-    train_dataset,
-    batch_size=32,
-    shuffle=True,
-    num_workers=4
-)`
-          }
-        ]
-      },
+// # Create data loaders
+// train_loader = DataLoader(
+//     train_dataset,
+//     batch_size=32,
+//     shuffle=True,
+//     num_workers=4
+// )`
+//           }
+//         ]
+//       },
       {
         id: 'roadmap',
         title: 'Challenges & Future Plans',

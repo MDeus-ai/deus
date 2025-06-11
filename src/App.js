@@ -1,4 +1,3 @@
-import React from 'react';
 import ScrollToTop from './components/ScrollToTop';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';

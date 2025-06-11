@@ -12,7 +12,7 @@ const HomePage = () => {
 
 
   useEffect(() => {
- 
+    document.title = 'muhumuza deus';
     if (location.hash) {
       const id = location.hash.substring(1); 
       const element = document.getElementById(id);

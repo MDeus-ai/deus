@@ -10,7 +10,7 @@ export default function Footer() {
   ];
   
   const projectLinks = [
-      { href: "https://github.com/MDeus-ai/plantvision", label: "PlantVision" },
+      { href: "https://github.com/MDeus-ai/PlantVision", label: "PlantVision" },
   ];
 
   return (
