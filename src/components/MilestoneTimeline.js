@@ -45,6 +45,13 @@ const milestones = [
     description: "Created a machine learning youtube channel and published my first YouTube which was about gradients.",
     icon: FaVideo,
     category: "Project"
+  },
+  {
+    date: "18th June 2025",
+    title: "Became A Notebooks Expert On Kaggle",
+    description: "I earned my notebooks expert tier with a site-wide rank of 2,107 of 56,775",
+    icon: FaTrophy,
+    category: "Achievement"
   }
 ];
 
