@@ -1,5 +1,18 @@
 [
     {
+      "slug": "ml-project-structure",
+      "title": "The Anatomy of a Professional Machine Learning Project: A Guide to Structure and Sanity",
+      "date": "2025-07-10",
+      "excerpt": "A comprehensive guide to understanding how real-world machine learning projects are structured",
+      "coverImage": "/assets/blog_assets/project_structures.jpg",
+      "author": "Muhumuza Deus.M.",
+      "tags": ["Deep Learning", "Python", "Neural Networks", "PlantVision", "Project"],
+      "readingTime": 30,
+      "featured": true,
+      "preview": true,
+      "isHero": true
+    },
+    {
       "slug": "just_in_time_learning",
       "title": "Just-In-Time Learning Framework (Project-Driven Learning)",
       "date": "2025-06-10",
@@ -10,7 +23,7 @@
       "readingTime": 10,
       "featured": true,
       "preview": true,
-      "isHero": true 
+      "isHero": false
     },
     {
       "slug": "BatchNormalization",
@@ -22,7 +35,7 @@
       "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
       "readingTime": 10,
       "featured": true,
-      "preview": true,
+      "preview": false,
       "isHero": false 
     },
     {

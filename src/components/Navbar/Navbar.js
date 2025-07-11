@@ -15,7 +15,9 @@ const navItems = [
       label: "Blog Posts",
       href: "/blog",
       dropdown: [
-        { title: "Just-In-Time Learning Framework", description: "My new framework for learning concepts and working on projects", href: "/blog/just_in_time_learning", tag: "New" },
+        { title: "The Anatomy of a Professional Machine Learning Project: A Guide to Structure and Sanity",
+          description: "A comprehensive guide to understanding how real-world machine learning projects are structured", href: "/blog/ml-project-structure", tag: "New" },
+        { title: "Just-In-Time Learning Framework", description: "My new framework for learning concepts and working on projects", href: "/blog/just_in_time_learning"},
         { title: "Batch Normalization Crush Course", description: "Understanding how batch normalization helps NNs", href: "/blog/BatchNormalization" },
         { title: "Understanding Neural Networks", description: "Quick tour into the math that powers simple MLPs", href: "/blog/advanced-ml-post" },
       ]
