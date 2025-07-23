@@ -1,4 +1,16 @@
-[
+[    {
+      "slug": "ci-unit-tests",
+      "title": "Continuous Integration (CI) and Unit Testing: Lessons from Building PlantVision",
+      "date": "2025-07-16",
+      "excerpt": "How automation and testing helped me catch bugs early and move fast",
+      "coverImage": "/assets/blog_assets/ci_unit_tests.jpg",
+      "author": "Muhumuza Deus.M.",
+      "tags": ["Deep Learning","Articles", "Projects", "PlantVision", "Python", "MLOps"],
+      "readingTime": 30,
+      "featured": true,
+      "preview": true,
+      "isHero": true
+    },
     {
       "slug": "ml-project-structure",
       "title": "The Anatomy of a Professional Machine Learning Project: A Guide to Structure and Sanity",
@@ -6,11 +18,11 @@
       "excerpt": "A comprehensive guide to understanding how real-world machine learning projects are structured",
       "coverImage": "/assets/blog_assets/project_structures.jpg",
       "author": "Muhumuza Deus.M.",
-      "tags": ["Deep Learning", "Python", "Neural Networks", "PlantVision", "Project"],
+      "tags": ["Deep Learning", "Python", "Neural Networks", "PlantVision", "Projects", "MLOps"],
       "readingTime": 30,
       "featured": true,
       "preview": true,
-      "isHero": true
+      "isHero": false
     },
     {
       "slug": "just_in_time_learning",
@@ -18,11 +30,11 @@
       "date": "2025-06-10",
       "excerpt": "My new framework for learning concepts and working on projects",
       "coverImage": "/assets/blog_assets/just_in_time_learning.jpg",
-      "author": "Muhumuza Deus",
-      "tags": ["Articles", "Projects"],
+      "author": "Muhumuza Deus.M.",
+      "tags": ["Articles", "Projects", "Productivity"],
       "readingTime": 10,
-      "featured": true,
-      "preview": true,
+      "featured": false,
+      "preview": false,
       "isHero": false
     },
     {
@@ -31,24 +43,11 @@
       "date": "2024-12-29",
       "excerpt": "Understanding the batch normalization alogrithm, and its impact on model performance.",
       "coverImage": "/assets/blog_assets/batch_norm.jpg",
-      "author": "Muhumuza Deus",
+      "author": "Muhumuza Deus.M.",
       "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
       "readingTime": 10,
       "featured": true,
       "preview": false,
       "isHero": false 
-    },
-    {
-      "slug": "advanced-ml-post",
-      "title": "Understanding Neural Networks: A Deep Dive",
-      "date": "2024-03-25",
-      "excerpt": "A comprehensive guide to neural networks, including math equations, code examples, and visualizations.",
-      "coverImage": "/assets/blog_assets/7.jpg",
-      "author": "Muhumuza Deus",
-      "tags": ["Deep Learning", "Mathematics", "Neural Networks"],
-      "readingTime": 12,
-      "featured": true,
-      "preview": false,
-      "isHero": false
     }
 ]

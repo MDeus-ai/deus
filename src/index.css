@@ -2,34 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Styles for the seamless infinite scrolling animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+:root {
+  /* --- Font Variables --- */
+  --font-heading: 'Roboto Slab', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* --- Light Mode Palette --- */
+  --color-background: 255 255 255;
+  --color-surface: 249 250 251;
+  --color-text-primary: 0 0 0;
+  --color-text-secondary: 75 85 99;
+  --color-accent: 250 204 21;
+  --color-accent-text: 0 0 0;
+  --color-border: 0 0 0;
+  --color-shadow: 0 0 0;
+  --color-shadow-accent-bg: 0 0 0;
 }
 
+html.dark {
+  /* --- Dark Mode Palette --- */
+  --color-background: 18 18 18;
+  --color-surface: 30 30 30;
+  --color-text-primary: 224 224 224;
+  --color-text-secondary: 158 158 158;
+  --color-accent: 224 196 123;
+  --color-accent-text: 18 18 18;
+  --color-border: 224 196 123;
+  --color-shadow: 224 196 123;
+  --color-shadow-accent-bg: 30 30 30; /* #1E1E1E */
+}
+
+/* --- Global Styles --- */
+html {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-text-primary));
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* --- Utility Animations --- */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
 
-/* Speed variations */
-.animate-marquee-fast {
-  animation: marquee 15s linear infinite;
-}
-
-.animate-marquee-slow {
-  animation: marquee 35s linear infinite;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+/* For hash link scrolling */
 #about-section,
-#milestones-section { 
-  scroll-margin-top: 75px;
+#milestones-section {
+  scroll-margin-top: 100px;
 }

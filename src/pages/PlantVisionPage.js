@@ -15,100 +15,106 @@ import 'katex/dist/katex.min.css';
 // ===================================================================================
 //
 //  START OF CONFIGURATION & CONTENT AREA
-//  This is the primary section to edit for project content.
 //
 // ===================================================================================
 
-// --- 1. Section Type Definitions ---
 const SectionTypes = {
-  OVERVIEW: 'overview',
   DOCUMENTATION: 'documentation',
   METRICS: 'metrics',
-  PROJECT_STRUCTURE: 'project_structure',
-  CODE: 'code',
   ROADMAP: 'roadmap',
+  PROJECT_STRUCTURE: 'project_structure',
 };
 
-// --- 2. Project Content ---
 const projectData = {
   "plantvision-cv001dd": {
     id: "plantvision-cv001dd",
-    title: "PlantVision cv001dd",
-    description: "A Vision model for detecting and classifying plant diseases from leaf images.",
+    title: "PlantVision Disease Detection",
+    description: "A state-of-the-art computer vision system for accurately identifying 38 classes of plant diseases from leaf imagery, built for real-world deployment on web and mobile.",
     image: "/assets/images/project/plantvision.jpg",
     github: "https://github.com/MDeus-ai/PlantVision",
-    tags: ["Tensorflow", "Pytorch", "Python", "Flutter", "Cuda"],
+    tags: ["PyTorch", "Computer Vision", "FastAPI", "Docker", "Flutter", "MLOps"],
 
-    // --- 2a. Sidebar Navigation Structure ---
     sidebar: [
       {
         category: 'Project Links',
         links: [
-          { id: 'github-link', title: 'GitHub Repository', external: true, href: "https://github.com/MDeus-ai/PlantVision-cv001dd" }
+          { id: 'github-link', title: 'GitHub Repository', external: true, href: "https://github.com/MDeus-ai/PlantVision" }
         ]
       },
       {
         category: 'On this page',
         links: [
-          { id: 'overview', title: 'Overview' },
-          { id: 'documentation', title: 'Documentation', subheadings: true },
-          { id: 'metrics', title: 'Performance' },
-          { id: 'structure', title: 'Structure' },
-          { id: 'code', title: 'Code' },
-          { id: 'roadmap', title: 'Roadmap' },
+          { id: 'overview', title: 'Overview', subheadings: true },
+          { id: 'metrics', title: 'Performance Metrics' },
+          { id: 'structure', title: 'Project Structure' },
+          { id: 'roadmap', title: 'Roadmap & Challenges' },
         ]
       },
     ],
 
-    // --- 2b. Page Content Sections ---
     sections: [
       {
         id: 'overview',
-        title: 'Overview',
-        type: SectionTypes.OVERVIEW,
-        content: "PlantVision is an innovative deep learning solution that leverages computer vision to help farmers and agricultural specialists identify plant diseases quickly and accurately. Built on a Convolutional Neural Network architecture, this model analyzes images of plant leaves to detect and classify diseases, providing early warning and treatment recommendations to prevent crop loss."
-      },
-      {
-        id: 'documentation',
-        title: 'Technical Documentation',
+        title: 'Overview & Documentation',
         type: SectionTypes.DOCUMENTATION,
         content: `
-## Architecture
+## The Problem & Solution
 
-The system consists of three main components:
+Crop diseases are a primary threat to global food security, causing an average of 40% yield loss annually. For millions of small-scale farmers and home gardeners, early and accurate disease identification is the key to effective management, but access to expert agricultural advice is often limited and expensive.
 
-1.  **CNN-based Image Classification Model**: Built with TensorFlow and PyTorch, using an EfficientNet-B2 backbone pre-trained on ImageNet.
-2.  **Mobile Application**: Developed using Flutter for cross-platform deployment.
-3.  **Backend API**: A Flask-based API to handle image processing, model inference, and deliver results.
+**PlantVision** addresses this challenge by democratizing plant pathology. It uses a highly accurate and efficient deep learning model to provide instant disease diagnosis from a simple photograph of a plant leaf. The system is designed for accessibility, with an offline-first mobile app for fieldwork and a scalable API for broader integration.
 
-### The CNN Model
-The core of the project is the deep learning model. We chose EfficientNet due to its excellent balance of accuracy and computational efficiency, making it suitable for potential mobile deployment. This is a key architectural decision.
+---
 
-### Data Preprocessing
-Data augmentation was critical. Techniques included random rotations, flips, and brightness adjustments to simulate real-world conditions.
+### System Architecture
 
-## Model Performance
+The project is architected as a robust, production-ready system with three core components:
 
-Below is a summary of the model's performance on the hold-out test set.
+1.  **PyTorch Classification Model**: The heart of the system is an EfficientNet model fine-tuned for high accuracy on plant leaf images.
+2.  **FastAPI Backend**: A high-performance, containerized REST API serves the model, handling image preprocessing and inference requests.
+3.  **Cross-Platform Mobile App**: A Flutter-based application that allows users to perform offline inference directly on their device using a quantized version of the model.
 
-| Metric          | Score   | Notes                                    |
+> *A high-level view of the system architecture. Placeholder for diagram.*
+
+---
+
+### Dataset & Preprocessing
+
+The model was trained on the **PlantVillage Dataset**, a public benchmark containing over 54,000 images of healthy and diseased leaves across 14 plant species and 38 distinct classes. To build a model that is robust to real-world variations, a strong augmentation pipeline was crucial.
+
+*   **Geometric Augmentations**: Random resized crops, flips, and rotations.
+*   **Color Augmentations**: Adjustments to brightness, contrast, and saturation.
+*   **Normalization**: Images were normalized using ImageNet's mean and standard deviation.
+
+---
+
+### Performance Evaluation
+
+The final model was evaluated on a held-out test set (20% of the total data).
+
+| Metric          | Score   | Description                              |
 |:----------------|:--------|:-----------------------------------------|
-| **Accuracy**    | 98.7%   | Overall correctness                      |
-| **Precision**   | 97.2%   | Of positive predictions, how many are correct |
-| **Recall**      | 96.5%   | Of actual positives, how many were found |
-| **F1-Score**    | 96.8%   | Harmonic mean of Precision and Recall    |
+| **Accuracy**    | 98.7%   | Overall percentage of correct predictions. |
+| **Precision**   | 97.2%   | Ability of the model not to label a negative sample as positive. |
+| **Recall**      | 96.5%   | Ability of the model to find all the positive samples. |
+| **F1-Score**    | 96.8%   | The weighted average of Precision and Recall. |
 
-> **Note:** These metrics represent the weighted average across all disease classes, accounting for class imbalance.
+> **Note:** These are weighted averages across all 38 classes to account for moderate class imbalance in the dataset.
 
-## Mathematical Formulation
+---
 
-The loss function used is the cross-entropy loss, defined as:
+### Mathematical Formulation
+
+The core of the classification task is minimizing the Cross-Entropy Loss, which is ideal for multi-class problems. The function is defined as:
 
 $$
 L_{CE} = - \\sum_{i=1}^{C} y_i \\log(\\hat{y}_i)
 $$
 
-Where $C$ is the number of classes, $y_i$ is the true label (one-hot encoded), and $\\hat{y}_i$ is the predicted probability for class $i$.
+Where:
+- $C$ is the total number of classes (38 in our case).
+- $y_i$ is the binary indicator (0 or 1) if class label $i$ is the correct classification.
+- $\\hat{y}_i$ is the predicted probability for class $i$.
 `
       },
       {
@@ -120,8 +126,7 @@ Where $C$ is the number of classes, $y_i$ is the true label (one-hot encoded), a
           { name: "Precision", value: 97.2 },
           { name: "Recall", value: 96.5 },
           { name: "F1 Score", value: 96.8 },
-          { name: "Top 1% Acc", value: 99.1 },
-          { name: "Top 5% Acc", value: 99.8 }
+          { name: "Top-2 Acc", value: 99.4 },
         ]
       },
       {
@@ -130,73 +135,35 @@ Where $C$ is the number of classes, $y_i$ is the true label (one-hot encoded), a
         type: SectionTypes.PROJECT_STRUCTURE,
         content: `
 plantvision/
-├── data/                    # ⛔ Not included in Git. Use DVC or git-lfs
+├── data/                    # ⛔ Not in Git. Use DVC or git-lfs.
 ├── src/                     # ✅ Source code
 │   ├── configs/             # 📄 YAML configs (no hardcoded values)
-│   ├── data/                # 📦 Data loading, augmentations
-│   ├── models/              # 🧠 Model definitions: CNNs, EfficientNet
-│   ├── train.py             # 🚂 Launch training with config + MLflow
-│   ├── evaluate.py          # 📊 Validation + metrics
-│   ├── quantize.py          # 🔧 Convert to ONNX/TFLite/INT8
-│   ├── serve/               # 🌐 FastAPI or TorchServe entrypoint
+│   ├── data/                # 📦 Data loading & augmentations
+│   ├── models/              # 🧠 Model definitions (e.g., EfficientNet)
+│   ├── train.py             # 🚂 Launch training with MLflow
+│   ├── evaluate.py          # 📊 Validation & metrics generation
+│   ├── serve/               # 🌐 FastAPI / TorchServe entrypoint
 │   └── utils.py             # 🛠 Logging, reproducibility, etc.
 ├── docker/                  # 🐳 Training + inference Dockerfiles
-├── mlruns/                  # 🧪 MLflow experiment tracking
-├── mlflow/                  # ⚙️ Config for MLflow server (optional)
-├── Dockerfile               # 🔧 Main container spec
-├── docker-compose.yml       # 🚀 Stack for local dev
+├── mlruns/                  # 🧪 MLflow experiment tracking output
+├── Dockerfile               # 🔧 Main container specification
 ├── requirements.txt         # 📦 Python dependencies
-├── README.md                # 📘 Docs & instructions
-├── start.sh                 # 🏁 Easy entrypoint to run things
-└── experiment/              # 📁 Jupyter notebooks, exploration
+└── README.md                # 📘 Project documentation
 `
       },
-//       {
-//         id: 'code',
-//         title: 'Code Snippets',
-//         type: SectionTypes.CODE,
-//         snippets: [
-//           { title: "Data Augmentation (Albumentations)", language: "python", code: `
-// import albumentations as A
-// from albumentations.pytorch import ToTensorV2
-
-// def get_train_transforms():
-//     return A.Compose([
-//         A.RandomResizedCrop(height=256, width=256, scale=(0.8, 1.0)),
-//         A.HorizontalFlip(p=0.5),
-//         A.VerticalFlip(p=0.5),
-//         A.Rotate(limit=45, p=0.5),
-//     ])`
-//           },
-//           { title: "PyTorch Data Loader", language: "python", code: `
-// import torch
-// from torch.utils.data import DataLoader
-
-// # Create data loaders
-// train_loader = DataLoader(
-//     train_dataset,
-//     batch_size=32,
-//     shuffle=True,
-//     num_workers=4
-// )`
-//           }
-//         ]
-//       },
       {
         id: 'roadmap',
-        title: 'Challenges & Future Plans',
+        title: 'Roadmap & Challenges',
         type: SectionTypes.ROADMAP,
         challenges: [
-          "Dealing with imbalanced classes in the dataset.",
-          "Optimizing model size for mobile deployment.",
-          "Handling varying lighting conditions.",
-          "Ensuring model generalization.",
+          "**Domain Shift**: Ensuring the model generalizes well to images taken with different cameras and lighting not present in the training data.",
+          "**Class Ambiguity**: Some diseases present very similar visual symptoms, making them difficult for the model to distinguish.",
+          "**Model Size vs. Accuracy**: Continually balancing the trade-off between performance and resource footprint for efficient on-device inference.",
         ],
         futurePlans: [
-          "Expand the model to cover more plant species.",
-          "Implement real-time detection capabilities.",
-          "Integrate with agricultural IoT systems.",
-          "Add severity estimation.",
+          "**Expand Dataset**: Incorporate more plant species and disease varieties, including user-submitted images with a verification pipeline.",
+          "**Disease Severity Estimation**: Move beyond classification to regression, estimating the severity of the disease (e.g., % leaf area affected).",
+          "**CI/CD for Model Retraining**: Implement a full MLOps pipeline to automatically retrain and deploy the model as new data becomes available.",
         ]
       }
     ]
@@ -206,73 +173,93 @@ plantvision/
 // ===================================================================================
 //
 //  END OF CONFIGURATION & CONTENT AREA
-//  React component logic begins below.
 //
 // ===================================================================================
 
-
-// --- Reusable Markdown component configuration ---
 const MarkdownComponents = {
-  // FIXED: Added `children` to all components to resolve jsx-a11y warnings.
-  h2: ({ node, children, ...props }) => <h2 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-2xl sm:text-3xl font-extrabold text-black mt-10 sm:mt-14 mb-5 scroll-mt-24" {...props}>{children}</h2>,
-  h3: ({ node, children, ...props }) => <h3 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-xl sm:text-2xl font-extrabold text-black mt-8 sm:mt-12 mb-4 scroll-mt-24" {...props}>{children}</h3>,
-  p: ({ children, ...props }) => <p className="text-lg md:text-xl leading-relaxed text-gray-800 mb-6" {...props}>{children}</p>,
-  ul: ({ children, ...props }) => <ul className="list-disc list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800" {...props}>{children}</ul>,
-  ol: ({ children, ...props }) => <ol className="list-decimal list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800" {...props}>{children}</ol>,
+  h2: ({ node, children, ...props }) => <h2 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-2xl sm:text-3xl font-extrabold text-text-primary mt-10 sm:mt-14 mb-5 scroll-mt-24 font-heading" {...props}>{children}</h2>,
+  h3: ({ node, children, ...props }) => <h3 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-xl sm:text-2xl font-extrabold text-text-primary mt-8 sm:mt-12 mb-4 scroll-mt-24 font-heading" {...props}>{children}</h3>,
+  p: ({ children, ...props }) => <p className="text-lg leading-relaxed text-text-secondary mb-6" {...props}>{children}</p>,
+  ul: ({ children, ...props }) => <ul className="list-disc list-outside pl-5 mb-6 space-y-2 text-lg text-text-secondary" {...props}>{children}</ul>,
+  ol: ({ children, ...props }) => <ol className="list-decimal list-outside pl-5 mb-6 space-y-2 text-lg text-text-secondary" {...props}>{children}</ol>,
   li: ({ children, ...props }) => <li className="leading-relaxed" {...props}>{children}</li>,
-  blockquote: ({ children, ...props }) => <blockquote className="my-8 border-l-4 border-yellow-400 pl-4 sm:pl-6 italic text-gray-700 text-lg md:text-xl" {...props}>{children}</blockquote>,
-  a: ({ children, ...props }) => <a className="text-black font-medium underline hover:text-gray-700 transition-colors break-words" {...props}>{children}</a>,
+  blockquote: ({ children, ...props }) => <blockquote className="my-8 border-l-4 border-accent pl-4 sm:pl-6 italic text-text-secondary text-lg" {...props}>{children}</blockquote>,
+  a: ({ children, ...props }) => <a className="text-accent font-medium underline hover:opacity-80 transition-opacity break-words" {...props}>{children}</a>,
   code: ({ node, inline, className, children, ...props }) => {
     const match = /language-(\w+)/.exec(className || '');
-    return !inline && match ? (<div className="my-6 sm:my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>) : (<code className="bg-yellow-200 text-yellow-900 font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>);
+    return !inline && match ? (<div className="my-6 sm:my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>) : (<code className="bg-accent/20 text-accent font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>);
   },
-  table: ({ children, ...props }) => <div className="my-8 w-full overflow-x-auto border-2 border-black"><table className="w-full min-w-full border-collapse text-base" {...props}>{children}</table></div>,
-  thead: ({ children, ...props }) => <thead className="bg-black text-white" {...props}>{children}</thead>,
-  th: ({ children, ...props }) => <th className="text-left font-bold p-3 border-r-2 border-white last:border-r-0" {...props}>{children}</th>,
+  table: ({ children, ...props }) => <div className="my-8 w-full overflow-x-auto border-2 border-border"><table className="w-full min-w-full border-collapse text-base" {...props}>{children}</table></div>,
+  thead: ({ children, ...props }) => <thead className="bg-text-primary text-background" {...props}>{children}</thead>,
+  th: ({ children, ...props }) => <th className="text-left font-bold p-3 border-r-2 border-background/20 dark:border-background/20 last:border-r-0" {...props}>{children}</th>,
   tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
-  tr: ({ children, ...props }) => <tr className="border-b-2 border-black/10 last:border-b-0" {...props}>{children}</tr>,
-  td: ({ children, ...props }) => <td className="p-3 border-r-2 border-black/10 last:border-r-0" {...props}>{children}</td>,
+  tr: ({ children, ...props }) => <tr className="border-b-2 border-border/10 last:border-b-0" {...props}>{children}</tr>,
+  td: ({ children, ...props }) => <td className="p-3 border-r-2 border-border/10 last:border-r-0 text-text-secondary" {...props}><div dangerouslySetInnerHTML={{__html: children}}></div></td>,
 };
 
-
-// --- Individual Section Components ---
-const OverviewSection = ({ content }) => <p className="text-lg text-gray-800 leading-relaxed">{content}</p>;
 const DocumentationSection = ({ content }) => <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeRaw, rehypeKatex]}>{content}</ReactMarkdown>;
+
 const MetricsSection = ({ data }) => (
   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-    <div className="lg:col-span-2"><div className="grid grid-cols-2 gap-4">
-      {data.map((metric) => (<div key={metric.name} className="bg-white border-2 border-black p-4 text-center shadow-[4px_4px_0px_#000]"><h4 className="text-sm font-bold text-black mb-1 leading-tight">{metric.name}</h4><p className="text-3xl font-extrabold text-black">{metric.value}%</p></div>))}
-    </div></div>
-    <div className="lg:col-span-3"><div className="h-80">
-      <ResponsiveContainer width="100%" height="100%"><BarChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}><CartesianGrid strokeDasharray="3 3" stroke="#ccc" /><XAxis dataKey="name" stroke="#333" tick={{ fontSize: 12 }} /><YAxis domain={[90, 100]} stroke="#333" tick={{ fontSize: 12 }} /><Tooltip contentStyle={{ backgroundColor: '#000', color: '#fff', border: 'none' }} cursor={{ fill: 'rgba(250, 204, 21, 0.3)' }} /><Bar dataKey="value" fill="#facc15" barSize={30} /></BarChart></ResponsiveContainer>
-    </div></div>
-  </div>
-);
-const StructureSection = ({ content }) => (
-  <div className="border-2 border-black overflow-hidden">
-    <div className="bg-black text-white p-3 border-b-2 border-black flex items-center gap-3"><FaFolder /><h3 className="font-bold">Project Root</h3></div>
-    <SyntaxHighlighter language="bash" style={vscDarkPlus} PreTag="div" customStyle={{ margin: 0 }}>{content}</SyntaxHighlighter>
-  </div>
-);
-const CodeSection = ({ snippets }) => (
-  <div className="space-y-8">
-    {snippets.map((snippet, index) => (
-      <div key={index} className="border-2 border-black overflow-hidden">
-        <div className="bg-black text-white p-3 border-b-2 border-black flex justify-between items-center"><h3 className="font-bold">{snippet.title}</h3><span className="text-xs font-mono uppercase bg-gray-700 px-2 py-0.5">{snippet.language}</span></div>
-        <SyntaxHighlighter language={snippet.language} style={vscDarkPlus} PreTag="div" customStyle={{ margin: 0 }}>{String(snippet.code).trim()}</SyntaxHighlighter>
+    <div className="lg:col-span-2">
+      <div className="grid grid-cols-2 gap-4">
+        {data.map((metric) => (
+          <div key={metric.name}
+               className="bg-surface border-2 border-border p-4 text-center transition-all duration-200 ease-in-out shadow-[4px_4px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 active:translate-x-0 active:translate-y-0">
+            <h4 className="text-sm font-bold text-text-primary mb-1 leading-tight">{metric.name}</h4>
+            <p className="text-3xl font-extrabold text-text-primary font-heading">{metric.value}%</p>
+          </div>
+        ))}
       </div>
-    ))}
+    </div>
+    <div className="lg:col-span-3">
+      <div className="h-80 bg-surface border-2 border-border p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--color-text-secondary) / 0.2)" />
+            <XAxis dataKey="name" stroke="rgb(var(--color-text-secondary))" tick={{ fontSize: 12, fill: 'rgb(var(--color-text-secondary))' }} />
+            <YAxis domain={[90, 100]} stroke="rgb(var(--color-text-secondary))" tick={{ fontSize: 12, fill: 'rgb(var(--color-text-secondary))' }} />
+            <Tooltip contentStyle={{ backgroundColor: 'rgb(var(--color-background))', color: 'rgb(var(--color-text-primary))', border: '1px solid rgb(var(--color-border))' }} cursor={{ fill: 'rgb(var(--color-accent) / 0.2)' }} />
+            <Bar dataKey="value" fill="rgb(var(--color-accent))" barSize={30} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   </div>
 );
+
+const StructureSection = ({ content }) => (
+  <div className="border-2 border-border overflow-hidden">
+    <div className="bg-text-primary text-background p-3 border-b-2 border-border flex items-center gap-3">
+      <FaFolder /><h3 className="font-bold font-body">Project Root</h3>
+    </div>
+    <SyntaxHighlighter language="bash" style={vscDarkPlus} PreTag="div" customStyle={{ margin: 0, fontFamily: 'var(--font-mono)' }}>
+      {content.trim()}
+    </SyntaxHighlighter>
+  </div>
+);
+
 const RoadmapSection = ({ challenges, futurePlans }) => (
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <div className="bg-gray-50 border-2 border-black p-6 md:p-8"><h3 className="text-2xl font-extrabold text-black mb-4 flex items-center gap-2"><FaExclamationTriangle className="text-yellow-500" /> Challenges</h3><ul className="space-y-3 text-lg list-disc list-outside pl-5 text-gray-800">{challenges.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
-    <div className="bg-gray-50 border-2 border-black p-6 md:p-8"><h3 className="text-2xl font-extrabold text-black mb-4 flex items-center gap-2"><FaLightbulb className="text-blue-500" /> Future Work</h3><ul className="space-y-3 text-lg list-disc list-outside pl-5 text-gray-800">{futurePlans.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
+    <div className="bg-surface border-2 border-border p-6 md:p-8 transition-all duration-200 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
+      <h3 className="text-2xl font-extrabold text-text-primary mb-4 flex items-center gap-2 font-heading">
+        <FaExclamationTriangle className="text-yellow-500" /> Challenges
+      </h3>
+      <ul className="space-y-3 text-lg list-disc list-outside pl-5 text-text-secondary">
+        {challenges.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item }} />)}
+      </ul>
+    </div>
+    <div className="bg-surface border-2 border-border p-6 md:p-8 transition-all duration-200 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
+      <h3 className="text-2xl font-extrabold text-text-primary mb-4 flex items-center gap-2 font-heading">
+        <FaLightbulb className="text-blue-500" /> Future Work
+      </h3>
+      <ul className="space-y-3 text-lg list-disc list-outside pl-5 text-text-secondary">
+        {futurePlans.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item }} />)}
+      </ul>
+    </div>
   </div>
 );
 
-
-// --- Smart Sidebar with Collapsible Sections ---
 const ProjectSidebar = ({ project, activeId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [openSections, setOpenSections] = useState({});
@@ -280,11 +267,16 @@ const ProjectSidebar = ({ project, activeId }) => {
   const toggleSection = (id) => {
     setOpenSections(prev => ({...prev, [id]: !prev[id]}));
   };
-  
+
   const handleNavClick = (e, hash) => {
     e.preventDefault();
-    document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.history.pushState(null, null, `#${hash}`);
+    const element = document.getElementById(hash);
+    if (element) {
+        window.history.pushState(null, null, `#${hash}`);
+        const yOffset = -100;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   };
 
   const enhancedSidebar = useMemo(() => {
@@ -293,8 +285,7 @@ const ProjectSidebar = ({ project, activeId }) => {
       links: category.links.map(link => {
         if (!link.subheadings) return link;
         const section = project.sections.find(s => s.id === link.id);
-        if (!section || section.type !== SectionTypes.DOCUMENTATION) return link;
-        
+        if (!section) return link;
         const subheadings = [...section.content.matchAll(/^(##|###)\s(.*)/gm)].map(match => ({
           level: match[1].length,
           title: match[2].trim(),
@@ -305,7 +296,6 @@ const ProjectSidebar = ({ project, activeId }) => {
     }));
   }, [project]);
 
-  // Effect to auto-open section if a child is active
   useEffect(() => {
     const newOpenSections = {};
     enhancedSidebar.forEach(category => {
@@ -318,12 +308,11 @@ const ProjectSidebar = ({ project, activeId }) => {
     setOpenSections(prev => ({ ...prev, ...newOpenSections }));
   }, [activeId, enhancedSidebar]);
 
-
   const filteredNavItems = useMemo(() => {
     if (!searchTerm) return enhancedSidebar;
     const lowercasedFilter = searchTerm.toLowerCase();
     return enhancedSidebar.map(category => {
-      const filteredLinks = category.links.filter(link => 
+      const filteredLinks = category.links.filter(link =>
         link.title.toLowerCase().includes(lowercasedFilter) ||
         (link.children && link.children.some(child => child.title.toLowerCase().includes(lowercasedFilter)))
       );
@@ -334,23 +323,23 @@ const ProjectSidebar = ({ project, activeId }) => {
   return (
     <aside className="sticky top-24 w-full">
       <div className="relative mb-6">
-        <input type="text" placeholder="Search this page..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-white border-b-2 border-gray-300 focus:border-black focus:ring-0 text-sm py-2 pl-9 pr-3" />
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input type="text" placeholder="Search this page..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-surface border-b-2 border-border/30 focus:border-border text-text-primary placeholder:text-text-secondary/70 focus:ring-0 text-sm py-2 pl-9 pr-3 font-mono" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary/50" />
       </div>
       <nav>
         {filteredNavItems.map(item => (
           <div key={item.category} className="mb-5">
-            <h3 className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-2">{item.category}</h3>
+            <h3 className="text-xs text-text-secondary font-bold uppercase tracking-wider mb-2">{item.category}</h3>
             <ul>
               {item.links.map(link => (
                 <li key={link.id}>
                   <div className="flex items-center justify-between">
-                    <a href={link.external ? link.href : `#${link.id}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined} onClick={(e) => handleNavClick(e, link.id)}
-                      className={`text-sm py-1.5 transition-all duration-200 border-l-2 flex-grow ${activeId === link.id && !link.children ? 'text-black font-semibold border-yellow-400 pl-3' : 'text-gray-500 hover:text-black border-transparent hover:border-gray-300 pl-3'}`}>
+                    <a href={link.external ? link.href : `#${link.id}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined} onClick={(e) => !link.external && handleNavClick(e, link.id)}
+                      className={`text-sm py-1.5 transition-all duration-200 border-l-2 flex-grow ${activeId === link.id && !link.children ? 'text-text-primary font-semibold border-accent pl-3' : 'text-text-secondary hover:text-text-primary border-transparent hover:border-border/30 pl-3'}`}>
                       {link.title}{link.external && <FaExternalLinkAlt className="inline-block w-3 h-3 ml-1.5 opacity-60" />}
                     </a>
                     {link.children && (
-                      <button onClick={() => toggleSection(link.id)} className="p-1 text-gray-400 hover:text-black">
+                      <button onClick={() => toggleSection(link.id)} className="p-1 text-text-secondary/60 hover:text-text-primary">
                         <ChevronDown size={16} className={`transition-transform duration-200 ${openSections[link.id] ? 'rotate-180' : ''}`} />
                       </button>
                     )}
@@ -360,7 +349,7 @@ const ProjectSidebar = ({ project, activeId }) => {
                       <ul className="pl-4 mt-1">
                         {link.children.map(child => (
                           <li key={child.id}>
-                            <a href={`#${child.id}`} onClick={(e) => handleNavClick(e, child.id)} className={`flex items-center justify-between text-sm py-1 transition-all duration-200 border-l-2 ${activeId === child.id ? 'text-black font-semibold border-yellow-400 pl-3' : 'text-gray-500 hover:text-black border-transparent hover:border-gray-300 pl-3'}`}>
+                            <a href={`#${child.id}`} onClick={(e) => handleNavClick(e, child.id)} className={`flex items-center text-sm py-1 transition-all duration-200 border-l-2 ${activeId === child.id ? 'text-text-primary font-semibold border-accent pl-3' : 'text-text-secondary hover:text-text-primary border-transparent hover:border-border/30 pl-3'}`}>
                                <span className={child.level === 3 ? 'ml-3' : ''}>{child.title}</span>
                             </a>
                           </li>
@@ -373,37 +362,33 @@ const ProjectSidebar = ({ project, activeId }) => {
             </ul>
           </div>
         ))}
-        {filteredNavItems.length === 0 && <p className="text-sm text-gray-500">No results found.</p>}
+        {filteredNavItems.length === 0 && <p className="text-sm text-text-secondary">No results found.</p>}
       </nav>
     </aside>
   );
 };
 
 
-// --- Main Page Component ---
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
   const project = projectData[projectId];
-  
   const [activeId, setActiveId] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       let currentId = '';
       const allHeadings = document.querySelectorAll('main section[id], main h2[id], main h3[id]');
-      
       allHeadings.forEach(heading => {
         if (heading.offsetTop - 150 <= window.scrollY) {
           currentId = heading.id;
         }
       });
-      setActiveId(currentId);
+      setActiveId(currentId || (project?.sections[0]?.id || ''));
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [project]);
 
   useEffect(() => {
     document.title = `${project?.title || 'Project'} | Muhumuza Deus`;
@@ -413,35 +398,53 @@ const ProjectDetailPage = () => {
     window.scrollTo(0, 0);
   }, [projectId]);
 
-
   if (!project) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center text-center px-4">
-        <div><h2 className="text-4xl font-extrabold mb-4">Project Not Found</h2><Link to="/projects" className="inline-block bg-yellow-400 text-black px-6 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200"><FaArrowLeft className="inline mr-2" /> Back to Projects</Link></div>
-      </div>
+        <div className="min-h-screen bg-background flex items-center justify-center text-center px-4">
+            <div>
+                <h2 className="text-4xl font-extrabold mb-4 text-text-primary font-heading">Project Not Found</h2>
+                <Link to="/" className="inline-flex items-center justify-center bg-accent text-accent-text px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)]">
+                    <FaArrowLeft className="inline mr-2" /> Back to Home
+                </Link>
+            </div>
+        </div>
     );
   }
-  
+
   const sectionComponentMap = {
-    [SectionTypes.OVERVIEW]: OverviewSection,
     [SectionTypes.DOCUMENTATION]: DocumentationSection,
     [SectionTypes.METRICS]: MetricsSection,
-    [SectionTypes.PROJECT_STRUCTURE]: StructureSection,
-    [SectionTypes.CODE]: CodeSection,
     [SectionTypes.ROADMAP]: RoadmapSection,
+    [SectionTypes.PROJECT_STRUCTURE]: StructureSection,
   };
 
   return (
-    <div className="bg-white text-black font-sans">
-      <header className="bg-yellow-400 border-b-4 border-black">
+    <div className="bg-background text-text-primary font-body">
+      <header className="bg-surface text-text-primary">
         <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div><h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-4">{project.title}</h1><p className="text-lg md:text-xl text-black/80 mb-6 max-w-lg">{project.description}</p><div className="flex flex-wrap gap-2 mb-8">{project.tags.map((tag) => ( <span key={tag} className="px-3 py-1 bg-black text-white rounded-full text-xs font-bold">{tag}</span> ))}</div><a href={project.github} target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-black px-6 py-3 border-2 border-black font-bold shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 transition-all duration-200"><FaGithub className="inline-block mr-2" /> View on GitHub</a></div>
-              <div className="hidden lg:block"><div className="bg-gray-50 border-2 border-black transition-all duration-300 ease-in-out hover:shadow-[8px_8px_0px_#000] hover:-translate-x-1 hover:-translate-y-1"><img src={project.image} alt={`${project.title} preview`} className="w-full h-full object-cover"/></div></div>
+              <div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-4 text-text-primary dark:text-accent font-heading">{project.title}</h1>
+                <p className="text-lg md:text-xl text-text-secondary mb-6 max-w-lg">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                    {project.tags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 bg-text-primary text-background dark:bg-accent dark:text-accent-text rounded-full text-xs font-bold">{tag}</span>
+                    ))}
+                </div>
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                   className="inline-flex items-center justify-center gap-2 bg-text-primary text-background px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)]">
+                   <FaGithub className="inline-block mr-2" /> View on GitHub
+                </a>
+              </div>
+              <div className="hidden lg:block">
+                  <div className="bg-surface border-2 border-border transition-all duration-300 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
+                      <img src={project.image} alt={`${project.title} preview`} className="w-full h-full object-cover"/>
+                  </div>
+              </div>
           </div>
         </div>
       </header>
-      
+
       <div className="container mx-auto px-4 py-20 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
           <div className="hidden lg:block lg:col-span-3">
@@ -451,12 +454,16 @@ const ProjectDetailPage = () => {
             <div className="space-y-16 lg:space-y-20">
                 {project.sections.map((section) => {
                   const Component = sectionComponentMap[section.type];
-                  return Component ? (
+                  if (!Component) return null;
+                  const showTitle = section.type !== SectionTypes.DOCUMENTATION;
+                  return (
                     <section key={section.id} id={section.id} className="scroll-mt-24">
-                      <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-8 scroll-mt-24">{section.title}</h2>
+                      {showTitle && (
+                         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-8 text-text-primary font-heading">{section.title}</h2>
+                      )}
                       <Component {...section} />
                     </section>
-                  ) : null;
+                  );
                 })}
             </div>
           </main>

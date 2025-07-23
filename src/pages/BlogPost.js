@@ -1,208 +1,163 @@
-import { useState, useEffect } from 'react';
+// src/pages/BlogPost.jsx
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
+import ReadingProgressBar from '../components/ReadingProgressBar';
+import AuthorBio from '../components/AuthorBio';
+import ReadNext from '../components/ReadNext';
+import Callout from '../components/Callout';
+
 const BlogPost = () => {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
   const [content, setContent] = useState('');
+  const [readingTime, setReadingTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // --- Data Fetching Effect ---
   useEffect(() => {
     const fetchPost = async () => {
       setIsLoading(true);
       try {
         const metadataResponse = await fetch('/blog/metadata.json');
-        if (!metadataResponse.ok) throw new Error(`HTTP error! status: ${metadataResponse.status}`);
         const postsMetadata = await metadataResponse.json();
         const currentPost = postsMetadata.find(p => p.slug === slug);
-        
+
         if (currentPost) {
           setPost(currentPost);
           document.title = `${currentPost.title} | Blog`;
-          
-          const contentResponse = await fetch(`/blog/posts/${slug}.md`);
-          if (!contentResponse.ok) throw new Error(`HTTP error! status: ${contentResponse.status}`);
-          const contentText = await contentResponse.text();
 
+          const contentResponse = await fetch(`/blog/posts/${slug}.md`);
+          const contentText = await contentResponse.text();
           const contentWithoutFrontmatter = contentText.replace(/^---[\s\S]+?---/, '').trim();
           setContent(contentWithoutFrontmatter);
+
+          const wordCount = contentWithoutFrontmatter.split(/\s+/).length;
+          const wordsPerMinute = 200;
+          setReadingTime(Math.ceil(wordCount / wordsPerMinute));
         }
-      } catch (error) {
-        console.error('Error fetching blog post:', error);
-      } finally {
-        setIsLoading(false);
-      }
+      } catch (error) { console.error('Error fetching post:', error); }
+      finally { setIsLoading(false); }
     };
-
     fetchPost();
-
-    return () => {
-      document.title = 'Blog | Muhumuza Deus';
-    };
+    return () => { document.title = 'Blog | Muhumuza Deus'; };
   }, [slug]);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const MarkdownComponents = useMemo(() => ({
+    // THE FIX: Added a style definition for h1 tags.
+    h1: ({ node, children, ...props }) => <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-text-primary mt-12 mb-6" {...props}>{children}</h1>,
 
-  // --- Markdown Component Overrides (mobile-optimized) ---
-  const MarkdownComponents = {
-    h1: ({ children }) => <h1 className="text-3xl sm:text-4xl font-extrabold text-black mt-12 sm:mt-16 mb-6">{children}</h1>,
-    h2: ({ children }) => <h2 className="text-2xl sm:text-3xl font-extrabold text-black mt-10 sm:mt-14 mb-5">{children}</h2>,
-    h3: ({ children }) => <h3 className="text-xl sm:text-2xl font-extrabold text-black mt-8 sm:mt-12 mb-4">{children}</h3>,
-    p: ({ children }) => <p className="text-lg md:text-xl leading-relaxed text-gray-800 mb-6">{children}</p>,
-    ul: ({ children }) => <ul className="list-disc list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800">{children}</ul>,
-    ol: ({ children }) => <ol className="list-decimal list-outside pl-5 mb-6 space-y-2 text-lg md:text-xl text-gray-800">{children}</ol>,
-    li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-    blockquote: ({ children }) => <blockquote className="my-8 border-l-4 border-yellow-400 pl-4 sm:pl-6 italic text-gray-700 text-lg md:text-xl">{children}</blockquote>,
-    a: ({ href, children }) => <a href={href} className="text-black font-medium underline hover:text-gray-700 transition-colors break-words">{children}</a>,
-    
-    img: ({ src, alt }) => (
-      <figure className="my-8 sm:my-10">
-        <img
-          src={src.startsWith('/') ? src : `/${src}`}
-          alt={alt}
-          className="rounded-sm w-full h-auto"
-          loading="lazy"
-        />
-        {alt && (
-          <figcaption className="text-center text-sm text-gray-500 mt-3">{alt}</figcaption>
-        )}
-      </figure>
-    ),
-
-    code: ({ node, inline, className, children, ...props }) => {
-      const match = /language-(\w+)/.exec(className || '');
-      return !inline && match ? (
-        <div className="my-6 sm:my-8 overflow-x-auto">
-          <SyntaxHighlighter
-            style={vscDarkPlus}
-            language={match[1]}
-            PreTag="div"
-            className="rounded-sm"
-            customStyle={{
-              fontSize: '14px',
-              lineHeight: '1.4'
-            }}
-            {...props}
-          >
-            {String(children).replace(/\n$/, '')}
-          </SyntaxHighlighter>
-        </div>
-      ) : (
-        <code className="bg-yellow-200 text-yellow-900 font-mono text-[0.9em] px-1.5 py-0.5 rounded-md break-words" {...props}>
-          {children}
-        </code>
-      );
+    h2: ({ node, children, ...props }) => <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-text-primary mt-12 mb-6 scroll-mt-28 border-b-2 border-border/20 pb-3" {...props}>{children}</h2>,
+    h3: ({ node, children, ...props }) => <h3 className="text-xl sm:text-2xl font-heading font-extrabold text-text-primary mt-10 mb-5 scroll-mt-28" {...props}>{children}</h3>,
+    p: (props) => <p className="text-lg leading-relaxed text-text-secondary mb-6" {...props} />,
+    ul: (props) => <ul className="list-disc list-outside pl-6 mb-6 space-y-3 text-lg text-text-secondary" {...props} />,
+    ol: (props) => <ol className="list-decimal list-outside pl-6 mb-6 space-y-3 text-lg text-text-secondary" {...props} />,
+    li: (props) => <li className="leading-relaxed" {...props} />,
+    a: ({ children, ...props }) => <a className="text-accent font-medium underline hover:opacity-80 transition-opacity break-words" {...props}>{children}</a>,
+    blockquote: ({ node, children, ...props }) => {
+        const pElement = Array.isArray(children) ? children[0] : children;
+        const text = pElement?.props?.children;
+        if (typeof text === 'string') {
+            const calloutMatch = text.match(/^\s*\[!(NOTE|TIP|WARNING)\]\s*/);
+            if (calloutMatch) {
+                const type = calloutMatch[1];
+                const newText = text.replace(calloutMatch[0], '');
+                const childrenWithoutSyntax = React.cloneElement(pElement, { children: newText });
+                return <Callout type={type}>{childrenWithoutSyntax}</Callout>;
+            }
+        }
+        return <blockquote className="my-8 border-l-4 border-accent pl-5 italic text-text-secondary text-lg" {...props}>{children}</blockquote>;
     },
-    
-    table: ({ children }) => (
-      <div className="my-8 w-full overflow-x-auto rounded-lg border border-gray-300">
-        <table className="w-full min-w-full border-collapse text-base">{children}</table>
-      </div>
-    ),
-    thead: ({ children }) => <thead>{children}</thead>,
-    th: ({ children }) => (
-      <th className="bg-black text-white text-left font-bold p-2 sm:p-3 lg:p-4 whitespace-nowrap border-r-2 border-white last:border-r-0">
-        {children}
-      </th>
-    ),
-    tbody: ({ children }) => <tbody className="bg-white">{children}</tbody>,
-    tr: ({ children }) => <tr className="border-b-2 border-white last:border-b-0">{children}</tr>,
-    td: ({ children }) => <td className="p-3 sm:p-2 bg-gray-100 text-gray-900 border-r-2 border-white last:border-r-0 first:bg-yellow-400 first:text-black">{children}</td>,
-  };
+    code: ({ node, inline, className, children, ...props }) => {
+        const match = /language-(\w+)/.exec(className || '');
+        return !inline && match ? (
+            <div className="my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontFamily: 'var(--font-mono)', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>
+        ) : (
+            <code className="bg-surface text-text-primary font-mono text-[0.9em] px-1.5 py-1 border border-border/20 rounded-md" {...props}>{children}</code>
+        );
+    },
+    img: (props) => <img className="my-8 rounded-lg border-2 border-border" {...props} alt={props.alt || ''} />,
+  }), []);
 
-  // --- Render Logic ---
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
-      </div>
-    );
-  }
+  if (isLoading) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-border"></div>
+    </div>
+  );
 
-  if (!post) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-black px-4 text-center">
-        <h1 className="text-3xl font-bold mb-4">Post not found</h1>
-        <Link to="/blog" className="flex items-center text-black hover:underline">
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          Back to Blog
+  if (!post) return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center text-center px-4">
+        <h1 className="text-3xl font-heading font-bold mb-4">Post not found</h1>
+        <Link to="/blog" className="flex items-center text-text-primary hover:text-accent">
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Blog
         </Link>
-      </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="bg-white text-black font-sans">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-12 sm:pb-20">
+    <div className="bg-background font-body text-text-primary">
+      <ReadingProgressBar />
+      <div className="container mx-auto px-4 pt-28 sm:pt-32 pb-16">
+        <main className="max-w-3xl mx-auto">
+            <header className="text-center mb-10">
+                {post.tags && (
+                    <p className="text-sm font-bold text-accent uppercase tracking-wider mb-4">
+                        {post.tags.join(' / ')}
+                    </p>
+                )}
+                <h1 className="text-4xl md:text-5xl font-extrabold font-heading tracking-tight text-text-primary mb-5 leading-tight">
+                    {post.title}
+                </h1>
+                <p className="text-lg text-text-secondary">
+                    {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    <span className="mx-2 text-border/50">•</span>
+                    {readingTime} min read
+                </p>
+            </header>
 
-        {/* --- Post Header --- */}
-        <header className="max-w-3xl mx-auto text-left mb-8 sm:mb-12">
-          {post.tags && (
-            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-              {post.tags.map((tag, index) => (
-                <span key={tag}>
-                  {tag}
-                  {index < post.tags.length - 1 && <span className="mx-2">/</span>}
-                </span>
-              ))}
+            {post.coverImage && (
+                <figure className="mb-12">
+                    <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="w-full h-auto object-cover aspect-video bg-surface"
+                    />
+                </figure>
+            )}
+
+            <ReactMarkdown
+                components={MarkdownComponents}
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeRaw, rehypeKatex]}
+            >
+                {content}
+            </ReactMarkdown>
+
+            <AuthorBio />
+
+            <ReadNext currentSlug={slug} currentTags={post?.tags} />
+
+            <div className="mt-16 pt-10 border-t border-border/20 flex justify-center">
+                <Link
+                    to="/blog"
+                    className="inline-flex items-center justify-center bg-surface text-text-primary px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)]"
+                >
+                    <ArrowLeft className="w-5 h-5 mr-2" />
+                    Back to All Articles
+                </Link>
             </div>
-          )}
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-black mb-5 leading-tight">
-            {post.title}
-          </h1>
-          <p className="text-lg text-gray-700">
-            {formatDate(post.date)}
-            {post.author && ` – ${post.author}`}
-          </p>
-        </header>
-
-        {/* --- Main Image --- */}
-        {post.coverImage && (
-          <figure className="mb-8 sm:mb-12 rounded-sm overflow-hidden max-w-3xl mx-auto">
-            <img src={post.coverImage} alt={post.title} className="w-full h-auto max-h-100 object-cover" />
-          </figure>
-        )}
-
-        {/* --- Post Content --- */}
-        <article className="max-w-3xl mx-auto">
-          <ReactMarkdown
-            components={MarkdownComponents}
-            remarkPlugins={[remarkGfm, remarkMath]}
-            rehypePlugins={[rehypeRaw, rehypeKatex]}
-          >
-            {content}
-          </ReactMarkdown>
-        </article>
-
-        {/* --- Bottom Navigation with Hard Shadow Button --- */}
-        <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-gray-200 flex justify-center">
-          <Link
-            to="/blog"
-            className="group relative inline-block text-black text-base"
-          >
-            <span className="relative z-10 flex items-center justify-center border-2 border-black bg-white px-6 py-3 font-bold transition-transform duration-150 ease-in-out group-hover:translate-x-0 group-hover:translate-y-0 -translate-x-1 -translate-y-1">
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Back to all articles
-            </span>
-            <span className="absolute inset-0 border-2 border-black bg-black"></span>
-          </Link>
-        </div>
+        </main>
       </div>
     </div>
   );

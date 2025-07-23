@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTrophy, FaVideo, FaCode } from 'react-icons/fa';
 
-
 const TimelineBanner = () => {
   const tickerText = "CAREER AND LEARNING MILESTONES • ";
   return (
     <div>
-      <div className="bg-black text-yellow-400 py-3 w-full overflow-hidden">
+      <div className="bg-accent-text text-accent py-3 w-full overflow-hidden">
         <div className="flex animate-marquee whitespace-nowrap">
           <span className="text-base font-semibold mx-4">{tickerText.repeat(20)}</span>
           <span className="text-base font-semibold mx-4" aria-hidden="true">{tickerText.repeat(20)}</span>
@@ -15,7 +14,6 @@ const TimelineBanner = () => {
     </div>
   );
 };
-
 
 const milestones = [
   {
@@ -55,7 +53,6 @@ const milestones = [
   }
 ];
 
-// --- Main Exported Component ---
 const MilestoneTimeline = () => {
   const [visibleItems, setVisibleItems] = useState(new Set());
   const [animationProgress, setAnimationProgress] = useState(0);
@@ -94,17 +91,18 @@ const MilestoneTimeline = () => {
   }, []);
 
   return (
-    <section 
+    <section
+      id="milestones-section"
       ref={timelineRef}
-      className="relative w-full bg-yellow-400 text-black font-sans overflow-hidden"
+      className="relative w-full bg-accent text-accent-text font-sans overflow-hidden"
     >
       <TimelineBanner />
 
       <div className="relative py-24 md:py-32">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 md:transform md:-translate-x-1/2">
-            <div 
-              className="h-full bg-black"
+            <div
+              className="h-full bg-accent-text"
               style={{
                 transform: `scaleY(${animationProgress})`,
                 transformOrigin: 'top',
@@ -125,13 +123,13 @@ const MilestoneTimeline = () => {
                 className={`relative flex items-center mb-12`}
                 style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.6s ease-out', transitionDelay: `${index * 150}ms` }}
               >
-                <div 
-                  className={`absolute left-4 md:left-1/2 w-8 h-8 bg-black border-2 border-yellow-400
+                <div
+                  className={`absolute left-4 md:left-1/2 w-8 h-8 bg-accent-text border-2 border-accent
                             flex items-center justify-center z-10 
                             transform -translate-x-1/2 transition-transform duration-500 ease-out`}
                   style={{ transform: `translateX(-50%) scale(${isVisible ? 1 : 0})` }}
                 >
-                  <Icon className="w-4 h-4 text-yellow-400" />
+                  <Icon className="w-4 h-4 text-accent" />
                 </div>
 
                 <div
@@ -143,16 +141,13 @@ const MilestoneTimeline = () => {
                     transitionDelay: `${100 + index * 150}ms`
                   }}
                 >
-                  <div 
-                    className="bg-white border-2 border-black p-6 
-                               shadow-[8px_8px_0px_#000] hover:shadow-none 
-                               hover:translate-x-2 hover:translate-y-2 
-                               transition-all duration-200 ease-in-out"
-                  >
-                    <p className="text-sm font-bold text-gray-700 mb-1">{milestone.date}</p>
-                    <h3 className="text-xl font-extrabold text-black mb-2">{milestone.title}</h3>
-                    <p className="text-gray-600 mb-4">{milestone.description}</p>
-                    <span className="inline-block px-3 py-1 text-xs font-bold bg-black text-yellow-400 border border-yellow-400">
+                  <div className="block bg-surface text-text-primary border-2 border-border p-6 transition-all duration-200 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow-accent-bg)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
+                    <p className="text-sm font-bold text-text-secondary mb-1">{milestone.date}</p>
+                    <h3 className="text-xl font-extrabold text-text-primary mb-2">{milestone.title}</h3>
+                    <p className="text-text-secondary/90 mb-4">{milestone.description}</p>
+                    <span className="inline-block px-3 py-1 text-xs font-bold
+                                   bg-accent-text text-accent
+                                   dark:bg-transparent dark:text-accent dark:border dark:border-accent">
                       {milestone.category}
                     </span>
                   </div>

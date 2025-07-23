@@ -3,7 +3,7 @@ title: "The Anatomy of a Professional Machine Learning Project: A Guide to Struc
 date: "2025-07-10"
 excerpt: "A comprehensive guide to understanding how real-world machine learning projects are structured"
 coverImage: "/assets/blog_assets/project_structures.jpg"
-tags: ["Deep Learning", "Python", "Neural Networks", "PlantVision", "Project"]
+tags: ["Deep Learning", "Python", "Neural Networks", "PlantVision", "Projects"]
 readingTime: 30
 ---
 # Introduction: From Fragile Scripts to Robust Systems
@@ -142,7 +142,7 @@ might introduce a subtle and dangerous problem as the project grows.
 
 - What if we `pip install` a library that also has a module named `data.py` or `utils.py`. When we write
 `from data import ...`, which data module is Python going to import?
-``### The Solution: The `src/PackageName` Layout``
+### ``The Solution: The `src/PackageName` Layout``
 By creating a dedicated package directory inside src, we solve the problem cleanly
 ```python
 project_root/
