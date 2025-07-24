@@ -10,8 +10,8 @@
   --font-mono: 'Fira Code', monospace;
 
   /* --- Light Mode Palette --- */
-  --color-background-rgb: 255, 255, 255;
-  --color-background: 255 255 255;
+  --color-accent: 243 239 224;        /* Pale Cream Accent: #F3EFE0 */
+  --color-accent: 243 239 224;        /* Pale Cream Accent: #F3EFE0 */
   --color-surface: 249 250 251;
   --color-text-primary: 0 0 0;
   --color-text-secondary: 75 85 99;
@@ -22,20 +22,21 @@
   --color-shadow-accent-bg: 0 0 0;
 }
 
+
 html.dark {
-  /* --- "Pure Black" Dark Palette --- */
   --color-background-rgb: 0, 0, 0;
-  --color-background: 0 0 0;
-  --color-surface: 10 10 10;
-  --color-text-primary: 245 245 245;
-  --color-text-secondary: 161 161 170;
-  --color-accent: 39 39 42;
-  --color-accent-text: 245 245 245;
-  --color-border: 63 63 70;
-  --color-shadow: 63 63 70;
-  --color-shadow-accent-bg: 10 10 10;
+  --color-background: 0 0 0;          /* True Black: #000000 */
+  --color-surface: 10 10 10;         /* Charcoal: #0A0A0A */
+  --color-text-primary: 245 245 245;    /* Bright White: #F5F5F5 */
+  --color-text-secondary: 161 161 170;  /* Light Gray: #A1A1AA */
+  --color-accent: 243 239 224;        /* Pale Cream Accent: #F3EFE0 */
+  --color-accent-text: 0 0 0;          /* Pure Black for Contrast */
+  --color-border: 63 63 70;           /* Mid Zinc (for visible borders): #3F3F46 */
+  --color-shadow: 63 63 70;           /* Mid Zinc (for visible shadows): #3F3F46 */
+  --color-shadow-accent-bg: 10 10 10;/* Matches Surface */
 }
-/* --- Global Styles (Unchanged) --- */
+
+/* --- Global Styles --- */
 html {
   scroll-behavior: auto !important;
 }
@@ -49,7 +50,7 @@ body {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-/* --- Utility Animations (Unchanged) --- */
+/* --- Utility Animations --- */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
@@ -58,8 +59,17 @@ body {
   animation: marquee 25s linear infinite;
 }
 
-/* For hash link scrolling (Unchanged) */
+/* For hash link scrolling*/
 #about-section,
 #milestones-section {
   scroll-margin-top: 100px;
 }
+
+/* Animation Delay Utilities*/
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+.animation-delay-1000 { animation-delay: 1s; }
+.animation-delay-1200 { animation-delay: 1.2s; }
