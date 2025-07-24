@@ -5,10 +5,12 @@
 :root {
   /* --- Font Variables --- */
   --font-heading: 'Roboto Slab', serif;
+  --font-secondary: 'Sora', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
   /* --- Light Mode Palette --- */
+  --color-background-rgb: 255, 255, 255;
   --color-background: 255 255 255;
   --color-surface: 249 250 251;
   --color-text-primary: 0 0 0;
@@ -21,19 +23,19 @@
 }
 
 html.dark {
-  /* --- Dark Mode Palette --- */
-  --color-background: 18 18 18;
-  --color-surface: 30 30 30;
-  --color-text-primary: 224 224 224;
-  --color-text-secondary: 158 158 158;
-  --color-accent: 224 196 123;
-  --color-accent-text: 18 18 18;
-  --color-border: 224 196 123;
-  --color-shadow: 224 196 123;
-  --color-shadow-accent-bg: 30 30 30; /* #1E1E1E */
+  /* --- "Pure Black" Dark Palette --- */
+  --color-background-rgb: 0, 0, 0;
+  --color-background: 0 0 0;
+  --color-surface: 10 10 10;
+  --color-text-primary: 245 245 245;
+  --color-text-secondary: 161 161 170;
+  --color-accent: 39 39 42;
+  --color-accent-text: 245 245 245;
+  --color-border: 63 63 70;
+  --color-shadow: 63 63 70;
+  --color-shadow-accent-bg: 10 10 10;
 }
-
-/* --- Global Styles --- */
+/* --- Global Styles (Unchanged) --- */
 html {
   scroll-behavior: auto !important;
 }
@@ -47,7 +49,7 @@ body {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-/* --- Utility Animations --- */
+/* --- Utility Animations (Unchanged) --- */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
@@ -56,7 +58,7 @@ body {
   animation: marquee 25s linear infinite;
 }
 
-/* For hash link scrolling */
+/* For hash link scrolling (Unchanged) */
 #about-section,
 #milestones-section {
   scroll-margin-top: 100px;

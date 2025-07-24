@@ -19,8 +19,40 @@ module.exports = {
       },
       fontFamily: {
         heading: ['var(--font-heading)', 'serif'],
+        secondary: ['var(--font-secondary)', 'sans-serif'], 
         body: ['var(--font-body)', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
+      },
+      keyframes: {
+        'grid-move': {
+          '0%': { transform: 'translate(0, 0)' },
+          '100%': { transform: 'translate(30px, 30px)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+          '25%': { transform: 'translateY(-10px) rotate(2deg)' },
+          '50%': { transform: 'translateY(-5px) rotate(-2deg)' },
+          '75%': { transform: 'translateY(-15px) rotate(1deg)' },
+        },
+        'fade-in-up': {
+          from: { opacity: '0', transform: 'translateY(30px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'fade-in-left': {
+          from: { opacity: '0', transform: 'translateX(30px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+      },
+      animation: {
+        'grid-move': 'grid-move 20s linear infinite',
+        float: 'float 8s ease-in-out infinite',
+        'fade-in-up': 'fade-in-up 0.8s ease-out forwards',
+        'fade-in-left': 'fade-in-left 0.8s ease-out forwards',
+        'fade-in': 'fade-in 0.8s ease-out forwards',
       },
       typography: (theme) => ({
         DEFAULT: {
