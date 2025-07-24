@@ -90,7 +90,6 @@ const AboutPreviewSection = () => {
           </InfoCard>
           <InfoCard className="lg:col-span-3">
              <div className="text-center">
-                <p className="mb-6 max-w-2xl mx-auto text-text-secondary"> Download and take a look at my resume or CV. </p>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-4">
                   <div className="text-center">
                     <h4 className="font-heading font-bold text-lg mb-3 text-text-primary dark:text-accent">Resume</h4>
