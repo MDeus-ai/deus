@@ -258,7 +258,7 @@ setup(
 # '' represents the 'package root', meaning that the root for all packages('') is mapped to the src/ dir
 ```
 
-### `pip install -e`
+### `pip install -e .`
 When ran inside the terminal,
 - `pip` finds setup.py in the current directory
 - It executes the `setup()` function
