@@ -37,11 +37,12 @@ const InfoCard = ({ title, children, className = '' }) => (
 
 const AboutPreviewSection = () => {
   const skills = [
-    { name: 'Statistical Analysis', proficiency: 60 },
-    { name: 'Machine Learning', proficiency: 55 },
-    { name: 'Deep Learning', proficiency: 50 },
     { name: 'Data Visualization', proficiency: 65 },
+    { name: 'Statistical Analysis', proficiency: 60 },
     { name: 'Python', proficiency: 60 },
+    { name: 'Machine Learning', proficiency: 55 },
+    { name: 'MLOps', proficiency: 20 },
+    { name: 'SQL & PostgreSQL', proficiency: 25 },
   ];
 
   return (

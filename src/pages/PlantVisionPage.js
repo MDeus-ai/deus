@@ -29,7 +29,7 @@ const projectData = {
   "plantvision-cv001dd": {
     id: "plantvision-cv001dd",
     title: "PlantVision Disease Detection",
-    description: "A state-of-the-art computer vision system for accurately identifying 38 classes of plant diseases from leaf imagery, built for real-world deployment on web and mobile.",
+    description: "An end-to-end deep learning system for detecting and classifying different kinds of plant diseases based on their leaves",
     image: "/assets/images/project/plantvision.jpg",
     github: "https://github.com/MDeus-ai/PlantVision",
     tags: ["PyTorch", "Computer Vision", "FastAPI", "Docker", "Flutter", "MLOps"],
@@ -62,7 +62,7 @@ const projectData = {
 
 Crop diseases are a primary threat to global food security, causing an average of 40% yield loss annually. For millions of small-scale farmers and home gardeners, early and accurate disease identification is the key to effective management, but access to expert agricultural advice is often limited and expensive.
 
-**PlantVision** addresses this challenge by democratizing plant pathology. It uses a highly accurate and efficient deep learning model to provide instant disease diagnosis from a simple photograph of a plant leaf. The system is designed for accessibility, with an offline-first mobile app for fieldwork and a scalable API for broader integration.
+**PlantVision** addresses this challenge by democratizing plant pathology. It uses a highly accurate and efficient deep learning model to provide instant disease diagnosis from a simple photograph of a plant leaf. The system is designed for accessibility, with a offline-first mobile app for fieldwork and a scalable API for broader integration.
 
 ---
 
@@ -134,21 +134,64 @@ Where:
         title: 'Project Structure',
         type: SectionTypes.PROJECT_STRUCTURE,
         content: `
-plantvision/
-├── data/                    # ⛔ Not in Git. Use DVC or git-lfs.
-├── src/                     # ✅ Source code
-│   ├── configs/             # 📄 YAML configs (no hardcoded values)
-│   ├── data/                # 📦 Data loading & augmentations
-│   ├── models/              # 🧠 Model definitions (e.g., EfficientNet)
-│   ├── train.py             # 🚂 Launch training with MLflow
-│   ├── evaluate.py          # 📊 Validation & metrics generation
-│   ├── serve/               # 🌐 FastAPI / TorchServe entrypoint
-│   └── utils.py             # 🛠 Logging, reproducibility, etc.
-├── docker/                  # 🐳 Training + inference Dockerfiles
-├── mlruns/                  # 🧪 MLflow experiment tracking output
-├── Dockerfile               # 🔧 Main container specification
-├── requirements.txt         # 📦 Python dependencies
-└── README.md                # 📘 Project documentation
+PlantVision_cv001dd/
+├── configs/                  # The Recipe Book: All experiment parameters.
+│   ├── data_config.yaml
+│   ├── model_config.yaml
+│   └── train_config.yaml
+├── data/                     # All project data.
+│   ├── processed/            # Cleaned, transformed data for training.
+│   ├── raw/                  # Original, immutable data.
+│   └── README.md             # README containing information about the datasets
+├── logo/               
+│   └── logo.png
+├── mlruns/                   # MLflow experimentations
+├── notebooks/                # The Lab Notebook: For exploration and analysis.
+├── outputs/                  # Outputs from the system
+│   ├── best_model.pth
+│   ├── class_names.json
+│   ├── classification_report.txt
+│   └── confusion_matrix.png
+│   
+├── scripts/               
+│   └── run_docker.sh
+├── src/                      # All PlantVision source code.
+│   ├── PlantVision/          # The core installable package for our project.
+│   │   ├── data/
+│   │   │   ├── __init__.py
+│   │   │   ├── loader.py
+│   │   │   └── transforms.py
+│   │   ├── models/
+│   │   │   └── efficientnet/
+│   │   │       ├── __init__.py
+│   │   │       └── EfficientNet.py 
+│   │   ├── __init__.py
+│   │   ├── evaluate.py       # Entrypoint for training.
+│   │   ├── paths.py          # Entrypoint for evaluation.
+│   │   ├── predict.py        # Entrypoint for evaluation.
+│   │   ├── train.py
+│       └── utils.py              
+├── tests/                    # Unit tests to verify if all components work as intended
+│   ├── data/
+│   │   ├── __init__.py
+│   │   ├── test_loader.py
+│   │   └── test_transforms.py
+│   ├── models/
+│   │   └── efficientnet/
+│   │   │       ├── __init__.py
+│   │   │       └── test_efficientnet.py
+│   │   ├── __init__.py
+│   │   ├── conftest.py          # Creates a simple temporary dummy project structure similar to this
+│   │   ├── test_evaluate.py       
+│   │   ├── test_predict.py     
+│   │   └── test_train.py
+├── .dockerignore             # Tells Docker what to ignore.
+├── Dockerfile                # The Shipping Container: For reproducibility.
+├── LICENSE
+├── pytest.ini                # Suppress warnings during unit tests
+├── README.md                 # Project explanation.
+├── requirements.txt          # PlantVision Project dependencies.
+└── setup.py                  # Build script for the project
 `
       },
       {
@@ -190,7 +233,7 @@ const MarkdownComponents = {
     return !inline && match ? (<div className="my-6 sm:my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>) : (<code className="bg-accent/20 text-accent font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>);
   },
   table: ({ children, ...props }) => <div className="my-8 w-full overflow-x-auto border-2 border-border"><table className="w-full min-w-full border-collapse text-base" {...props}>{children}</table></div>,
-  thead: ({ children, ...props }) => <thead className="bg-text-primary text-background" {...props}>{children}</thead>,
+  thead: ({ children, ...props }) => <thead className="bg-gray-900 text-white dark:bg-text-primary dark:text-background" {...props}>{children}</thead>,
   th: ({ children, ...props }) => <th className="text-left font-bold p-3 border-r-2 border-background/20 dark:border-background/20 last:border-r-0" {...props}>{children}</th>,
   tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
   tr: ({ children, ...props }) => <tr className="border-b-2 border-border/10 last:border-b-0" {...props}>{children}</tr>,
@@ -420,27 +463,91 @@ const ProjectDetailPage = () => {
 
   return (
     <div className="bg-background text-text-primary font-body">
-      <header className="bg-surface text-text-primary">
-        <div className="container mx-auto px-4 pt-24 pb-16 lg:pt-28 lg:pb-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-4 text-text-primary dark:text-accent font-heading">{project.title}</h1>
-                <p className="text-lg md:text-xl text-text-secondary mb-6 max-w-lg">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                    {project.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1 bg-text-primary text-background dark:bg-accent dark:text-accent-text rounded-full text-xs font-bold">{tag}</span>
-                    ))}
-                </div>
-                <a href={project.github} target="_blank" rel="noopener noreferrer"
-                   className="inline-flex items-center justify-center gap-2 bg-text-primary text-background px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)]">
-                   <FaGithub className="inline-block mr-2" /> View on GitHub
+      <header className="bg-surface text-text-primary border-b border-border/20">
+        <div className="container mx-auto px-4 pt-32 pb-16 lg:pt-40 lg:pb-20">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter text-text-primary font-heading leading-tight">
+                {project.title}
+              </h1>
+              <p className="text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 rounded-full text-sm font-medium dark:bg-accent/10 dark:text-accent dark:border-accent/20"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-accent text-accent-text px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)]"
+                >
+                  <FaGithub className="w-5 h-5" />
+                  View on GitHub
                 </a>
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-surface text-text-primary px-6 py-3 border-2 border-border font-bold transition-all duration-200 hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5 active:translate-x-0 active:translate-y-0 shadow-[6px_6px_0px_theme(colors.shadow)] hover:bg-border/10"
+                  >
+                    <FaExternalLinkAlt className="w-4 h-4" />
+                    Live Demo
+                  </a>
+                )}
               </div>
-              <div className="hidden lg:block">
-                  <div className="bg-surface border-2 border-border transition-all duration-300 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
-                      <img src={project.image} alt={`${project.title} preview`} className="w-full h-full object-cover"/>
+            </div>
+
+            {/* FIXED IMAGE SECTION */}
+            <div className="order-first lg:order-last mb-8 lg:mb-0">
+              <div className="relative max-w-md mx-auto lg:max-w-none lg:ml-[-2rem]">
+                {/* Background decoration */}
+                <div className="absolute inset-0 bg-accent/5 -rotate-6 rounded-lg border-4 border-accent/20"></div>
+
+                {/* Main image container */}
+                <div className="relative bg-surface border-2 border-border transition-all duration-300 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0 rounded-lg overflow-hidden">
+                  {/* Try to load the image */}
+                  <img
+                    src={project.image}
+                    alt={`${project.title} preview`}
+                    className="w-full h-80 lg:h-96 object-cover"
+                    loading="eager"
+                    onError={(e) => {
+                      // Hide broken image and show fallback
+                      e.target.style.display = 'none';
+                      e.target.nextElementSibling.style.display = 'flex';
+                    }}
+                  />
+
+                  {/* Fallback content (hidden by default, shown when image fails) */}
+                  <div
+                    className="w-full h-80 lg:h-96 bg-gradient-to-br from-accent/20 to-accent/5 items-center justify-center"
+                    style={{ display: 'none' }}
+                  >
+                    <div className="text-center p-8">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-accent/20 rounded-full flex items-center justify-center">
+                        <FaFolder className="w-8 h-8 text-accent" />
+                      </div>
+                      <h3 className="text-xl font-bold text-text-primary mb-2 font-heading">
+                        {project.title}
+                      </h3>
+                      <p className="text-sm text-text-secondary">
+                        Project Preview
+                      </p>
+                    </div>
                   </div>
+                </div>
               </div>
+            </div>
           </div>
         </div>
       </header>

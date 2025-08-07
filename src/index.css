@@ -10,9 +10,8 @@
   --font-mono: 'Fira Code', monospace;
 
   /* --- Light Mode Palette --- */
-  --color-accent: 243 239 224;        /* Pale Cream Accent: #F3EFE0 */
-  --color-accent: 243 239 224;        /* Pale Cream Accent: #F3EFE0 */
-  --color-surface: 249 250 251;
+  --color-background: 243 239 224;
+  --color-surface: 243 239 224;
   --color-text-primary: 0 0 0;
   --color-text-secondary: 75 85 99;
   --color-accent: 250 204 21;
