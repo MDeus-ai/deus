@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { FaGithub, FaExclamationTriangle, FaLightbulb, FaFolder, FaArrowLeft, FaExternalLinkAlt } from 'react-icons/fa';
 import { Search, ChevronDown } from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ import 'katex/dist/katex.min.css';
 
 // ===================================================================================
 //
-//  START OF CONFIGURATION & CONTENT AREA
+//  START OF CONFIGURATION & CONTENT AREA (IMPROVED)
 //
 // ===================================================================================
 
@@ -170,7 +170,7 @@ PlantVision_cv001dd/
 │   │   ├── paths.py          # Entrypoint for evaluation.
 │   │   ├── predict.py        # Entrypoint for evaluation.
 │   │   ├── train.py
-│       └── utils.py              
+│   │   └── utils.py              
 ├── tests/                    # Unit tests to verify if all components work as intended
 │   ├── data/
 │   │   ├── __init__.py
@@ -219,9 +219,21 @@ PlantVision_cv001dd/
 //
 // ===================================================================================
 
+// -----------------------------
+// Markdown custom renderers
+// -----------------------------
 const MarkdownComponents = {
-  h2: ({ node, children, ...props }) => <h2 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-2xl sm:text-3xl font-extrabold text-text-primary mt-10 sm:mt-14 mb-5 scroll-mt-24 font-heading" {...props}>{children}</h2>,
-  h3: ({ node, children, ...props }) => <h3 id={node.children[0].value.toLowerCase().replace(/\s+/g, '-')} className="text-xl sm:text-2xl font-extrabold text-text-primary mt-8 sm:mt-12 mb-4 scroll-mt-24 font-heading" {...props}>{children}</h3>,
+  h2: ({ node, children, ...props }) => {
+    // Some headings may include inline nodes; build a safe id
+    const text = node.children ? node.children.map(c => c.value || '').join('') : '';
+    const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+    return <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-text-primary mt-10 sm:mt-14 mb-5 scroll-mt-24 font-heading" {...props}>{children}</h2>;
+  },
+  h3: ({ node, children, ...props }) => {
+    const text = node.children ? node.children.map(c => c.value || '').join('') : '';
+    const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+    return <h3 id={id} className="text-xl sm:text-2xl font-extrabold text-text-primary mt-8 sm:mt-12 mb-4 scroll-mt-24 font-heading" {...props}>{children}</h3>;
+  },
   p: ({ children, ...props }) => <p className="text-lg leading-relaxed text-text-secondary mb-6" {...props}>{children}</p>,
   ul: ({ children, ...props }) => <ul className="list-disc list-outside pl-5 mb-6 space-y-2 text-lg text-text-secondary" {...props}>{children}</ul>,
   ol: ({ children, ...props }) => <ol className="list-decimal list-outside pl-5 mb-6 space-y-2 text-lg text-text-secondary" {...props}>{children}</ol>,
@@ -230,18 +242,33 @@ const MarkdownComponents = {
   a: ({ children, ...props }) => <a className="text-accent font-medium underline hover:opacity-80 transition-opacity break-words" {...props}>{children}</a>,
   code: ({ node, inline, className, children, ...props }) => {
     const match = /language-(\w+)/.exec(className || '');
-    return !inline && match ? (<div className="my-6 sm:my-8"><SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter></div>) : (<code className="bg-accent/20 text-accent font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>);
+    return !inline && match ? (
+      <div className="my-6 sm:my-8">
+        <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: '1.4', margin: 0 }} {...props}>
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      </div>
+    ) : (
+      <code className="bg-accent/20 text-accent font-mono text-[0.9em] px-1.5 py-0.5 rounded-sm break-words" {...props}>{children}</code>
+    );
   },
   table: ({ children, ...props }) => <div className="my-8 w-full overflow-x-auto border-2 border-border"><table className="w-full min-w-full border-collapse text-base" {...props}>{children}</table></div>,
   thead: ({ children, ...props }) => <thead className="bg-gray-900 text-white dark:bg-text-primary dark:text-background" {...props}>{children}</thead>,
   th: ({ children, ...props }) => <th className="text-left font-bold p-3 border-r-2 border-background/20 dark:border-background/20 last:border-r-0" {...props}>{children}</th>,
   tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
   tr: ({ children, ...props }) => <tr className="border-b-2 border-border/10 last:border-b-0" {...props}>{children}</tr>,
-  td: ({ children, ...props }) => <td className="p-3 border-r-2 border-border/10 last:border-r-0 text-text-secondary" {...props}><div dangerouslySetInnerHTML={{__html: children}}></div></td>,
+  td: ({ children, ...props }) => <td className="p-3 border-r-2 border-border/10 last:border-r-0 text-text-secondary" {...props}><div>{children}</div></td>,
 };
 
-const DocumentationSection = ({ content }) => <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeRaw, rehypeKatex]}>{content}</ReactMarkdown>;
+const DocumentationSection = ({ content }) => (
+  <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeRaw, rehypeKatex]}>
+    {content}
+  </ReactMarkdown>
+);
 
+// -----------------------------
+// Metrics Section
+// -----------------------------
 const MetricsSection = ({ data }) => (
   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
     <div className="lg:col-span-2">
@@ -271,6 +298,9 @@ const MetricsSection = ({ data }) => (
   </div>
 );
 
+// -----------------------------
+// Structure Section
+// -----------------------------
 const StructureSection = ({ content }) => (
   <div className="border-2 border-border overflow-hidden">
     <div className="bg-text-primary text-background p-3 border-b-2 border-border flex items-center gap-3">
@@ -282,14 +312,21 @@ const StructureSection = ({ content }) => (
   </div>
 );
 
-const RoadmapSection = ({ challenges, futurePlans }) => (
+// -----------------------------
+// Roadmap Section (render items as markdown to keep formatting)
+// -----------------------------
+const RoadmapSection = ({ challenges = [], futurePlans = [] }) => (
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <div className="bg-surface border-2 border-border p-6 md:p-8 transition-all duration-200 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
       <h3 className="text-2xl font-extrabold text-text-primary mb-4 flex items-center gap-2 font-heading">
         <FaExclamationTriangle className="text-yellow-500" /> Challenges
       </h3>
       <ul className="space-y-3 text-lg list-disc list-outside pl-5 text-text-secondary">
-        {challenges.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item }} />)}
+        {challenges.map((item, i) => (
+          <li key={i} className="leading-relaxed">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{item}</ReactMarkdown>
+          </li>
+        ))}
       </ul>
     </div>
     <div className="bg-surface border-2 border-border p-6 md:p-8 transition-all duration-200 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0">
@@ -297,76 +334,95 @@ const RoadmapSection = ({ challenges, futurePlans }) => (
         <FaLightbulb className="text-blue-500" /> Future Work
       </h3>
       <ul className="space-y-3 text-lg list-disc list-outside pl-5 text-text-secondary">
-        {futurePlans.map((item, i) => <li key={i} dangerouslySetInnerHTML={{ __html: item }} />)}
+        {futurePlans.map((item, i) => (
+          <li key={i} className="leading-relaxed">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{item}</ReactMarkdown>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
 );
 
+// -----------------------------
+// Sidebar (memoized and enhanced)
+// -----------------------------
 const ProjectSidebar = ({ project, activeId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [openSections, setOpenSections] = useState({});
-
-  const toggleSection = (id) => {
-    setOpenSections(prev => ({...prev, [id]: !prev[id]}));
-  };
-
-  const handleNavClick = (e, hash) => {
-    e.preventDefault();
-    const element = document.getElementById(hash);
-    if (element) {
-        window.history.pushState(null, null, `#${hash}`);
-        const yOffset = -100;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
-
   const enhancedSidebar = useMemo(() => {
+    // improved regex to match ATX headings like "## Title" or "### Title"
+    const headingRegex = /^(?:\s{0,3})(#{2,3})\s+(.*)$/gm;
     return project.sidebar.map(category => ({
       ...category,
       links: category.links.map(link => {
         if (!link.subheadings) return link;
         const section = project.sections.find(s => s.id === link.id);
-        if (!section) return link;
-        const subheadings = [...section.content.matchAll(/^(##|###)\s(.*)/gm)].map(match => ({
-          level: match[1].length,
-          title: match[2].trim(),
-          id: match[2].trim().toLowerCase().replace(/\s+/g, '-'),
-        }));
+        if (!section || !section.content) return link;
+        const subheadings = [];
+        let match;
+        try {
+          while ((match = headingRegex.exec(section.content)) !== null) {
+            const level = match[1].length; // 2 or 3
+            const title = match[2].trim();
+            const id = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+            subheadings.push({ level, title, id });
+            // avoid infinite loops if zero-length match (shouldn't happen)
+            if (match.index === headingRegex.lastIndex) headingRegex.lastIndex++;
+          }
+        } catch (e) {
+          // fallback to no children if something goes wrong
+          console.warn('Error parsing subheadings', e);
+        }
         return { ...link, children: subheadings };
       }),
     }));
   }, [project]);
 
   useEffect(() => {
-    const newOpenSections = {};
-    enhancedSidebar.forEach(category => {
-      category.links.forEach(link => {
-        if (link.children && link.children.some(child => child.id === activeId)) {
-          newOpenSections[link.id] = true;
+    // auto-open sidebar groups that contain activeId
+    const newOpen = {};
+    enhancedSidebar.forEach(cat => {
+      cat.links.forEach(link => {
+        if (link.children && link.children.some(c => c.id === activeId)) {
+          newOpen[link.id] = true;
         }
       });
     });
-    setOpenSections(prev => ({ ...prev, ...newOpenSections }));
+    setOpenSections(prev => ({ ...prev, ...newOpen }));
   }, [activeId, enhancedSidebar]);
 
   const filteredNavItems = useMemo(() => {
     if (!searchTerm) return enhancedSidebar;
-    const lowercasedFilter = searchTerm.toLowerCase();
+    const lowercased = searchTerm.toLowerCase();
     return enhancedSidebar.map(category => {
       const filteredLinks = category.links.filter(link =>
-        link.title.toLowerCase().includes(lowercasedFilter) ||
-        (link.children && link.children.some(child => child.title.toLowerCase().includes(lowercasedFilter)))
+        (link.title && link.title.toLowerCase().includes(lowercased)) ||
+        (link.children && link.children.some(child => child.title.toLowerCase().includes(lowercased)))
       );
       return { ...category, links: filteredLinks };
     }).filter(category => category.links.length > 0);
   }, [searchTerm, enhancedSidebar]);
 
+  const toggleSection = useCallback((id) => {
+    setOpenSections(prev => ({ ...prev, [id]: !prev[id] }));
+  }, []);
+
+  const handleNavClick = (e, hash) => {
+    e.preventDefault();
+    const element = document.getElementById(hash);
+    if (element) {
+      window.history.pushState(null, null, `#${hash}`);
+      const yOffset = -100;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <aside className="sticky top-24 w-full">
       <div className="relative mb-6">
-        <input type="text" placeholder="Search this page..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-surface border-b-2 border-border/30 focus:border-border text-text-primary placeholder:text-text-secondary/70 focus:ring-0 text-sm py-2 pl-9 pr-3 font-mono" />
+        <input aria-label="Search this page" type="text" placeholder="Search this page..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full bg-surface border-b-2 border-border/30 focus:border-border text-text-primary placeholder:text-text-secondary/70 focus:ring-0 text-sm py-2 pl-9 pr-3 font-mono" />
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary/50" />
       </div>
       <nav>
@@ -382,7 +438,7 @@ const ProjectSidebar = ({ project, activeId }) => {
                       {link.title}{link.external && <FaExternalLinkAlt className="inline-block w-3 h-3 ml-1.5 opacity-60" />}
                     </a>
                     {link.children && (
-                      <button onClick={() => toggleSection(link.id)} className="p-1 text-text-secondary/60 hover:text-text-primary">
+                      <button aria-label={`Toggle ${link.title}`} onClick={() => toggleSection(link.id)} className="p-1 text-text-secondary/60 hover:text-text-primary">
                         <ChevronDown size={16} className={`transition-transform duration-200 ${openSections[link.id] ? 'rotate-180' : ''}`} />
                       </button>
                     )}
@@ -411,27 +467,15 @@ const ProjectSidebar = ({ project, activeId }) => {
   );
 };
 
-
+// -----------------------------
+// Main page
+// -----------------------------
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
   const project = projectData[projectId];
   const [activeId, setActiveId] = useState('');
-
-  useEffect(() => {
-    const handleScroll = () => {
-      let currentId = '';
-      const allHeadings = document.querySelectorAll('main section[id], main h2[id], main h3[id]');
-      allHeadings.forEach(heading => {
-        if (heading.offsetTop - 150 <= window.scrollY) {
-          currentId = heading.id;
-        }
-      });
-      setActiveId(currentId || (project?.sections[0]?.id || ''));
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [project]);
+  const [imageError, setImageError] = useState(false);
+  const observerRef = useRef(null);
 
   useEffect(() => {
     document.title = `${project?.title || 'Project'} | Muhumuza Deus`;
@@ -440,6 +484,34 @@ const ProjectDetailPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [projectId]);
+
+  // IntersectionObserver for active heading tracking (better performance than scroll events)
+  useEffect(() => {
+    if (!project) return;
+    const options = {
+      root: null,
+      rootMargin: '-40% 0% -40% 0%', // trigger when heading is near center
+      threshold: 0,
+    };
+    const callback = (entries) => {
+      // Find the entry with isIntersecting true and highest boundingClientRect.top
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.boundingClientRect.top - a.boundingClientRect.top);
+      if (visible.length > 0) {
+        setActiveId(visible[0].target.id || '');
+      } else {
+        // fallback: choose first section id
+        setActiveId(project.sections?.[0]?.id || '');
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observerRef.current = observer;
+    const allHeadings = document.querySelectorAll('main section[id], main h2[id], main h3[id]');
+    allHeadings.forEach(h => observer.observe(h));
+    return () => {
+      observer.disconnect();
+      observerRef.current = null;
+    };
+  }, [project, projectId]);
 
   if (!project) {
     return (
@@ -507,44 +579,37 @@ const ProjectDetailPage = () => {
               </div>
             </div>
 
-            {/* FIXED IMAGE SECTION */}
+            {/* FIXED IMAGE SECTION (improved) */}
             <div className="order-first lg:order-last mb-8 lg:mb-0">
               <div className="relative max-w-md mx-auto lg:max-w-none lg:ml-[-2rem]">
                 {/* Background decoration */}
-                <div className="absolute inset-0 bg-accent/5 -rotate-6 rounded-lg border-4 border-accent/20"></div>
+                <div className="absolute inset-0 bg-accent/5 -rotate-6 rounded-lg border-4 border-accent/20" aria-hidden="true"></div>
 
                 {/* Main image container */}
                 <div className="relative bg-surface border-2 border-border transition-all duration-300 ease-in-out shadow-[8px_8px_0px_theme(colors.shadow)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 active:translate-x-0 active:translate-y-0 rounded-lg overflow-hidden">
-                  {/* Try to load the image */}
-                  <img
-                    src={project.image}
-                    alt={`${project.title} preview`}
-                    className="w-full h-80 lg:h-96 object-cover"
-                    loading="eager"
-                    onError={(e) => {
-                      // Hide broken image and show fallback
-                      e.target.style.display = 'none';
-                      e.target.nextElementSibling.style.display = 'flex';
-                    }}
-                  />
-
-                  {/* Fallback content (hidden by default, shown when image fails) */}
-                  <div
-                    className="w-full h-80 lg:h-96 bg-gradient-to-br from-accent/20 to-accent/5 items-center justify-center"
-                    style={{ display: 'none' }}
-                  >
-                    <div className="text-center p-8">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-accent/20 rounded-full flex items-center justify-center">
-                        <FaFolder className="w-8 h-8 text-accent" />
+                  {!imageError ? (
+                    <img
+                      src={project.image}
+                      alt={`${project.title} preview`}
+                      className="w-full h-80 lg:h-96 object-cover"
+                      loading="lazy"
+                      onError={() => setImageError(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-80 lg:h-96 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
+                      <div className="text-center p-8">
+                        <div className="w-16 h-16 mx-auto mb-4 bg-accent/20 rounded-full flex items-center justify-center">
+                          <FaFolder className="w-8 h-8 text-accent" />
+                        </div>
+                        <h3 className="text-xl font-bold text-text-primary mb-2 font-heading">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-text-secondary">
+                          Project Preview
+                        </p>
                       </div>
-                      <h3 className="text-xl font-bold text-text-primary mb-2 font-heading">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-text-secondary">
-                        Project Preview
-                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -557,7 +622,7 @@ const ProjectDetailPage = () => {
           <div className="hidden lg:block lg:col-span-3">
             <ProjectSidebar project={project} activeId={activeId} />
           </div>
-          <main className="lg:col-span-9 mt-12 lg:mt-0">
+          <main className="lg:col-span-9 mt-12 lg:mt-0" aria-live="polite">
             <div className="space-y-16 lg:space-y-20">
                 {project.sections.map((section) => {
                   const Component = sectionComponentMap[section.type];

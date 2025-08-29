@@ -39,6 +39,7 @@ const AboutPreviewSection = () => {
   const skills = [
     { name: 'Data Visualization', proficiency: 65 },
     { name: 'Statistical Analysis', proficiency: 60 },
+    { name: 'PowerBI', proficiency: 30 },
     { name: 'Python', proficiency: 60 },
     { name: 'Machine Learning', proficiency: 55 },
     { name: 'MLOps', proficiency: 20 },
